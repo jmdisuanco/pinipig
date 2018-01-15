@@ -1,0 +1,27 @@
+{
+  "name": "pinipig",
+  "version": "0.1.0",
+  "description": "A Webservice toolkit",
+  "main": "pinipig.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmdisuanco/pinipig.git"
+  },
+  "keywords": [
+    "webservice",
+    "rest",
+    "api"
+  ],
+  "author": "John Martin R. Disuanco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jmdisuanco/pinipig/issues"
+  },
+  "homepage": "https://github.com/jmdisuanco/pinipig#readme",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
