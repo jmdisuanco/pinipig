@@ -1,5 +1,6 @@
 const http = require('http')
 const _ = require('lodash')
+var options
 
 function sHTTP(req,res){
     var cb
@@ -7,7 +8,7 @@ function sHTTP(req,res){
     var exp=false
     var hit = false
     var restful= false
-    var pattern = regexify(routes)
+    var pattern = regexify(options.routes)
     _.forEach(pattern, function(value){
         var exp = RegExp(value.regex)
         if(exp.test(req.url) == true) {
@@ -84,9 +85,16 @@ function getURIData(sourcedata, sourcekey){
 }
 
 
-console.log('now serving')
-http.createServer(function (req, res) {sHTTP(req,res)}).listen(3030);
 
-/**
- * #TODO Node Modularize this pinipig!
- */
+function createServer(opt){
+    //initiate the options
+    console.log(options = opt)
+    http.createServer(function (req, res) {sHTTP(req,res)})
+        .listen(options.port)
+        .on('error', function(err){console.log(err)})
+    
+}
+
+module.exports = {
+    createServer: createServer
+}
