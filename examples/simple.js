@@ -37,7 +37,14 @@ var routes =[
         POST: HelloPost
     },
     {    
-        url:'/user/:name',
+        url:'/user/:name', // http://localhost:3000/user/john
         GET: Query
     }
 ]
+
+console.log('simple server running')
+var options = {
+    port: 3000,
+    routes: routes
+}
+pinipig.createServer(options)
