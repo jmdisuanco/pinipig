@@ -11,9 +11,10 @@
     "url": "git+https://github.com/jmdisuanco/pinipig.git"
   },
   "keywords": [
-    "webservice",
+    "webservices",
     "rest",
-    "api"
+    "api",
+    "restful api"
   ],
   "author": "John Martin R. Disuanco",
   "license": "MIT",
