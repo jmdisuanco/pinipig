@@ -1,7 +1,7 @@
 {
   "name": "pinipig",
   "version": "0.2.0",
-  "description": "A Webservice toolkit",
+  "description": "A super `simple` webservice (HTTP)  framework",
   "main": "pinipig.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,9 @@
     "webservices",
     "rest",
     "api",
-    "restful api"
+    "restful api",
+    "http"
+    
   ],
   "author": "John Martin R. Disuanco",
   "license": "MIT",

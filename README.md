@@ -1,7 +1,18 @@
+
+o--o                       
+|   | o      o      o      
+O--o    o-o    o-o    o--o 
+|     | |  | | |  | | |  | 
+o     | o  o | O-o  | o--O 
+               |         | 
+               o      o--o 
+
+
+A super `simple` webservice (HTTP)  framework
+
+**Work in Progress** API might change
+
 # Pinipig
-
-A super `simple` web service toolkit
-
 
 
 ## Getting Started
@@ -22,3 +33,6 @@ Please refer to the examples inside the example directory
 
 
 
+##License
+
+MIT &copy; 2018 JOHN MARTIN DISUANCO

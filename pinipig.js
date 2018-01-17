@@ -84,15 +84,31 @@ function getURIData(sourcedata, sourcekey){
     return qdata
 }
 
-
+function responseHTML(payload,req,res){
+    //#load module
+    //#preloading
+    // ##response part ##
+    //header part
+    var data ={
+        res: res,
+        req: req,
+        msg: ''
+    }
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    //the response
+    task = payload
+    res.write(task(data)); //write a response to the client
+    //before ending
+    res.end(); //end the response
+}
 
 function createServer(opt){
     //initiate the options
-    console.log(options = opt)
+    options = opt
     http.createServer(function (req, res) {sHTTP(req,res)})
         .listen(options.port)
         .on('error', function(err){console.log(err)})
-    
 }
 
 module.exports = {
