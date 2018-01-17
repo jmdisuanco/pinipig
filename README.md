@@ -10,7 +10,7 @@ o     | o  o | O-o  | o--O
 
 A super `simple` webservice (HTTP)  framework
 
-**Work in Progress** API might change
+**Work in Progress** :hatching_chick: API might change
 
 # Pinipig
 
