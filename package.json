@@ -1,6 +1,6 @@
 {
   "name": "pinipig",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A super `simple` webservice (HTTP)  framework",
   "main": "pinipig.js",
   "scripts": {
@@ -15,8 +15,8 @@
     "rest",
     "api",
     "restful api",
-    "http"
-    
+    "http",
+    "pinipig"
   ],
   "author": "John Martin R. Disuanco",
   "license": "MIT",
