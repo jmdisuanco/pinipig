@@ -1,8 +1,10 @@
 const http = require('http')
 const _ = require('lodash')
+const core = require('./libs/core')
 var options
 
-function sHTTP(req,res){
+
+function sHTTP(req,res){ //simple http
     var cb
     var count = 1
     var exp=false
@@ -29,13 +31,13 @@ function sHTTP(req,res){
                 }
             }else{
                 console.log('no method')
-                cb = noMatch
+                cb = core.noMatch
                 cb(req,res,query)
             }
         }
     })
     if(!hit){ //display 404 if no match was hit during the iteration
-        cb = noMatch
+        cb = core.noMatch
         cb(req,res)
     }
 
@@ -82,25 +84,6 @@ function getURIData(sourcedata, sourcekey){
         qdata[newkey] = v
     })
     return qdata
-}
-
-function responseHTML(payload,req,res){
-    //#load module
-    //#preloading
-    // ##response part ##
-    //header part
-    var data ={
-        res: res,
-        req: req,
-        msg: ''
-    }
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    //the response
-    task = payload
-    res.write(task(data)); //write a response to the client
-    //before ending
-    res.end(); //end the response
 }
 
 function createServer(opt){

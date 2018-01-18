@@ -1,3 +1,9 @@
+/**
+ * This is a barebone example using the HTTP module of Nodejs
+ * and taking advantage of pinipig's REST handler
+ *  
+ */
+
 const pinipig = require('../pinipig')
 
 var HelloWorld = function(req,res){
@@ -11,14 +17,6 @@ var HelloPost = function(req,res,query){
     res.setHeader('Content-Type', 'text/html');
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write('POST'); //write a response to the client
-    res.end(); //end the response
-}
-
-var Test = function(req,res,query){
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(404, { 'Content-Type': 'text/html' });
-    console.log(query)
-    res.write('test'); //write a response to the client
     res.end(); //end the response
 }
 
@@ -42,9 +40,9 @@ var routes =[
     }
 ]
 
-console.log('simple server running')
 var options = {
     port: 3000,
     routes: routes
 }
+
 pinipig.createServer(options)
