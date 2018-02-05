@@ -1,7 +1,9 @@
 const http = require('http')
 const _ = require('lodash')
+const c = require('8colors')
 const core = require('./libs/core')
 var options
+
 
 
 function sHTTP(req,res){ //simple http
@@ -10,14 +12,14 @@ function sHTTP(req,res){ //simple http
     var exp=false
     var hit = false
     var restful= false
-    var pattern = regexify(options.routes)
+    var pattern = regexify(options.sorted)
     _.forEach(pattern, function(value){
         var exp = RegExp(value.regex)
         if(exp.test(req.url) == true) {
             hit = true
             var method = req.method
             var query
-            console.log(value.url)
+            console.log('Find',exp)
             if(value.url.search(':') > 0){
                 console.log('reading url data...')
                 query = getURIData(req.url, value.url)
@@ -26,13 +28,16 @@ function sHTTP(req,res){ //simple http
                 cb =value[method]
                 if( method =='POST'){
                     getXwfu(cb,req,res) //run x-www-form-urlencode
+                    return false
                 }else{
                     cb(req,res,query)    
+                    return false
                 }
             }else{
                 console.log('no method')
                 cb = core.noMatch
                 cb(req,res,query)
+                return false
             }
         }
     })
@@ -45,9 +50,9 @@ function sHTTP(req,res){ //simple http
 
 function regexify(obj){           
     var regexified
-    var replaceWith = '([a-z]*)'
+    var replaceWith = '([a-z0-9A-Z]*)'
    regexified =  _.forEach(obj,function(value){
-        value.regex= _.replace(value.url,/(\/:[a-z]*)/,replaceWith)
+        value.regex= _.replace(value.url,/(:[a-z]*)/g,replaceWith)
         if(value.regex =='/'){
             value.regex =_.replace(value.url,'/','^(\/)$')
            }
@@ -59,7 +64,7 @@ function getXwfu(cb,req,res){ //Extract X-WWW-form-urlencoded
     req.on('data', (chunk) => {
         var query =[]
         var data_str = chunk.toString()
-        console.log(data_str)
+        //console.log(data_str)
         _.split(decodeURIComponent(data_str),'&')
         .forEach(function(value){
             query.push(_.split(value,'='))
@@ -89,9 +94,15 @@ function getURIData(sourcedata, sourcekey){
 function createServer(opt){
     //initiate the options
     options = opt
+    options.sorted = _.orderBy(options.routes, function (o) {
+        return o.url.length
+    }, 'desc') 
+
     http.createServer(function (req, res) {sHTTP(req,res)})
-        .listen(options.port)
-        .on('error', function(err){console.log(err)})
+        .listen(options.port,function(){
+            var msg = c.by('Pininig Server is listening on ').m(options.port).end()
+            console.log(msg)
+        })
 }
 
 module.exports = {

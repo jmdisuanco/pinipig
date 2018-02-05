@@ -1,15 +1,5 @@
-```
-  _____    _           _           _         
- |  __ \  (_)         (_)         (_)        
- | |__) |  _   _ __    _   _ __    _    __ _ 
- |  ___/  | | | '_ \  | | | '_ \  | |  / _` |
- | |      | | | | | | | | | |_) | | | | (_| |
- |_|      |_| |_| |_| |_| | .__/  |_|  \__, |
-                          | |           __/ |
-                          |_|          |___/ 
-```
 # Pinipig
-A super `simple` webservice (HTTP)  framework
+A super `simple` `REST` webservice (HTTP)  framework
 
 **Work in Progress** :hatching_chick: API might change
 
@@ -88,8 +78,18 @@ pinipig.createServer(options)
 
 ```
 
+```
+  _____    _           _           _         
+ |  __ \  (_)         (_)         (_)        
+ | |__) |  _   _ __    _   _ __    _    __ _ 
+ |  ___/  | | | '_ \  | | | '_ \  | |  / _` |
+ | |      | | | | | | | | | |_) | | | | (_| |
+ |_|      |_| |_| |_| |_| | .__/  |_|  \__, |
+                          | |           __/ |
+                          |_|          |___/ 
+```
 
 
-#License
+# License
 
-MIT &copy; 2018 JOHN MARTIN DISUANCO
+MIT &copy;  JOHN MARTIN DISUANCO

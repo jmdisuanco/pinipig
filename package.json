@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/jmdisuanco/pinipig#readme",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "8colors": "^1.0.1",
+    "lodash": "^4.17.5"
   }
 }
