@@ -2,6 +2,7 @@ const http = require('http')
 const _ = require('lodash')
 const c = require('8colors')
 const core = require('./libs/core')
+const formidable = require('formidable')
 var options
 
 
@@ -61,22 +62,11 @@ function regexify(obj){
 }
 
 function getXwfu(cb,req,res){ //Extract X-WWW-form-urlencoded
-    req.on('data', (chunk) => {
-        try {
-            var query =[]
-            var data_str = chunk.toString()
-            _.split(decodeURIComponent(data_str),'&')
-            .forEach(function(value){
-                query.push(_.split(value,'='))
-            })
-            var results = _.fromPairs(query)
-       }
-       catch (e) {
-            results =  chunk;                                       
-       }
-       
-        cb(req,res,results)
-      })
+    var form = new formidable.IncomingForm()
+    form.parse(req, function(err, fields, files) {
+      var data = {fields: fields, files: files}
+      cb(req,res,data)
+    });
     
 }
 
