@@ -49,7 +49,7 @@ var QueryDesc = function(req,res,query){
 
 var routes =[
     {    
-        url:'/age/:age/:name', // http://localhost:3000/age/99/john
+        url:'/age/:age/:name', // http://localhost:3000/age/21/Joe
         GET: QueryAge
     },
     {    
@@ -58,11 +58,11 @@ var routes =[
         POST: HelloPost
     },
     {    
-        url:'/age/:age/:name/:desc', // http://localhost:3000/age/99/john
+        url:'/age/:age/:name/:desc', // http://localhost:3000/age/33/Jane
         GET: QueryDesc
     },
     {    
-        url:'/user/:name', // http://localhost:3000/user/john
+        url:'/user/:name', // http://localhost:3000/user/
         GET: Query
     }
 ]
