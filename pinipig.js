@@ -62,14 +62,19 @@ function regexify(obj){
 
 function getXwfu(cb,req,res){ //Extract X-WWW-form-urlencoded
     req.on('data', (chunk) => {
-        var query =[]
-        var data_str = chunk.toString()
-        //console.log(data_str)
-        _.split(decodeURIComponent(data_str),'&')
-        .forEach(function(value){
-            query.push(_.split(value,'='))
-        })
-        var results = _.fromPairs(query)
+        try {
+            var query =[]
+            var data_str = chunk.toString()
+            _.split(decodeURIComponent(data_str),'&')
+            .forEach(function(value){
+                query.push(_.split(value,'='))
+            })
+            var results = _.fromPairs(query)
+       }
+       catch (e) {
+            results =  chunk;                                       
+       }
+       
         cb(req,res,results)
       })
     
