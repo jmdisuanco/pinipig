@@ -7,7 +7,6 @@ Version : 1.0.0
 
 A super `simple` `REST` webservice (HTTP)  framework
 
-**Work in Progress** :hatching_chick: API might change
 
 Version 1 released!
 
