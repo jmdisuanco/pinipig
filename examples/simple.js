@@ -6,83 +6,114 @@
 
 const pinipig = require('../pinipig')
 const fs = require('fs')
-var HelloWorld = function(req,res){
+
+let HelloWorld = function(context){
     console.log('helloWorld')
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write('Working'); //write a response to the client
-    res.end(); //end the response
+    context.res.setHeader('Content-Type', 'text/html');
+    context.res.writeHead(200, { 'Content-Type': 'text/html' });
+    context.res.write('Working'); //write a response to the client
+    context.res.end(); //end the response
 }
 
-var HelloPost = function(req,res,query){
+let beforehook = (context) => {
+    console.log('before')
+    console.log(context.data)
+    context.data['age'] = 90 
+}
+
+let beforehook2 = () => {
+    console.log('before 2')
+}
+
+let afterhook = () => {
+    console.log('after')
+}
+
+let HelloPost = (context) => {
     console.log('helloPost')
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write('POST'); //write a response to the client
-    res.end(); //end the response
+    context.res.setHeader('Content-Type', 'text/html');
+    context.res.writeHead(200, { 'Content-Type': 'text/html' });
+    context.res.write('POST'); //write a response to the client
+    context.res.end(); //end the response
 }
 
 
-var Query = function(req,res,query){
+let Query = (context) => {
     console.log('Query')
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write('<H1>Hello '+query.name+'</H1>'); //write a response to the client
-    res.end(); //end the response
+    context.res.setHeader('Content-Type', 'text/html');
+    context.res.writeHead(200, { 'Content-Type': 'text/html' });
+    context.res.write('<H1>Hello '+query.name+'</H1>'); //write a response to the client
+    context.res.end(); //end the response
 }
 
-var QueryAge = function(req,res,query){
-    console.log('QueryAge',query)
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write('<H1>Hello '+query.name+'</H1>'+query.age); //write a response to the client
-    res.end(); //end the response
+let QueryAge = (context) => {
+    console.log('QueryAge',context.data)
+    let query = context.data
+    console.log(query)
+    context.res.setHeader('Content-Type', 'text/html');
+    context.res.writeHead(200, { 'Content-Type': 'text/html' });
+    context.res.write('<H1>Hello '+query.name+'</H1>'+query.age); //write a response to the client
+    context.res.end(); //end the response
 }
 
-var QueryDesc = function(req,res,query){
+let QueryDesc = (context) => {
     console.log('QueryDesc')
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write('<H1>Hello '+query.name+'</H1>'+query.desc+' '+query.age); //write a response to the client
-    res.end(); //end the response
+    let query = context.data
+    context.res.setHeader('Content-Type', 'text/html');
+    context.res.writeHead(200, { 'Content-Type': 'text/html' });
+    context.res.write('<H1>Hello '+query.name+'</H1>'+query.desc+' '+query.age); //write a response to the client
+    context.res.end(); //end the response
 }
 
 
-var UploadForm = function (req,res){
-    res.writeHead(200, {'content-type': 'text/html'});
-    res.write('<form action="/upload" enctype="multipart/form-data" method="post">'+
+let UploadForm = (context) => {
+    context.res.writeHead(200, {'content-type': 'text/html'});
+    context.res.write('<form action="/upload" enctype="multipart/form-data" method="post">'+
         '<input type="text" name="title"/><br>'+
         '<input type="file" name="upload" multiple="multiple"><br>'+
         '<input type="submit" value="Upload">'+
         '</form>'
     )
-    res.end();
-    return res.end();
+    context.res.end();
+    return context.res.end();
 }
 
-var UploadFormProcess = function (req,res,data) {
-    var tmpPath = data.files.upload.path
-    var newPath = './uploads/'+data.files.upload.name //Make sure you created uploads folder in your App root.
+let UploadFormProcess =  (context) => {
+    let data = context.data
+    let tmpPath = data.files.upload.path
+    let newPath = './examples/uploads/'+data.files.upload.name //Make sure you created uploads folder in your App root.
     fs.rename(tmpPath, newPath, function (err) {
         if (err) throw err;
-        res.write('File uploaded with title '+data.fields.title+'!');
-        res.end();
+        context.res.write('File uploaded with title '+data.fields.title+'!');
+        context.res.end();
       });
     }
 
-var routes =[
+let routes =[
     {    
         url:'/age/:age/:name', // http://localhost:3000/age/21/Joe
-        GET: QueryAge
+        GET: QueryAge,
+        hooks:{
+            before:[beforehook, beforehook2],
+            after: [afterhook]
+        }
     },
     {    
         url:'/',
         GET: HelloWorld,
-        POST: HelloPost
+        POST: HelloPost,
+        hooks:{
+            before:[beforehook, beforehook2],
+            after: [afterhook]
+        }
     },
     {    
         url:'/age/:age/:name/:desc', // http://localhost:3000/age/33/Jane
-        GET: QueryDesc
+        GET: QueryDesc,
+        hooks:{
+            before:[beforehook, beforehook2],
+            after: [afterhook]
+        }
     },
     {    
         url:'/user/:name', // http://localhost:3000/user/
@@ -98,7 +129,7 @@ var routes =[
     }
 ]
 
-var options = {
+let options = {
     port: 3000,
     routes: routes
 }

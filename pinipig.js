@@ -1,43 +1,56 @@
 const http = require('http')
-const _ = require('lodash')
 const c = require('8colors')
+const orderBy = require('lodash/orderBy')
+const forEach = require('lodash/forEach')
+const replace = require('lodash/replace')
+const zipObject = require('lodash/zipObject')
+const pickBy = require('lodash/pickBy')
+const invert = require('lodash/invert')
+const flow = require('lodash/flow')
 const core = require('./libs/core')
+
 const formidable = require('formidable')
-var options
-
-
-
-function sHTTP(req,res){ //simple http
-    var cb
-    var count = 1
-    var exp=false
-    var hit = false
-    var restful= false
-    var pattern = regexify(options.sorted)
-    _.forEach(pattern, function(value){
-        var exp = RegExp(value.regex)
+let options
+let sHTTP = (req,res) => { //simple http
+    let cb
+    let count = 1
+    let exp=false
+    let hit = false
+    let restful= false
+    let pattern = regexify(options.sorted)
+    forEach(pattern, function(value){
+        let exp = RegExp(value.regex)
+        let context ={
+            req: req,
+            res: res,
+            data: {}
+        }
         if(exp.test(req.url) == true) {
             hit = true
-            var method = req.method
-            var query
-            console.log('Find',exp)
+            let method = req.method
             if(value.url.search(':') > 0){
-                console.log('reading url data...')
-                query = getURIData(req.url, value.url)
+                context.data = getURIData(req.url, value.url)
             }
             if( method && value[method]){ // check if a service is available for the request method
                 cb =value[method]
+                let beforeHook = () =>{return}
+                let afterHook = () =>{return}
+                value.hooks != undefined ? beforeHook = flow(value.hooks.before) : null 
+                value.hooks != undefined ? afterHook = flow(value.hooks.after) : null
                 if( method =='POST'){
-                    getXwfu(cb,req,res) //run x-www-form-urlencode
+                    getXwfu(cb,context) //run x-www-form-urlencode
                     return false
                 }else{
-                    cb(req,res,query)    
+                    beforeHook(context)
+                    cb(context)  
+                    afterHook(context)  
                     return false
                 }
             }else{
-                console.log('no method')
                 cb = core.noMatch
-                cb(req,res,query)
+                beforeHook()
+                cb(context)
+                afterHook()
                 return false
             }
         }
@@ -49,47 +62,48 @@ function sHTTP(req,res){ //simple http
 
 }
 
-function regexify(obj){           
-    var regexified
-    var replaceWith = '([a-z0-9A-Z:,_-]*)'
-   regexified =  _.forEach(obj,function(value){
-        value.regex= _.replace(value.url,/(:[a-z]*)/g,replaceWith)
+let regexify = (obj) => {           
+    // let regexified
+    let replaceWith = '([a-z0-9A-Z:,_-]*)'
+   regexified =  forEach(obj,function(value){
+        value.regex= replace(value.url,/(:[a-z]*)/g,replaceWith)
         if(value.regex =='/'){
-            value.regex =_.replace(value.url,'/','^(\/)$')
+            value.regex =replace(value.url,'/','^(\/)$')
            }
     })
     return obj
 }
 
-function getXwfu(cb,req,res){ //Extract X-WWW-form-urlencoded
-    var form = new formidable.IncomingForm()
-    form.parse(req, function(err, fields, files) {
-      var data = {fields: fields, files: files}
-      cb(req,res,data)
+let  getXwfu = (cb,context) => { //Extract X-WWW-form-urlencoded
+    let form = new formidable.IncomingForm()
+    form.parse(context.req, function(err, fields, files) {
+      let data = {fields: fields, files: files}
+        context.data = data
+      cb(context)
     });
     
 }
 
-function getURIData(sourcedata, sourcekey){
+let getURIData = (sourcedata, sourcekey) => {
     keys = sourcekey.split('/')
     data = sourcedata.split('/')
-    mapped =_.zipObject(keys,data)
+    mapped =zipObject(keys,data)
     var qdata =[]
-    var result = _.pickBy(mapped, function(value, key) {
+    var result = pickBy(mapped, function(value, key) {
         return key.startsWith(":")
     });
 
-    var inv = _.forEach(_.invert(result), function(k,v){
+    var inv = forEach(invert(result), function(k,v){
         var newkey = k.replace(':','')
         qdata[newkey] = v
     })
     return qdata
 }
 
-function createServer(opt){
+let createServer = (opt) => {
     //initiate the options
     options = opt
-    options.sorted = _.orderBy(options.routes, function (o) {
+    options.sorted = orderBy(options.routes, function (o) {
         return o.url.length
     }, 'desc') 
 
