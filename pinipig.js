@@ -51,7 +51,7 @@ function sHTTP(req,res){ //simple http
 
 function regexify(obj){           
     var regexified
-    var replaceWith = '([a-z0-9A-Z]*)'
+    var replaceWith = '([a-z0-9A-Z:,_-]*)'
    regexified =  _.forEach(obj,function(value){
         value.regex= _.replace(value.url,/(:[a-z]*)/g,replaceWith)
         if(value.regex =='/'){
