@@ -11,6 +11,8 @@ const core = require('./libs/core')
 
 const formidable = require('formidable')
 let options
+let beforeHook = () => {return}
+let afterHook = () => {return}
 let sHTTP = (req,res) => { //simple http
     let cb
     let count = 1
@@ -33,8 +35,6 @@ let sHTTP = (req,res) => { //simple http
             }
             if( method && value[method]){ // check if a service is available for the request method
                 cb =value[method]
-                let beforeHook = () =>{return}
-                let afterHook = () =>{return}
                 value.hooks != undefined ? beforeHook = flow(value.hooks.before) : null 
                 value.hooks != undefined ? afterHook = flow(value.hooks.after) : null
                 if( method =='POST'){
