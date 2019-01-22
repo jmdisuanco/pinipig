@@ -107,7 +107,7 @@ let createServer = (opt) => {
         return o.url.length
     }, 'desc') 
 
-    http.createServer(function (req, res) {sHTTP(req,res)})
+    return http.createServer(function (req, res) {sHTTP(req,res)})
         .listen(options.port,function(){
             var msg = c.by('Pininig Server is listening on ').m(options.port).end()
             console.log(msg)
