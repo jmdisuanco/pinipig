@@ -3,7 +3,7 @@
 ![](https://img.shields.io/github/license/jmdisuanco/pinipig.svg) ![](https://img.shields.io/twitter/url/https/github.com/jmdisuanco/pinipig.svg?style=social)
 ![](https://img.shields.io/github/commit-activity/y/jmdisuanco/pinipig.svg)
 
-Version : 1.0.0
+Version : 1.0.3
 
 A super `simple` `REST` webservice (HTTP)  framework
 

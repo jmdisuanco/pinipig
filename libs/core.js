@@ -4,7 +4,6 @@
 
 function noMatch(req,res){
     res.setHeader('Content-Type', 'text/html');
-    res.setHeader('X-Foo', 'bar'); //sample
     res.writeHead(404, { 'Content-Type': 'text/html' });
     res.write('<h1>404</h1><h5>resource not found...</h5>')
     res.end();

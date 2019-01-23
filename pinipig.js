@@ -38,7 +38,10 @@ let sHTTP = (req,res) => { //simple http
                 value.hooks != undefined ? beforeHook = flow(value.hooks.before) : null 
                 value.hooks != undefined ? afterHook = flow(value.hooks.after) : null
                 if( method =='POST'){
-                    getXwfu(cb,context) //run x-www-form-urlencode
+                    context.cb = cb
+                    beforeHook(context)
+                    getXwfu(context) //run x-www-form-urlencode
+                    afterHook(context)  
                     return false
                 }else{
                     beforeHook(context)
@@ -74,12 +77,12 @@ let regexify = (obj) => {
     return obj
 }
 
-let  getXwfu = (cb,context) => { //Extract X-WWW-form-urlencoded
+let  getXwfu = (context) => { //Extract X-WWW-form-urlencoded
     let form = new formidable.IncomingForm()
     form.parse(context.req, function(err, fields, files) {
       let data = {fields: fields, files: files}
         context.data = data
-      cb(context)
+        context.cb(context)
     });
     
 }
