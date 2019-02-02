@@ -45,7 +45,7 @@ let sHTTP = (req, res) => {
                     (beforeHook = flow(value.hooks.before)) :
                     null;
                 value.hooks != undefined ? (afterHook = flow(value.hooks.after)) : null;
-                if (method == "POST" ||method == "PUT" || method == "PATCH") {
+                if (method == "POST" || method == "PUT" || method == "PATCH") {
                     context.cb = cb;
                     beforeHook(context);
                     getXwfu(context); //run x-www-form-urlencode
@@ -135,7 +135,7 @@ let createServer = opt => {
                 .by("Pinipig Server is listening on ")
                 .m(options.port)
                 .end();
-            options.banner != undefined || options.banner != '' ? msg = options.banner : null
+            options.banner != undefined ? msg = options.banner : null
 
             console.log(msg);
 
