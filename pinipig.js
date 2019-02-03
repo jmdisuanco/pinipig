@@ -38,6 +38,7 @@ let sHTTP = (req, res) => {
             if (value.url.search(":") > 0) {
                 context.data = getURIData(req.url, value.url);
             }
+            context.query = core.getURLQuery(req)
             if (method && value[method]) {
                 // check if a service is available for the request method
                 cb = value[method];
