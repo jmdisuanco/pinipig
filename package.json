@@ -27,11 +27,6 @@
   "dependencies": {
     "8colors": "^1.0.1",
     "formidable": "^1.2.1",
-    "lodash.orderby": "^4.17.5",
-    "lodash.foreach": "^4.17.5",
-    "lodash.replace": "^4.17.5",
-    "lodash.zipobject": "^4.17.5",
-    "lodash.pickby": "^4.17.5",
-    "lodash.invert": "^4.17.5"
+    "lodash": "^4.17.5"
   }
 }
