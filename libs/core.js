@@ -27,6 +27,17 @@ let getURLQuery = (req) => {
     }
 }
 
+
+let flow = (fns) => param => {
+    try {
+        fns.reduce(async (payload, nxt) => nxt(await payload), param)
+    } catch (e) {
+        const err = new Error(`Parameter should be array of methods:
+  Example usage-> flow([func1,func2,func3])`)
+        console.error(err.message)
+    }
+}
+
 /**
  *  #TODO 
  */
@@ -81,5 +92,6 @@ function json(payload, req, res) {
 
 module.exports = {
     noMatch,
-    getURLQuery
+    getURLQuery,
+    flow
 }

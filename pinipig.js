@@ -6,9 +6,8 @@ const replace = require("lodash/replace");
 const zipObject = require("lodash/zipObject");
 const pickBy = require("lodash/pickBy");
 const invert = require("lodash/invert");
-const flow = require("lodash/flow");
 const core = require("./libs/core");
-
+const flow = core.flow
 const formidable = require("formidable");
 let options;
 let beforeHook = () => {
@@ -17,6 +16,7 @@ let beforeHook = () => {
 let afterHook = () => {
     return;
 };
+
 let sHTTP = (req, res) => {
     //simple http
     let cb;
@@ -42,10 +42,8 @@ let sHTTP = (req, res) => {
             if (method && value[method]) {
                 // check if a service is available for the request method
                 cb = value[method];
-                value.hooks != undefined ?
-                    (beforeHook = flow(value.hooks.before)) :
-                    null;
-                value.hooks != undefined ? (afterHook = flow(value.hooks.after)) : null;
+                value.hooks != undefined ? beforeHook = flow(value.hooks.before) : null
+                value.hooks != undefined ? afterHook = flow(value.hooks.after) : null
                 if (method == "POST" || method == "PUT" || method == "PATCH") {
                     context.cb = cb;
                     beforeHook(context);
@@ -53,10 +51,10 @@ let sHTTP = (req, res) => {
                     afterHook(context);
                     return false;
                 } else {
-                    beforeHook(context);
-                    cb(context);
-                    afterHook(context);
-                    return false;
+                    beforeHook(context)
+                    cb(before)
+                    afterHook(context)
+                    return false
                 }
             } else {
                 cb = core.noMatch;
