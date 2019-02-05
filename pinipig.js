@@ -52,7 +52,7 @@ let sHTTP = (req, res) => {
                     return false;
                 } else {
                     beforeHook(context)
-                    cb(before)
+                    cb(context)
                     afterHook(context)
                     return false
                 }
@@ -142,5 +142,6 @@ let createServer = opt => {
 };
 
 module.exports = {
-    createServer: createServer
+    createServer: createServer,
+    flow
 };
