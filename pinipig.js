@@ -53,16 +53,11 @@ let sHTTP = (req, res) => {
             if (method && value[method]) {
                 // check if a service is available for the request method
                 cb = value[method]
-                // value.hooks != undefined ? beforeHook = flow(value.hooks.before) : null
-                // value.hooks != undefined ? afterHook = flow(value.hooks.after) : null
                 value.hooks != undefined ? beforeHook = value.hooks.before : null
                 value.hooks != undefined ? afterHook = value.hooks.after : null
 
                 if (method == "POST" || method == "PUT" || method == "PATCH") {
                     context.cb = cb;
-                    //beforeHook(context);
-                    //getXwfu(context); //run x-www-form-urlencode
-                    //afterHook(context);
                     let merged = flatten([beforeHook, getXwfu, afterHook])
                     flow(merged)(context)
                     return false;
@@ -70,10 +65,6 @@ let sHTTP = (req, res) => {
                     preFlight(context.res)
 
                 } else {
-                    // beforeHook(context)
-                    // cb(context)
-                    // afterHook(context)
-                    //res.end()
                     let merged = flatten([beforeHook, cb, afterHook])
                     flow(merged)(context)
                     return false
@@ -139,10 +130,9 @@ let getURIData = (sourcedata, sourcekey) => {
 
 let createServer = opt => {
     //initiate the options
-    //console.log(options.worker)
     options = opt
-    let workers = 1
-    options.worker === undefined ? options.worker = 1 : null
+    let workers = cpus
+    options.worker === undefined ? options.worker = cpus : null
     options.worker > cpus ? workers = cpus : workers = parseInt(options.worker)
     options.sorted = orderBy(
         options.routes,
@@ -173,9 +163,6 @@ let createServer = opt => {
                     .end()
                 options.banner != undefined ? msg = options.banner : null
                 console.log(msg)
-
-
-
             })
     }
 };

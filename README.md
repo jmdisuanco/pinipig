@@ -28,7 +28,7 @@ hooks inside before
 
 ```javascript
 hooks: {
-  before: [hook1, hook2, hook3];
+  before: [hook1, hook2, hook3]
 } // arrays
 ```
 
@@ -38,7 +38,7 @@ hooks inside afer
 
 ```javascript
 hooks: {
-  before: [hook4, hook5, hook6];
+  before: [hook4, hook5, hook6]
 } // arrays
 ```
 
@@ -71,7 +71,7 @@ installing the pinipig toolkit via npm
  *
  */
 
-const pinipig = require("../pinipig");
+const pinipig = require("pinipig");
 
 let HelloWorld = function(ctx) {
   ctx.res.setHeader("Content-Type", "text/html");
@@ -97,13 +97,13 @@ let routes = [
     GET: HelloWorld
   },
   {
-    url: "/user/:name", // http://localhost:3000/user/[NAME]
+    url: "/user/:name", // http://localhost:9090/user/[NAME]
     GET: Query
   }
 ];
 
 let options = {
-  port: 3000,
+  port: 9090,
   routes: routes
 };
 
@@ -121,7 +121,7 @@ pinipig.createServer(options);
  *
  */
 
-const pinipig = require("../pinipig");
+const pinipig = require("pinipig");
 
 let HelloWorld = function(ctx) {
   ctx.res.setHeader("Content-Type", "text/html");
@@ -156,7 +156,7 @@ let routes = [
     GET: HelloWorld
   },
   {
-    url: "/add/:num", // http://localhost:3000/add/[Number]
+    url: "/add/:num", // http://localhost:9090/add/[Number]
     GET: Query,
     hooks: {
       before: addOne,
@@ -166,7 +166,7 @@ let routes = [
 ];
 
 let options = {
-  port: 3000,
+  port: 9090,
   routes: routes
 };
 
@@ -196,7 +196,7 @@ let options = {
  *  -- > Make sure you created uploads folder in your App root. < --
  */
 
-const pinipig = require("../pinipig");
+const pinipig = require("pinipig");
 
 let UploadForm = context => {
   context.res.writeHead(200, {
@@ -236,7 +236,7 @@ let routes = [
 ];
 
 let options = {
-  port: 3000,
+  port: 9090,
   routes: routes
 };
 
@@ -248,7 +248,7 @@ pinipig.createServer(options);
 - ## CORS example
 
 ```javascript
-const pinipig = require("../pinipig");
+const pinipig = require("pinipig");
 
 let { cors, preFlight } = pinipig.utils;
 let HelloWorld = function(ctx) {
@@ -276,7 +276,7 @@ let routes = [
     GET: HelloWorld
   },
   {
-    url: "/user/:name", // http://localhost:3000/user/[NAME]
+    url: "/user/:name", // http://localhost:9090/user/[NAME]
     GET: Query,
     OPTIONS: preFlight // Preflight check by browser
   }
