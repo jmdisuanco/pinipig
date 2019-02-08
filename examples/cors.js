@@ -1,11 +1,14 @@
 /**
- * This is a barebone example using the HTTP module of Nodejs
- * and taking advantage of pinipig's REST handler
+ * CORS Example
  *  
  */
 
 const pinipig = require('../pinipig')
 
+let {
+    cors,
+    preFlight
+} = pinipig.utils
 let HelloWorld = function (ctx) {
     ctx.res.setHeader('Content-Type', 'text/html');
     ctx.res.writeHead(200, {
@@ -16,6 +19,7 @@ let HelloWorld = function (ctx) {
 }
 
 let Query = (ctx) => {
+    cors(ctx.res)
     ctx.res.setHeader('Content-Type', 'text/html');
     ctx.res.writeHead(200, {
         'Content-Type': 'text/html'
@@ -30,7 +34,8 @@ let routes = [{
     },
     {
         url: '/user/:name', // http://localhost:3000/user/[NAME]
-        GET: Query
+        GET: Query,
+        OPTIONS: preFlight // Preflight check by browser
     }
 
 ]

@@ -38,6 +38,7 @@ let routes = [{
 let options = {
     port: 9090,
     routes: routes,
+    worker: 2 //initiate 4 workers
 }
 
 pinipig.createServer(options)

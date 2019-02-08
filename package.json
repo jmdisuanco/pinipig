@@ -1,7 +1,7 @@
 {
   "name": "pinipig",
   "version": "1.0.10",
-  "description": "A super `simple` webservice (HTTP)  framework",
+  "description": "A super `simple` webservice (HTTP)  functional style framework",
   "main": "pinipig.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,6 +27,6 @@
   "dependencies": {
     "8colors": "^1.0.1",
     "formidable": "^1.2.1",
-    "lodash": "^4.17.5"
+    "lodash": ">=4.17.11"
   }
 }

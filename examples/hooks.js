@@ -1,5 +1,5 @@
 /**
- * This is a barebone example using the HTTP module of Nodejs
+ * This is an example with Hooks
  * and taking advantage of pinipig's REST handler
  *  
  */
@@ -20,24 +20,37 @@ let Query = (ctx) => {
     ctx.res.writeHead(200, {
         'Content-Type': 'text/html'
     });
-    ctx.res.write('<H1>Hello ' + ctx.data.name + '</H1>'); //write a response to the client
+    ctx.res.write(`<H1> ${ctx.data.num } + 1 =  ${ctx.data.total}</H1>`); //iuput the processed data
     ctx.res.end(); //end the response
+    return ctx
 }
 
+let addOne = (ctx) => {
+    ctx.data.total = parseInt(ctx.data.num) + 1
+    return ctx
+}
+
+let sytemOut = (ctx) => {
+    console.log(ctx.data) //console log to the system
+}
 let routes = [{
         url: '/',
         GET: HelloWorld
     },
     {
-        url: '/user/:name', // http://localhost:3000/user/[NAME]
-        GET: Query
+        url: '/add/:num', // http://localhost:3000/add/[Number]
+        GET: Query,
+        hooks: {
+            before: addOne,
+            after: sytemOut //console log to the system
+        }
     }
 
 ]
 
 let options = {
     port: 9090,
-    routes: routes,
+    routes: routes
 }
 
 pinipig.createServer(options)

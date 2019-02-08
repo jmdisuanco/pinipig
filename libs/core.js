@@ -1,14 +1,42 @@
 /**********************************************************************************************/
-/****************************CORE  MODULES  *****************************************/
+/**************************** CORE  MODULES  *****************************************/
 /**********************************************************************************************/
 
-function noMatch(req, res) {
+let noMatch = (req, res) => {
     res.setHeader('Content-Type', 'text/html');
     res.writeHead(404, {
         'Content-Type': 'text/html'
     });
     res.write('<h1>404</h1><h5>resource not found...</h5>')
     res.end();
+}
+
+/**
+ * Flatten Nested Arrays
+ * @param {Array} arrays | [['a'],['b],['c','d']]
+ */
+let flatten = (arrays) => {
+    return arrays.reduce((a, b) => a.concat(b), [])
+}
+
+/**
+ * CORS
+ * @param {Obectt} Response ctx.res
+ */
+let cors = (res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Credentials', true)
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers', '*')
+}
+/**
+ * Preflight response
+ * This is ussually attached on OPTIONS method for browser's pre-flight checking response
+ * @param {Object} res 
+ */
+let preFlight = (res) => {
+    cors(res)
+    res.end()
 }
 
 let getURLQuery = (req) => {
@@ -91,7 +119,10 @@ function json(payload, req, res) {
 /**********************************************************************************************/
 
 module.exports = {
+    cors,
     noMatch,
     getURLQuery,
-    flow
+    flow,
+    flatten,
+    preFlight
 }

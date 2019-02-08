@@ -1,22 +1,33 @@
-const http = require("http");
-const c = require("8colors");
-const orderBy = require("lodash/orderBy");
-const forEach = require("lodash/forEach");
-const replace = require("lodash/replace");
-const zipObject = require("lodash/zipObject");
-const pickBy = require("lodash/pickBy");
-const invert = require("lodash/invert");
-const core = require("./libs/core");
-const flow = core.flow
+const http = require("http")
+const c = require("8colors")
+const orderBy = require("lodash/orderBy")
+const forEach = require("lodash/forEach")
+const replace = require("lodash/replace")
+const zipObject = require("lodash/zipObject")
+const pickBy = require("lodash/pickBy")
+const invert = require("lodash/invert")
+const core = require("./libs/core")
+const os = require('os')
+const {
+    cors,
+    flow,
+    flatten,
+    preFlight
+} = core
+const cluster = require('cluster')
 const formidable = require("formidable");
 let options;
-let beforeHook = () => {
-    return;
-};
-let afterHook = () => {
-    return;
-};
+let cpus = os.cpus().length
 
+// let beforeHook = () => {
+//     return;
+// };
+// let afterHook = () => {
+//     return;
+// };
+
+let beforeHook = []
+let afterHook = []
 let sHTTP = (req, res) => {
     //simple http
     let cb;
@@ -41,26 +52,37 @@ let sHTTP = (req, res) => {
             context.query = core.getURLQuery(req)
             if (method && value[method]) {
                 // check if a service is available for the request method
-                cb = value[method];
-                value.hooks != undefined ? beforeHook = flow(value.hooks.before) : null
-                value.hooks != undefined ? afterHook = flow(value.hooks.after) : null
+                cb = value[method]
+                // value.hooks != undefined ? beforeHook = flow(value.hooks.before) : null
+                // value.hooks != undefined ? afterHook = flow(value.hooks.after) : null
+                value.hooks != undefined ? beforeHook = value.hooks.before : null
+                value.hooks != undefined ? afterHook = value.hooks.after : null
+
                 if (method == "POST" || method == "PUT" || method == "PATCH") {
                     context.cb = cb;
-                    beforeHook(context);
-                    getXwfu(context); //run x-www-form-urlencode
-                    afterHook(context);
+                    //beforeHook(context);
+                    //getXwfu(context); //run x-www-form-urlencode
+                    //afterHook(context);
+                    let merged = flatten([beforeHook, getXwfu, afterHook])
+                    flow(merged)(context)
                     return false;
+                } else if (method === "OPTIONS") {
+                    preFlight(context.res)
+
                 } else {
-                    beforeHook(context)
-                    cb(context)
-                    afterHook(context)
+                    // beforeHook(context)
+                    // cb(context)
+                    // afterHook(context)
+                    //res.end()
+                    let merged = flatten([beforeHook, cb, afterHook])
+                    flow(merged)(context)
                     return false
                 }
             } else {
                 cb = core.noMatch;
-                beforeHook();
+                //beforeHook();
                 cb(context.req, context.res);
-                afterHook();
+                //afterHook();
                 return false;
             }
         }
@@ -93,30 +115,35 @@ let getXwfu = context => {
             files: files
         };
         //context.data = data
-        Object.assign(context.data, data);
-        context.cb(context);
+        Object.assign(context.data, data)
+        context.cb(context)
+        return context
     });
 };
 
 let getURIData = (sourcedata, sourcekey) => {
-    keys = sourcekey.split("/");
-    data = sourcedata.split("/");
-    mapped = zipObject(keys, data);
-    var qdata = [];
+    keys = sourcekey.split("/")
+    data = sourcedata.split("/")
+    mapped = zipObject(keys, data)
+    var qdata = []
     var result = pickBy(mapped, function (value, key) {
-        return key.startsWith(":");
+        return key.startsWith(":")
     });
 
     var inv = forEach(invert(result), function (k, v) {
-        var newkey = k.replace(":", "");
-        qdata[newkey] = v;
+        var newkey = k.replace(":", "")
+        qdata[newkey] = v
     });
-    return qdata;
+    return qdata
 };
 
 let createServer = opt => {
     //initiate the options
-    options = opt;
+    //console.log(options.worker)
+    options = opt
+    let workers = 1
+    options.worker === undefined ? options.worker = 1 : null
+    options.worker > cpus ? workers = cpus : workers = parseInt(options.worker)
     options.sorted = orderBy(
         options.routes,
         function (o) {
@@ -124,24 +151,42 @@ let createServer = opt => {
         },
         "desc"
     );
+    if (cluster.isMaster) {
+        console.log(`Master ${process.pid} is running`)
+        console.log(`${workers} worker/s out of ${cpus} will be started`)
+        for (let i = 0; i < workers; i++) {
+            cluster.fork()
+        }
 
-    return http
-        .createServer(function (req, res) {
-            sHTTP(req, res);
+        cluster.on('exit', (worker, code, signal) => {
+            console.log(`worker ${worker.process.pid} died`)
         })
-        .listen(options.port, function () {
-            let msg = c
-                .by("Pinipig Server is listening on ")
-                .m(options.port)
-                .end();
-            options.banner != undefined ? msg = options.banner : null
+    } else {
+        return http
+            .createServer(function (req, res) {
+                sHTTP(req, res);
+            })
+            .listen(options.port, function () {
+                let msg = c
+                    .by(`Worker ${process.pid} | Pinipig Server is listening on `)
+                    .m(options.port)
+                    .end()
+                options.banner != undefined ? msg = options.banner : null
+                console.log(msg)
 
-            console.log(msg);
 
-        });
+
+            })
+    }
 };
 
 module.exports = {
     createServer: createServer,
-    flow
+    utils: {
+        cors,
+        flow,
+        flatten,
+        color: c,
+        preFlight
+    }
 };
