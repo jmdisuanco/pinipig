@@ -18,7 +18,6 @@ Version 1 released!
 - CORS
 - preflight handling
 - Async Functional Flow
-- Workers (base on number of CPUs)
 
 ## What are Hooks
 
@@ -171,18 +170,6 @@ let options = {
 };
 
 pinipig.createServer(options);
-```
-
----
-
-- ## Multi-Core Example
-
-```javascript
-let options = {
-  port: 9090,
-  routes: routes,
-  worker: 4 //initiate 4 workers
-};
 ```
 
 ---

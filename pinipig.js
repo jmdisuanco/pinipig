@@ -1,4 +1,5 @@
-const http = require("http")
+//const http = require("http")
+const http = require('@discordjs/uws').http
 const c = require("8colors")
 const orderBy = require("lodash/orderBy")
 const forEach = require("lodash/forEach")
@@ -141,31 +142,31 @@ let createServer = opt => {
         },
         "desc"
     );
-    if (cluster.isMaster) {
-        console.log(`Master ${process.pid} is running`)
-        console.log(`${workers} worker/s out of ${cpus} will be started`)
-        for (let i = 0; i < workers; i++) {
-            cluster.fork()
-        }
+    // if (cluster.isMaster) {
+    //     console.log(`Master ${process.pid} is running`)
+    //     console.log(`${workers} worker/s out of ${cpus} will be started`)
+    //     for (let i = 0; i < workers; i++) {
+    //         cluster.fork()
+    //     }
 
-        cluster.on('exit', (worker, code, signal) => {
-            console.log(`worker ${worker.process.pid} died`)
+    //     cluster.on('exit', (worker, code, signal) => {
+    //         console.log(`worker ${worker.process.pid} died`)
+    //     })
+    // } else {
+    return http
+        .createServer(function (req, res) {
+            sHTTP(req, res);
         })
-    } else {
-        return http
-            .createServer(function (req, res) {
-                sHTTP(req, res);
-            })
-            .listen(options.port, function () {
-                let msg = c
-                    .by(`Worker ${process.pid} | Pinipig Server is listening on `)
-                    .m(options.port)
-                    .end()
-                options.banner != undefined ? msg = options.banner : null
-                console.log(msg)
-            })
-    }
-};
+        .listen(options.port, function () {
+            let msg = c
+                .by(`Worker ${process.pid} | Pinipig Server is listening on `)
+                .m(options.port)
+                .end()
+            options.banner != undefined ? msg = options.banner : null
+            console.log(msg)
+        })
+}
+// }
 
 module.exports = {
     createServer: createServer,
@@ -176,4 +177,4 @@ module.exports = {
         color: c,
         preFlight
     }
-};
+}
