@@ -5,7 +5,7 @@
  */
 
 const pinipig = require('../pinipig')
-
+const fs = require('fs')
 let UploadForm = (context) => {
     context.res.writeHead(200, {
         'content-type': 'text/html'
@@ -43,8 +43,9 @@ let routes = [{
 ]
 
 let options = {
-    port: 3000,
+    port: 9090,
     routes: routes,
+    http: 'node'
 }
 
 pinipig.createServer(options)

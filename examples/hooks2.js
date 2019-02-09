@@ -73,7 +73,7 @@ let routes = [{
         url: '/async/:num', // http://localhost:3000/async/
         GET: Query,
         hooks: {
-            before: throttle, // sleep for 3 secs before serving Query on Webpage
+            before: [throttle, addOne], // sleep for 3 secs before serving Query on Webpage
             after: sytemOut //console log to the system
         }
     },

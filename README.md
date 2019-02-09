@@ -14,7 +14,7 @@ Version 1 released!
 - Hooks / Async Hooks
   - before
   - after
-- Inbuilt file upload
+- Inbuilt file upload (available in HTTP node module mode)
 - CORS
 - preflight handling
 - Async Functional Flow
@@ -27,7 +27,7 @@ hooks inside before
 
 ```javascript
 hooks: {
-  before: [hook1, hook2, hook3]
+  before: [hook1, hook2, hook3];
 } // arrays
 ```
 
@@ -37,7 +37,7 @@ hooks inside afer
 
 ```javascript
 hooks: {
-  before: [hook4, hook5, hook6]
+  before: [hook4, hook5, hook6];
 } // arrays
 ```
 
@@ -56,6 +56,18 @@ using Pinipig toolkit is pretty easy
 installing the pinipig toolkit via npm
 
 `npm install --save pinipig`
+
+# Options
+
+##
+
+| Options | Type                      | Description                                                                    | Posible Values (example)                               | Optional |
+| ------- | ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ | -------- |
+| http    | (String)                  | http server type node = native node http module micro(default) uws http server | `'micro'` (default), `'node'`                          | Yes      |
+| worker  | (Integer)                 | Number of workers to start this option is available for http = node only       | 1,2,3...                                               | Yes      |
+| routes  | (Object)                  | routes object see sample                                                       | see examples                                           | No       |
+| port    | (Integer)                 | port where to serve our Pinipig Server                                         | 9090                                                   | No       |
+| banner  | (String / String Literal) | Message when Server start is succesful                                         | `` `Pinipig Server is listening on ${options.port}` `` | Yes      |
 
 # Examples
 
@@ -224,7 +236,8 @@ let routes = [
 
 let options = {
   port: 9090,
-  routes: routes
+  routes: routes,
+  http: "node"
 };
 
 pinipig.createServer(options);

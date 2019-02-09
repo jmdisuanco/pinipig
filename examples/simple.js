@@ -29,7 +29,7 @@ let routes = [{
         GET: HelloWorld
     },
     {
-        url: '/user/:name', // http://localhost:3000/user/[NAME]
+        url: '/user/:name', // http://localhost:9090/user/[NAME]
         GET: Query
     }
 
@@ -38,6 +38,7 @@ let routes = [{
 let options = {
     port: 9090,
     routes: routes,
+    http: 'micro' // options 'node','micro' 
 }
 
 pinipig.createServer(options)

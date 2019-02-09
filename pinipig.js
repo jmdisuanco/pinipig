@@ -1,5 +1,5 @@
-//const http = require("http")
-const http = require('@discordjs/uws').http
+const http = require("http")
+const microHTTP = require('./libs/uws').http
 const c = require("8colors")
 const orderBy = require("lodash/orderBy")
 const forEach = require("lodash/forEach")
@@ -98,20 +98,43 @@ let regexify = obj => {
     return obj;
 };
 
+// let getXwfu = (cb, req, res) => { //Extract X-WWW-form-urlencoded
+//     req.on('data', (chunk) => {
+//         try {
+//             var query = []
+//             var data_str = chunk.toString()
+//             _.split(decodeURIComponent(data_str), '&')
+//                 .forEach(function (value) {
+//                     query.push(_.split(value, '='))
+//                 })
+//             var results = _.fromPairs(query)
+//         } catch (e) {
+//             results = chunk;
+//         }
+
+//         cb(req, res, results)
+//     })
+
+// }
 let getXwfu = context => {
     //Extract X-WWW-form-urlencoded
-    let form = new formidable.IncomingForm();
-    form.parse(context.req, function (err, fields, files) {
-        let data = {
-            fields: fields,
-            files: files
-        };
-        //context.data = data
-        Object.assign(context.data, data)
-        context.cb(context)
-        return context
-    });
-};
+    try {
+        let form = new formidable.IncomingForm();
+        form.parse(context.req, function (err, fields, files) {
+            let data = {
+                fields: fields,
+                files: files
+            };
+            //context.data = data
+            Object.assign(context.data, data)
+            context.cb(context)
+            return context
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 
 let getURIData = (sourcedata, sourcekey) => {
     keys = sourcekey.split("/")
@@ -133,7 +156,10 @@ let createServer = opt => {
     //initiate the options
     options = opt
     let workers = cpus
+    let httpserver = http
     options.worker === undefined ? options.worker = cpus : null
+    options.http === undefined || options.http === 'micro' ? httpserver = microHTTP : null
+    options.http === 'node' ? httpserver = http : null
     options.worker > cpus ? workers = cpus : workers = parseInt(options.worker)
     options.sorted = orderBy(
         options.routes,
@@ -142,31 +168,32 @@ let createServer = opt => {
         },
         "desc"
     );
-    // if (cluster.isMaster) {
-    //     console.log(`Master ${process.pid} is running`)
-    //     console.log(`${workers} worker/s out of ${cpus} will be started`)
-    //     for (let i = 0; i < workers; i++) {
-    //         cluster.fork()
-    //     }
+    if (cluster.isMaster && options.http === 'node' && options.worker != 1) {
+        console.log(`Master ${process.pid} is running`)
+        console.log(`${workers} worker/s out of ${cpus} will be started`)
+        for (let i = 0; i < workers; i++) {
+            cluster.fork()
+        }
 
-    //     cluster.on('exit', (worker, code, signal) => {
-    //         console.log(`worker ${worker.process.pid} died`)
-    //     })
-    // } else {
-    return http
-        .createServer(function (req, res) {
-            sHTTP(req, res);
+        cluster.on('exit', (worker, code, signal) => {
+            console.log(`worker ${worker.process.pid} halted`)
+            cluster.fork() //respawn 
         })
-        .listen(options.port, function () {
-            let msg = c
-                .by(`Worker ${process.pid} | Pinipig Server is listening on `)
-                .m(options.port)
-                .end()
-            options.banner != undefined ? msg = options.banner : null
-            console.log(msg)
-        })
+    } else {
+        return httpserver
+            .createServer(function (req, res) {
+                sHTTP(req, res);
+            })
+            .listen(options.port, function () {
+                let msg = c
+                    .by(`Worker ${process.pid} | Pinipig Server is listening on `)
+                    .m(options.port)
+                    .end()
+                options.banner != undefined ? msg = options.banner : null
+                console.log(msg)
+            })
+    }
 }
-// }
 
 module.exports = {
     createServer: createServer,

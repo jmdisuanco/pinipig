@@ -1,0 +1,65 @@
+{
+  "_from": "@discordjs/uws",
+  "_id": "@discordjs/uws@11.149.1",
+  "_inBundle": false,
+  "_integrity": "sha512-TmbwZaeXDSCq0ckmf2q10Fkt1220gu9AZJ/UvtQjsi2jyJDjy0i0OwL4/eb3vc9Cwr0mpC9EbfzltQ2si0qUiQ==",
+  "_location": "/@discordjs/uws",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@discordjs/uws",
+    "name": "@discordjs/uws",
+    "escapedName": "@discordjs%2fuws",
+    "scope": "@discordjs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@discordjs/uws/-/uws-11.149.1.tgz",
+  "_shasum": "2e86f2825f43bed43d2e69eaf30a07d2dd8e8946",
+  "_spec": "@discordjs/uws",
+  "_where": "/Users/jm/Projects/disuanco/pinipig",
+  "author": {
+    "name": "Alex Hultman",
+    "email": "alexhultman@gmail.com",
+    "url": "https://github.com/alexhultman"
+  },
+  "bugs": {
+    "url": "https://github.com/discordjs/uws/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "iCrawl",
+      "email": "icrawltogo@gmail.com",
+      "url": "https://github.com/iCrawl"
+    }
+  ],
+  "deprecated": false,
+  "description": "Tiny WebSockets",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "gypfile": true,
+  "homepage": "https://github.com/discordjs/uws#readme",
+  "keywords": [
+    "tiny",
+    "websockets"
+  ],
+  "license": "Zlib",
+  "main": "uws.js",
+  "name": "@discordjs/uws",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/discordjs/uws.git"
+  },
+  "scripts": {
+    "install": "node-gyp rebuild"
+  },
+  "version": "11.149.1"
+}
