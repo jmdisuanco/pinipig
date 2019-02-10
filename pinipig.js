@@ -13,7 +13,8 @@ const {
     cors,
     flow,
     flatten,
-    preFlight
+    preFlight,
+    memoize
 } = core
 const cluster = require('cluster')
 const formidable = require("formidable");
@@ -136,7 +137,7 @@ let getXwfu = context => {
 }
 
 
-let getURIData = memoize( (sourcedata, sourcekey) => {
+let getURIData = memoize((sourcedata, sourcekey) => {
     keys = sourcekey.split("/")
     data = sourcedata.split("/")
     mapped = zipObject(keys, data)
