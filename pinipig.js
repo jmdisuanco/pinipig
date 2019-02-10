@@ -86,7 +86,7 @@ let sHTTP = (req, res) => {
     }
 };
 
-let regexify = obj => {
+let regexify = memoize(obj => {
     // let regexified
     let replaceWith = "([a-z0-9A-Z:,_-]*)";
     regexified = forEach(obj, function (value) {
@@ -96,18 +96,18 @@ let regexify = obj => {
         }
     });
     return obj;
-};
+})
 
 // let getXwfu = (cb, req, res) => { //Extract X-WWW-form-urlencoded
 //     req.on('data', (chunk) => {
 //         try {
-//             var query = []
-//             var data_str = chunk.toString()
+//             let query = []
+//             let data_str = chunk.toString()
 //             _.split(decodeURIComponent(data_str), '&')
 //                 .forEach(function (value) {
 //                     query.push(_.split(value, '='))
 //                 })
-//             var results = _.fromPairs(query)
+//             let results = _.fromPairs(query)
 //         } catch (e) {
 //             results = chunk;
 //         }
@@ -136,21 +136,21 @@ let getXwfu = context => {
 }
 
 
-let getURIData = (sourcedata, sourcekey) => {
+let getURIData = memoize( (sourcedata, sourcekey) => {
     keys = sourcekey.split("/")
     data = sourcedata.split("/")
     mapped = zipObject(keys, data)
-    var qdata = []
-    var result = pickBy(mapped, function (value, key) {
+    let qdata = []
+    let result = pickBy(mapped, function (value, key) {
         return key.startsWith(":")
-    });
+    })
 
-    var inv = forEach(invert(result), function (k, v) {
-        var newkey = k.replace(":", "")
+    let inv = forEach(invert(result), function (k, v) {
+        let newkey = k.replace(":", "")
         qdata[newkey] = v
-    });
+    })
     return qdata
-};
+})
 
 let createServer = opt => {
     //initiate the options
