@@ -14,7 +14,7 @@ Version 1 released!
 - Hooks / Async Hooks
   - before
   - after
-- Inbuilt file upload (available in HTTP node module mode)
+- Inbuilt file upload (available gin HTTP node module mode)
 - CORS
 - preflight handling
 - Async Functional Flow
@@ -63,7 +63,7 @@ installing the pinipig toolkit via npm
 
 | Options | Type                      | Description                                                                    | Posible Values (example)                               | Optional |
 | ------- | ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ | -------- |
-| http    | (String)                  | http server type node = native node http module micro(default) uws http server | `'micro'` (default), `'node'`                          | Yes      |
+| http    | (String)                  | http server type node = native node http module micro(default) uws http server | `'micro'` (Experimental), `'node'` (default)           | Yes      |
 | worker  | (Integer)                 | Number of workers to start this option is available for http = node only       | 1,2,3...                                               | Yes      |
 | routes  | (Object)                  | routes object see sample                                                       | see examples                                           | No       |
 | port    | (Integer)                 | port where to serve our Pinipig Server                                         | 9090                                                   | No       |

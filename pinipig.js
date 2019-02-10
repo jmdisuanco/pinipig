@@ -158,8 +158,8 @@ let createServer = opt => {
     let workers = cpus
     let httpserver = http
     options.worker === undefined ? options.worker = cpus : null
-    options.http === undefined || options.http === 'micro' ? httpserver = microHTTP : null
-    options.http === 'node' ? httpserver = http : null
+    options.http === undefined || options.http === 'node' ? httpserver = http : null
+    options.http === 'micro' ? httpserver = microHTTP : null
     options.worker > cpus ? workers = cpus : workers = parseInt(options.worker)
     options.sorted = orderBy(
         options.routes,

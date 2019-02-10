@@ -24,11 +24,11 @@ let UploadFormProcess = (context) => {
     let data = context.data
     let tmpPath = data.files.upload.path
     let newPath = './examples/uploads/' + data.files.upload.name //Make sure you created uploads folder in your App root.
-    fs.rename(tmpPath, newPath, function (err) {
-        if (err) throw err;
-        context.res.write('File uploaded with title ' + data.fields.title + '!');
-        context.res.end();
-    });
+    // fs.rename(tmpPath, newPath, function (err) {
+    //     if (err) throw err;
+    //     context.res.write('File uploaded with title ' + data.fields.title + '!');
+    //     context.res.end();
+    // });
 }
 
 let routes = [{
@@ -45,7 +45,7 @@ let routes = [{
 let options = {
     port: 9090,
     routes: routes,
-    http: 'node'
+    http: 'micro'
 }
 
 pinipig.createServer(options)

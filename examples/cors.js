@@ -28,6 +28,15 @@ let Query = (ctx) => {
     ctx.res.end(); //end the response
 }
 
+let FormProcess = (ctx) => {
+    cors(ctx.res)
+    ctx.res.setHeader('Content-Type', 'text/html')
+    ctx.res.writeHead(200, {
+        'Content-Type': 'text/html'
+    })
+    ctx.res.write(JSON.stringify(ctx.data))
+}
+
 let routes = [{
         url: '/',
         GET: HelloWorld
@@ -35,6 +44,7 @@ let routes = [{
     {
         url: '/user/:name', // http://localhost:3000/user/[NAME]
         GET: Query,
+        POST: FormProcess,
         OPTIONS: preFlight // Preflight check by browser
     }
 
@@ -43,6 +53,7 @@ let routes = [{
 let options = {
     port: 9090,
     routes: routes,
+    http: 'node'
 }
 
 pinipig.createServer(options)
