@@ -49,7 +49,10 @@ let sHTTP = (req, res) => {
             hit = true;
             let method = req.method;
             if (value.url.search(":") > 0) {
-                context.data = getURIData(req.url, value.url);
+                context.data = getURIData({
+                    keys: req.url,
+                    value: value.url
+                })
             }
             context.query = core.getURLQuery(req)
             if (method && value[method]) {
@@ -137,20 +140,36 @@ let getXwfu = context => {
 }
 
 
-let getURIData = memoize((sourcedata, sourcekey) => {
-    keys = sourcekey.split("/")
-    data = sourcedata.split("/")
-    mapped = zipObject(keys, data)
+// let getURIData = (sourcedata, sourcekey) => {
+//     keys = sourcekey.split("/")
+//     data = sourcedata.split("/")
+//     console.log('old', keys, data)
+//     mapped = zipObject(keys, data)
+//     let qdata = []
+//     let result = pickBy(mapped, function (value, key) {
+//         return key.startsWith(":")
+//     })
+//     let inv = forEach(invert(result), function (k, v) {
+//         let newkey = k.replace(":", "")
+//         qdata[newkey] = v
+//     })
+//     return qdata
+// }
+let getURIData = memoize((source) => {
+    keys = source.keys.split("/")
+    data = source.value.split("/")
+    mapped = zipObject(data, keys)
     let qdata = []
     let result = pickBy(mapped, function (value, key) {
         return key.startsWith(":")
     })
-
     let inv = forEach(invert(result), function (k, v) {
         let newkey = k.replace(":", "")
         qdata[newkey] = v
     })
     return qdata
+    //return source
+
 })
 
 let createServer = opt => {
