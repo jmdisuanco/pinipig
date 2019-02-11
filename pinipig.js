@@ -155,7 +155,7 @@ let getXwfu = context => {
 //     })
 //     return qdata
 // }
-let getURIData = memoize((source) => {
+let getURIData = (source) => {
     keys = source.keys.split("/")
     data = source.value.split("/")
     mapped = zipObject(data, keys)
@@ -168,9 +168,7 @@ let getURIData = memoize((source) => {
         qdata[newkey] = v
     })
     return qdata
-    //return source
-
-})
+}
 
 let createServer = opt => {
     //initiate the options
