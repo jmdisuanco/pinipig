@@ -8,7 +8,7 @@ A super `simple` `REST` webservice framework
 
 Version 1 released!
 
-## What's in version 1.2
+## What's in version 1.2.0
 
 - Routes
 - Async Hooks

@@ -12,7 +12,6 @@ const {
 
 let options;
 
-
 let createServer = options => {
   //initiate the options
   //options = opt;

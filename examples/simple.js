@@ -2,6 +2,7 @@
  * This is a barebone example using the HTTP module of Nodejs
  * and taking advantage of pinipig's REST handler
  *  
+ * 
  */
 
 const pinipig = require('../pinipig')

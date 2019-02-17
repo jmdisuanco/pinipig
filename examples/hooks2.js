@@ -2,6 +2,7 @@
  * This is an example with Hooks
  * and taking advantage of pinipig's REST handler
  *  
+ * 
  */
 
 const pinipig = require('../pinipig')

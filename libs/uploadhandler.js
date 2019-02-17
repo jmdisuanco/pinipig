@@ -11,7 +11,6 @@ let getValueinsideQoute = (str) => {
     console.log(e)
     return false
   }
-
 }
 
 let formdataHandler = async context => {
