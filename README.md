@@ -122,11 +122,12 @@ installing the pinipig toolkit via npm
 
 ### Data Store Context
 
-| From                                    | Where is it stored in context  |
-| --------------------------------------- | ------------------------------ |
-| URL parameter `/url/:username`          | `ctx.data.parameters.username` |
-| Forms submitted via POST                | `ctx.data.fields` [Object]     |
-| Files submitted vai multipart form-data | `ctx.data.files` [Array]       |
+| From                                                        | Where is it stored in context |
+| ----------------------------------------------------------- | ----------------------------- |
+| URL parameter `/url/:username`                              | `ctx.parameters` [Object]     |
+| Forms submitted via POST                                    | `ctx.data.fields` [Object]    |
+| Files submitted vai multipart form-data                     | `ctx.data.files` [Array]      |
+| Query from url `http://localhost:9090/url?name=john&age=18` | `ctx.query` [Object]          |
 
 ~Code Snippet~ inside route object
 

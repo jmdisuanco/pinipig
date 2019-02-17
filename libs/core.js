@@ -1,5 +1,5 @@
 /**********************************************************************************************/
-/**************************** CORE  MODULES  *****************************************/
+/************************************* CORE  MODULES  *****************************************/
 /**********************************************************************************************/
 
 const orderBy = require("lodash/orderBy")
@@ -15,7 +15,7 @@ const {
     formUrlencodedHandler,
     formdataHandler
 } = require('./uploadhandler')
-let allowedHTTPMethods = ['get', 'post', 'options', 'put', 'patch', 'delete', 'del', 'head']
+let allowedHTTPMethods = ['get', 'post', 'options', 'put', 'patch', 'del', 'head']
 
 let noMatch = (res, req) => {
     res.writeHeader('Content-Type', 'text/json');
@@ -82,7 +82,7 @@ let preFlight = (res) => {
 }
 
 let getURLQuery = (req) => {
-    let url = req.getUrl().split('?')
+    let url = req.getQuery().split('?')
     let kvp = {}
     if (url[1]) {
         let queries = url[1].split('&')
@@ -153,9 +153,10 @@ let payload = (res, req, urlTemplate) => {
     res.setHeader = res.writeHeader
     //context.req.headers = getHeaders(req) /*BOTTLENECK */ : null
     context.req.getHeaders = getHeaders
-    //context.query = getURLQuery
+    context.getURLQuery = getURLQuery
     //context.data = getUriData
     urlTemplate.search(':') ? context.parameters = getUriData(urlTemplate, req) /*BOTTLENECK */ : null
+    urlTemplate.search('\\?') ? context.query = getURLQuery(req) /*BOTTLENECK */ : null
     res.writeHead = (status, headers) => {
         try {
             res.writeStatus(status.toString());

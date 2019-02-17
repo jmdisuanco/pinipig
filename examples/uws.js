@@ -54,6 +54,10 @@ let Query = ctx => {
 
 };
 
+let getQuery = ctx => {
+    ctx.res.end(JSON.stringify(ctx.query))
+
+}
 let tellURL = ctx => {
     try {
         let url = ctx.req.getUrl()
@@ -145,7 +149,6 @@ let routes = [{
         url: "/a",
         get: tellURL,
     },
-
     {
         url: "/post",
         post: FormProcess,
@@ -160,6 +163,10 @@ let routes = [{
             drain: null,
             close: null
         }
+    },
+    {
+        url: "/query",
+        get: getQuery
     }
 
 ];
