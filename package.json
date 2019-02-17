@@ -1,10 +1,11 @@
 {
-  "name": "pinipig",
-  "version": "1.1.7",
-  "description": "A super `simple` webservice (HTTP)  functional style framework",
+  "name": "upinipig",
+  "version": "1.1.9",
+  "description": "A super `simple` webservice functional style framework",
   "main": "pinipig.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./examples/uws",
+    "profiler": "clinic doctor --on-port 'autocannon  http://localhost:$PORT' -- node ./examples/simple"
   },
   "repository": {
     "type": "git",
@@ -12,6 +13,7 @@
   },
   "keywords": [
     "webservices",
+    "microservice",
     "rest",
     "api",
     "restful api",
@@ -26,7 +28,7 @@
   "homepage": "https://github.com/jmdisuanco/pinipig#readme",
   "dependencies": {
     "8colors": "^1.0.1",
-    "formidable": "^1.2.1",
-    "lodash": ">=4.17.11"
+    "lodash": ">=4.17.11",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.1.0"
   }
 }

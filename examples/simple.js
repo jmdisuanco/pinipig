@@ -11,7 +11,7 @@ let HelloWorld = function (ctx) {
     ctx.res.writeHead(200, {
         'Content-Type': 'text/html'
     });
-    ctx.res.write('Working'); //write a response to the client
+    ctx.res.write('Hello World'); //write a response to the client
     ctx.res.end(); //end the response
 }
 
@@ -37,8 +37,7 @@ let routes = [{
 
 let options = {
     port: 9090,
-    routes: routes,
-    http: 'micro' // options 'node','micro' 
+    routes: routes
 }
 
 pinipig.createServer(options)

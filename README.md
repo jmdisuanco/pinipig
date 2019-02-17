@@ -4,20 +4,22 @@
 ![](https://img.shields.io/github/license/jmdisuanco/pinipig.svg) ![](https://img.shields.io/twitter/url/https/github.com/jmdisuanco/pinipig.svg?style=social)
 ![](https://img.shields.io/github/commit-activity/y/jmdisuanco/pinipig.svg)
 
-A super `simple` `REST` webservice (HTTP) framework
+A super `simple` `REST` webservice framework
 
 Version 1 released!
 
-## What's in version 1
+## What's in version 1.2
 
 - Routes
-- Hooks / Async Hooks
+- Async Hooks
   - before
   - after
-- Inbuilt file upload (available gin HTTP node module mode)
+- Inbuilt file upload
 - CORS
 - preflight handling
 - Async Functional Flow
+- WebSockets
+- a lot faster than previous version
 
 ## What are Hooks
 
@@ -57,17 +59,85 @@ installing the pinipig toolkit via npm
 
 `npm install --save pinipig`
 
+# Methods available inside context (ctx)
+
+## res
+
+| Method                        | Description                                                       | Usage                                                              |
+| ----------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
+| writeStatus                   | send response status                                              | `res.writeStatus('200')`                                           |
+| end                           | send end response                                                 | `res.end('Message HERE')`                                          |
+| write                         | send message to cliend                                            | `res.send('Hello Client')`                                         |
+| writeHeader alias `setHeader` | send the header part                                              | `res.writeHeader('content-type','text/json')`                      |
+| writeHead                     | send the header part in sets and with status (node http polyfill) | `res.writeHead(200, { accept: "*", "content-type": "text/json" })` |
+
+## req
+
+| Method       | Description                        | Usage                                                                                                   |
+| ------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| getHeader    | get Header of the request          | `req.getHeader('content-type')`                                                                         |
+| getParameter | get paramater based on index       | `req.getParameter(0)` to retrieve name value on `\user\:name` route data also available via `data.name` |
+| getUrl       | get URL of the request             | `req.getUrl()`                                                                                          |  |
+| getMethod    | get Method of the request          | `req.getMethod()`                                                                                       |
+| getQuery     |                                    | `req.getQuery()`                                                                                        |
+| getHeaders   | get all the Headers sent by client | `req.getHeaders()`                                                                                      |
+
+## ws
+
+| Method            | Description |
+| ----------------- | ----------- |
+| send              |             |
+| end               |             |
+| close             |             |
+| getBufferedAmount |             |
+| subscribe         |             |
+| publish           |             |
+
 # Options
 
-##
+| Options | Type                      | Description                            | Posible Values (example)                     | Optional |
+| ------- | ------------------------- | -------------------------------------- | -------------------------------------------- | -------- |
+| routes  | (Object)                  | routes object see sample               | see examples                                 | No       |
+| port    | (Integer)                 | port where to serve our Pinipig Server | 9090                                         | No       |
+| banner  | (String / String Literal) | Message when Server start is succesful | `` `Pinipig Server is listening on 9090 ` `` | Yes      |
 
-| Options | Type                      | Description                                                                    | Posible Values (example)                               | Optional |
-| ------- | ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ | -------- |
-| http    | (String)                  | http server type node = native node http module micro(default) uws http server | `'micro'` (Experimental), `'node'` (default)           | Yes      |
-| worker  | (Integer)                 | Number of workers to start this option is available for http = node only       | 1,2,3...                                               | Yes      |
-| routes  | (Object)                  | routes object see sample                                                       | see examples                                           | No       |
-| port    | (Integer)                 | port where to serve our Pinipig Server                                         | 9090                                                   | No       |
-| banner  | (String / String Literal) | Message when Server start is succesful                                         | `` `Pinipig Server is listening on ${options.port}` `` | Yes      |
+## Websockets
+
+### Options
+
+| Options           |
+| ----------------- |
+| compression       |
+| maxPayloadLength  |
+| idleTimeout: 3000 |
+
+### Handlers
+
+| Handlers |
+| -------- |
+| open     |
+| message  |
+| drain    |
+| close    |
+
+~Code Snippet~ inside route object
+
+```javascript
+//post: PostHandler,
+//get: getHandler,
+//...
+ws: {
+            options: {
+                compression: 0,
+                maxPayloadLength: 16 * 1024 * 1024,
+                idleTimeout: 3000
+            },
+            open: WSPost,
+            message: WSMessage,
+            drain: null,
+            close: null
+        }
+```
 
 # Examples
 
@@ -236,8 +306,7 @@ let routes = [
 
 let options = {
   port: 9090,
-  routes: routes,
-  http: "node"
+  routes: routes
 };
 
 pinipig.createServer(options);
