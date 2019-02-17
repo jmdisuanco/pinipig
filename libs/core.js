@@ -326,54 +326,6 @@ let generateApp = App => (options) => {
             }
         )
     })
-    //let wsFunc = {}
-
-    // App.ws('/*', {
-    //     /* Options */
-    //     compression: 0,
-    //     maxPayloadLength: 16 * 1024 * 1024,
-    //     idleTimeout: 3000,
-
-    //     /* Handlers */
-    //     open: (ws, req) => {
-    //         try {
-    //             let result = find(routes, {
-    //                 url: req.getUrl()
-    //             })
-    //             wsFunc = result.ws
-    //             console.log('A WebSocket connected via URL: ' + req.getUrl() + '!')
-    //         } catch (e) {
-    //             ws.close()
-    //         }
-    //     },
-    //     message: (ws, message, isBinary) => {
-    //         let context = {
-    //             isBinary,
-    //             ws
-    //         }
-    //         try {
-    //             wsFunc.message(context)
-    //         } catch (e) {
-    //             ws.close()
-    //         }
-
-    //         /* Ok is false if backpressure was built up, wait for drain */
-    //         //let ok = ws.send(message, isBinary);
-    //     },
-    //     drain: (ws) => {
-    //         let context = {
-    //             ws
-    //         }
-    //         try {
-    //             wsFunc.message(context)
-    //         } catch (e) {
-    //             ws.close()
-    //         }
-    //     },
-    //     close: (ws, code, message) => {
-    //         console.log('WebSocket closed');
-    //     }
-    // })
 
 
     App.any('/*', (res, req) => {

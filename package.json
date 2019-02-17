@@ -4,7 +4,8 @@
   "description": "A super `simple` webservice functional style framework",
   "main": "pinipig.js",
   "scripts": {
-    "dev": "nodemon ./examples/uws"
+    "dev": "nodemon ./examples/uws",
+    "postpublish": "git push --follow-tags"
   },
   "repository": {
     "type": "git",
