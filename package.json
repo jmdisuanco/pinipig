@@ -5,6 +5,9 @@
   "main": "pinipig.js",
   "scripts": {
     "dev": "nodemon ./examples/uws",
+    "pub:patch": "npm version patch && npm publish",
+    "pub:minor": "npm version minor && npm publish",
+    "pub:major": "npm version major && npm publish",
     "postpublish": "git push --follow-tags"
   },
   "repository": {

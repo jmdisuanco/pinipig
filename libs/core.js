@@ -3,13 +3,13 @@
 /**********************************************************************************************/
 
 const orderBy = require("lodash/orderBy")
-const find = require("lodash/find")
+// const find = require("lodash/find")
 const c = require("8colors")
 const pkg = require("../package")
-const path = require('path')
-const os = require('os')
-const fs = require('fs')
-const querystring = require('querystring')
+// const path = require('path')
+// const os = require('os')
+// const fs = require('fs')
+// const querystring = require('querystring')
 const commonHeaders = require('./commonheaders')
 const {
     formUrlencodedHandler,
@@ -155,7 +155,7 @@ let payload = (res, req, urlTemplate) => {
     context.req.getHeaders = getHeaders
     //context.query = getURLQuery
     //context.data = getUriData
-    urlTemplate.search(':') ? context.data.parameters = getUriData(urlTemplate, req) /*BOTTLENECK */ : null
+    urlTemplate.search(':') ? context.parameters = getUriData(urlTemplate, req) /*BOTTLENECK */ : null
     res.writeHead = (status, headers) => {
         try {
             res.writeStatus(status.toString());

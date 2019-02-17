@@ -120,6 +120,14 @@ installing the pinipig toolkit via npm
 | drain    |
 | close    |
 
+### Data Store Context
+
+| From                                    | Where is it stored in context  |
+| --------------------------------------- | ------------------------------ |
+| URL parameter `/url/:username`          | `ctx.data.parameters.username` |
+| Forms submitted via POST                | `ctx.data.fields` [Object]     |
+| Files submitted vai multipart form-data | `ctx.data.files` [Array]       |
+
 ~Code Snippet~ inside route object
 
 ```javascript
