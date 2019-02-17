@@ -155,7 +155,7 @@ let payload = (res, req, urlTemplate) => {
     context.req.getHeaders = getHeaders
     //context.query = getURLQuery
     //context.data = getUriData
-    urlTemplate.search(':') ? context.data = getUriData(urlTemplate, req) /*BOTTLENECK */ : null
+    urlTemplate.search(':') ? context.data.parameters = getUriData(urlTemplate, req) /*BOTTLENECK */ : null
     res.writeHead = (status, headers) => {
         try {
             res.writeStatus(status.toString());
@@ -383,7 +383,7 @@ let generateApp = App => (options) => {
     App.listen(options.port, token => {
         if (token) {
             let msg = c
-                .by(`Pinipig v${pkg.version}-beta Listening on port: `)
+                .by(`Pinipig v${pkg.version} Listening on port: `)
                 .bm(`${options.port}`)
                 .end();
             options.banner != undefined ? (msg = options.banner) : null;
