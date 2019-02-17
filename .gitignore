@@ -64,3 +64,5 @@ uploads
 
 #Work in progress directory
 wip
+
+.DS_Store
