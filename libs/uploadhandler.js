@@ -68,8 +68,10 @@ let formdataHandler = async context => {
 
 let formUrlencodedHandler = async context => {
   try {
-    let result = querystring.parse(context.rawdata);
-    context.data.fields = result;
+    let result = querystring.parse(context.rawdata)
+    context.data = {
+      fields: result
+    }
     context.cb(context);
   } catch (e) {
     console.log(e)
