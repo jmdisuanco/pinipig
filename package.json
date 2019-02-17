@@ -4,8 +4,7 @@
   "description": "A super `simple` webservice functional style framework",
   "main": "pinipig.js",
   "scripts": {
-    "dev": "nodemon ./examples/uws",
-    "profiler": "clinic doctor --on-port 'autocannon  http://localhost:$PORT' -- node ./examples/simple"
+    "dev": "nodemon ./examples/uws"
   },
   "repository": {
     "type": "git",
