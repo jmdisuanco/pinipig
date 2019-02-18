@@ -3,25 +3,18 @@
 /**********************************************************************************************/
 
 const orderBy = require("lodash/orderBy")
-// const find = require("lodash/find")
 const c = require("8colors")
 const pkg = require("../package")
-// const path = require('path')
-// const os = require('os')
-// const fs = require('fs')
-// const querystring = require('querystring')
 const commonHeaders = require('./commonheaders')
 const {
     formUrlencodedHandler,
     formdataHandler
 } = require('./uploadhandler')
 let allowedHTTPMethods = ['get', 'post', 'options', 'put', 'patch', 'del', 'head']
-
 let noMatch = (res, req) => {
-    res.writeHeader('Content-Type', 'text/json');
     res.writeStatus('404')
-    res.write('{"result":"no resource found"}')
-    res.end()
+    res.writeHeader('Content-Type', 'text/json');
+    res.end('{"result":"no resource found"}')
 }
 
 /**
@@ -335,6 +328,7 @@ let generateApp = App => (options) => {
 
     App.listen(options.port, token => {
         if (token) {
+            tkn = token
             let msg = c
                 .by(`Pinipig v${pkg.version} Listening on port: `)
                 .bm(`${options.port}`)

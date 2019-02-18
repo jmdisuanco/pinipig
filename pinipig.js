@@ -10,7 +10,7 @@ const {
   generateApp
 } = core;
 
-let options;
+let options
 
 let createServer = options => {
   //initiate the options
