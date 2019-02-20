@@ -147,6 +147,7 @@ let payload = (res, req, urlTemplate) => {
     //context.req.headers = getHeaders(req) /*BOTTLENECK */ : null
     context.req.getHeaders = getHeaders
     context.getURLQuery = getURLQuery
+    //context.method = req.getMethod()
     //context.data = getUriData
     urlTemplate.search(':') ? context.parameters = getUriData(urlTemplate, req) /*BOTTLENECK */ : null
     urlTemplate.search('\\?') ? context.query = getURLQuery(req) /*BOTTLENECK */ : null
@@ -246,35 +247,37 @@ let MethodLoader = App => (route, routeObj, Flow) => {
 
 
 let POSTHandler = callback => (context) => {
-    try {
-        context.cb = callback
-        let type = context.req.getHeader('content-type')
-        type = type.split(";")[0]
-        //console.log(`Processing ${type}`)
-        let data = ""
-        let isFirst = true
-        context.res.onData((chunk, isLast) => {
-
-            data += Buffer.from(chunk).toString("binary")
-            if (isFirst) {
-                //First chunk action here
-                //Detect File via File signature
-                // let firstChunk = Buffer.from(chunk)
-                // let magicN = Buffer.alloc(4, firstChunk).toString('hex')
+    let formUrlencoded = formUrlencodedHandler(callback)
+    let formdata = formdataHandler(callback)
+    //context.cb = callback
+    let type = context.req.getHeader('content-type')
+    type = type.split(";")[0]
+    //console.log(`Processing ${type}`)
+    let data = ""
+    let isFirst = true
+    context.res.onAborted(() => {
+        return false
+    })
+    context.res.onData((chunk, isLast) => {
+        data += Buffer.from(chunk).toString("binary")
+        if (isFirst) {
+            //First chunk action here
+            //Detect File via File signature
+            // let firstChunk = Buffer.from(chunk)
+            // let magicN = Buffer.alloc(4, firstChunk).toString('hex')
+        }
+        isFirst = false
+        if (isLast) {
+            context.rawdata = data
+            if (type == "application/x-www-form-urlencoded") {
+                //formUrlencodedHandler(context)
+                formUrlencoded(context)
+            } else {
+                formdata(context)
+                //formdataHandler(context)
             }
-            isFirst = false
-            if (isLast) {
-                context.rawdata = data
-                if (type == "application/x-www-form-urlencoded") {
-                    formUrlencodedHandler(context)
-                } else {
-                    formdataHandler(context)
-                }
-            }
-        })
-    } catch (e) {
-        console.log(e)
-    }
+        }
+    })
 }
 
 
@@ -287,13 +290,15 @@ let composedFn = (Obj, hooks) => {
         hooks.before ? beforeHooks = hooks.before : null
         hooks.after ? afterHooks = hooks.after : null
     }
-
+    let postMethods = ['post', 'patch']
     if (allowedHTTPMethods.includes(prop)) {
-        if (prop != 'post') {
-            cb = Obj[1]
-        } else {
-            cb = POSTHandler(Obj[1])
-        }
+        // if (!postMethods.includes(prop)) {
+        //     cb = Obj[1]
+        // } else {
+        //     cb = POSTHandler(Obj[1]) //Bug Starts here 
+        // }
+        !postMethods.includes(prop) ? cb = Obj[1] : cb = POSTHandler(Obj[1])
+
         if (beforeHooks == '' && typeof cb == 'function' && afterHooks == '') {
             return cb
         } else {
