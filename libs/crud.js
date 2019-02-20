@@ -1,7 +1,7 @@
 //ObjectID = require('mongodb').ObjectID
 
 let read = model => (ctx) => {
-  console.log('reading...')
+  // console.log('reading...')
 
   let id
   /*ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) :*/
@@ -20,7 +20,7 @@ let read = model => (ctx) => {
 }
 
 let readList = model => async (ctx) => {
-  console.log('listing...')
+  // console.log('listing...')
   let urlQuery = ctx.query
   let query = {}
   let count = 0
@@ -30,7 +30,7 @@ let readList = model => async (ctx) => {
     urlQuery.skip != undefined ? query.skip = parseInt(urlQuery.skip) : query.skip = 0
     urlQuery.order != undefined ? query.order = urlQuery.order : null
   }
-
+  // console.log(query)
   model.all(query, (err, data) => {
     if (err) {
       console.log(err)
@@ -58,7 +58,7 @@ let readList = model => async (ctx) => {
 }
 
 let create = model => (ctx) => {
-  console.log('creating...')
+  // console.log('creating...')
   model.create(ctx.data.fields, (err, data) => {
     if (err) {
       ctx.res.end(JSON.stringify(err))
@@ -77,7 +77,7 @@ let create = model => (ctx) => {
 }
 
 let update = model => (ctx) => {
-  console.log('updating...', ctx.req.getMethod())
+  // console.log('updating...', ctx.req.getMethod())
   id = ctx.data.fields.id // ObjectID(ctx.data.id)
   model.exists(id, (err, exists) => {
     if (exists) {
@@ -94,7 +94,7 @@ let update = model => (ctx) => {
 }
 
 let destroy = model => (ctx) => {
-  console.log('detroying...')
+  // console.log('detroying...')
 
   id = ctx.parameters.id // ObjectID(ctx.data.id)
   model.destroyById(id, (err, result) => {

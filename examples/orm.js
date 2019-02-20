@@ -60,7 +60,6 @@ let u = update(Post)
 let list = readList(Post)
 let d = destroy(Post)
 
-
 let getMethod = (ctx) => {
     const {
         res,
