@@ -13,8 +13,8 @@ let getValueinsideQoute = (str) => {
   }
 }
 
-let formdataHandler = async context => {
-  console.log('from-data handler initiated')
+let formdataHandler = callback => async context => {
+  console.log('form-data handler initiated')
   try {
     let set = context.rawdata.split(/------[a-zA-Z0-9--]*/);
     let fields = {};
@@ -52,27 +52,29 @@ let formdataHandler = async context => {
         return;
       }
     });
+
     Promise.all(results).then(complete => {
       let d = {
         fields,
         files
       };
       context.data = d;
-      context.cb(context)
+      callback(context)
     })
   } catch (e) {
+    console.log('error on Form Handler')
     console.log(e)
   }
 }
 
 
-let formUrlencodedHandler = async context => {
+let formUrlencodedHandler = callback => async context => {
   try {
     let result = querystring.parse(context.rawdata)
     context.data = {
       fields: result
     }
-    context.cb(context);
+    callback(context);
   } catch (e) {
     console.log(e)
   }

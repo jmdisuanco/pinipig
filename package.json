@@ -32,6 +32,7 @@
   "homepage": "https://github.com/jmdisuanco/pinipig#readme",
   "dependencies": {
     "8colors": "^1.0.1",
+    "bluebird": "^3.5.3",
     "lodash": ">=4.17.11",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.1.0"
   },

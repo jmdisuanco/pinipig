@@ -1,7 +1,8 @@
 const c = require("8colors");
 const uWS = require("uWebSockets.js");
 const core = require("./libs/core");
-
+const orm = require("./libs/orm")
+const crud = require("./libs/crud")
 const {
   cors,
   flatten,
@@ -22,6 +23,8 @@ let createServer = options => {
 
 module.exports = {
   createServer,
+  orm,
+  crud,
   utils: {
     cors,
     flow,

@@ -13,6 +13,24 @@ let {
   preFlight
 } = pinipig.utils;
 
+let getMethod = (ctx) => {
+  const {
+    res,
+    req
+  } = ctx
+  try {
+    res.onAborted = () => {
+      res.end()
+    }
+    let method = JSON.stringify(req.getMethod())
+    res.end(method)
+  } catch (e) {
+    console.log(req.getMethod(), e.message)
+    res.end()
+    result
+  }
+}
+
 let HelloWorld = function (ctx) {
   try {
     ctx.res.writeHead(200, {
@@ -185,7 +203,12 @@ let routes = [
     get: UploadForm,
     post: FormProcess
   },
-
+  {
+    url: '/method',
+    get: getMethod,
+    post: getMethod,
+    patch: getMethod
+  }
 
 ]
 
