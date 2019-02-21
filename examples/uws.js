@@ -11,7 +11,11 @@ let {
     cors,
     preFlight
 } = pinipig.utils;
+let {
+    streamFile
+} = pinipig
 
+let sf = streamFile('./examples/uploads')
 let HelloWorld = function (ctx) {
     try {
         ctx.res.writeHead(200, {
@@ -148,6 +152,10 @@ let routes = [{
     {
         url: "/a",
         get: tellURL,
+    },
+    {
+        url: "/stream/*",
+        get: sf,
     },
     {
         url: "/post",

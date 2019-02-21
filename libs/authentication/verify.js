@@ -1,13 +1,16 @@
 const jwt = require('jsonwebtoken')
-const config = require('../config/default')
+
 /**
- * 
+ *
+ * Partial function
  * @param {Object} ctx | context object from Pinipig App
- * 
+ *Usage
+ * let verifier = verify(config)
+ * verifier(ctx) 
  */
-let verify = async (ctx) => {
+let verify = config => async (ctx) => {
   let block = () => {
-    ctx.res.end('Unauthorized')
+    ctx.res.end('{"result":"Unauthorized}"')
   }
   if (ctx.headers == undefined) {
     let token = ctx.req.headers['pinipig-jwt']

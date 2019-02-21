@@ -166,4 +166,21 @@ describe('/blahblah', () => {
       done()
     }
   })
+
+})
+
+//StreamFile Check
+describe('/public/test.txt', () => {
+  it('should return test.txt file content "Hello World"', (done) => {
+    http.get(url + '/public/test.txt', (res) => {
+      let data = ''
+      res.on('data', (chunk) => {
+        data += chunk
+      })
+      res.on('end', () => {
+        assert.equal('Hello World', data)
+        done()
+      })
+    })
+  })
 })

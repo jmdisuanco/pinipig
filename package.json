@@ -31,6 +31,8 @@
   },
   "homepage": "https://github.com/jmdisuanco/pinipig#readme",
   "dependencies": {
+    "bcrypt": "^3.0.3",
+    "jsonwebtoken": "^8.4.0",
     "8colors": "^1.0.1",
     "bluebird": "^3.5.3",
     "lodash": ">=4.17.11",

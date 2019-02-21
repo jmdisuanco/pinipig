@@ -119,7 +119,7 @@ let routes = [{
         DEL: d
     },
     {
-        url: '/user/:name', // http://localhost:3000/user/[NAME]
+        url: '/user/:name', // http://localhost:9090/user/[NAME]
         GET: Query,
         POST: FormProcess,
         OPTIONS: preFlight // Preflight check by browser

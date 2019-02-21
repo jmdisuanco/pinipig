@@ -1,6 +1,7 @@
 const encryptPass = require('./encryptpassword')
 const issueToken = require('./issuetoken')
 const verify = require('./verify')
+
 //default strategies
 const local = require('./strategies/local')
 

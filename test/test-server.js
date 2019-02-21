@@ -13,6 +13,11 @@ let {
   preFlight
 } = pinipig.utils;
 
+let {
+  streamFile
+} = pinipig
+let sf = streamFile('./test/public')
+
 let getMethod = (ctx) => {
   const {
     res,
@@ -153,7 +158,7 @@ let routes = [
     get: HelloWorld
   },
   {
-    url: "/user/:name", // http://localhost:3000/user/[NAME]
+    url: "/user/:name", // http://localhost:9090/user/[NAME]
     get: Param,
   },
   // URL Query TEST
@@ -208,6 +213,10 @@ let routes = [
     get: getMethod,
     post: getMethod,
     patch: getMethod
+  },
+  {
+    url: '/public/*',
+    get: sf
   }
 
 ]

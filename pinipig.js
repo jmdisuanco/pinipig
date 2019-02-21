@@ -3,6 +3,8 @@ const uWS = require("uWebSockets.js");
 const core = require("./libs/core");
 const orm = require("./libs/orm")
 const crud = require("./libs/crud")
+const auth = require('./libs/authentication')
+const streamFile = require('./libs/streamfile')
 const {
   cors,
   flatten,
@@ -11,7 +13,7 @@ const {
   generateApp
 } = core;
 
-let options
+// let options
 
 let createServer = options => {
   //initiate the options
@@ -22,14 +24,16 @@ let createServer = options => {
 }
 
 module.exports = {
+  auth,
   createServer,
-  orm,
   crud,
+  orm,
+  streamFile,
   utils: {
     cors,
+    color: c,
     flow,
     flatten,
-    color: c,
     preFlight
   }
 };

@@ -1,11 +1,19 @@
-//ObjectID = require('mongodb').ObjectID
+try {
+  ObjectID = require('mongodb').ObjectID
+} catch (e) {
+  null
+}
 
 let read = model => (ctx) => {
   // console.log('reading...')
 
   let id
-  /*ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) :*/
-  id = parseInt(ctx.parameters.id)
+  try {
+    //will work if adapter is MongoDB
+    ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) : id = parseInt(ctx.parameters.id)
+  } catch (e) {
+    id = parseInt(ctx.parameters.id)
+  }
   model.find({
     where: {
       id: id
@@ -77,8 +85,12 @@ let create = model => (ctx) => {
 }
 
 let update = model => (ctx) => {
-  // console.log('updating...', ctx.req.getMethod())
-  id = ctx.data.fields.id // ObjectID(ctx.data.id)
+  try {
+    //will work if adapter is MongoDB
+    ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) : id = parseInt(ctx.parameters.id)
+  } catch (e) {
+    id = parseInt(ctx.parameters.id)
+  }
   model.exists(id, (err, exists) => {
     if (exists) {
       model.updateOrCreate({
@@ -95,8 +107,12 @@ let update = model => (ctx) => {
 
 let destroy = model => (ctx) => {
   // console.log('detroying...')
-
-  id = ctx.parameters.id // ObjectID(ctx.data.id)
+  try {
+    //will work if adapter is MongoDB
+    ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) : id = parseInt(ctx.parameters.id)
+  } catch (e) {
+    id = parseInt(ctx.parameters.id)
+  }
   model.destroyById(id, (err, result) => {
     ctx.res.end(JSON.stringify({
       result: 'deleted',
