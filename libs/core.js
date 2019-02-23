@@ -302,6 +302,7 @@ let composedFn = (Obj, hooks) => {
         if (beforeHooks == '' && typeof cb == 'function' && afterHooks == '') {
             return cb
         } else {
+
             let merged = flatten([beforeHooks, cb, afterHooks])
             return flow(merged)
         }
@@ -321,7 +322,10 @@ let generateApp = App => (options) => {
         Object.entries(routes).map(
             (route) => {
                 let Flow = composedFn(route, routes.hooks)
-                loader = Loader(route, routes, Flow)
+                if (Flow) {
+                    Loader(route, routes, Flow)
+                }
+
             }
         )
     })
