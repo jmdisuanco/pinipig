@@ -39,6 +39,7 @@
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.1.0"
   },
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "tingodb": "^0.6.1"
   }
 }

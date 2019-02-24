@@ -1,12 +1,13 @@
 /**
  * Test Server
  * 
- *
  */
 
 const pinipig = require("../pinipig.js")
+const crud = pinipig.crud
 const path = require('path')
 const fs = require('fs')
+const orm = pinipig.orm
 
 let {
   cors,
@@ -18,6 +19,46 @@ let {
 } = pinipig
 let sf = streamFile('./test/public')
 
+//Initialize ORM
+let dbconf = {
+  driver: 'tingodb',
+  database: './test/data'
+}
+
+
+let ORM = orm.Schema
+let schema = new ORM(dbconf.driver, dbconf)
+
+//Create Model
+let Model = schema.define('Test', {
+  title: {
+    type: schema.String
+  },
+  content: {
+    type: schema.String
+  },
+  hidden: {
+    type: String
+  }
+})
+
+let filter = (ctx) => {
+  ctx.options = {
+    filter: ['hidden']
+  }
+  return ctx
+
+}
+//initialize CRUD
+
+let C = crud.create(Model)
+let R = crud.read(Model)
+let L = crud.readList(Model) //List
+let U = crud.update(Model)
+let D = crud.destroy(Model) //destroy coz 'delete' is a reserved word
+let count = crud.count(Model)
+
+//Methods
 let getMethod = (ctx) => {
   const {
     res,
@@ -217,8 +258,23 @@ let routes = [
   {
     url: '/public/*',
     get: sf
+  },
+  //CRUD TEST
+  {
+    url: '/crud',
+    get: [filter, L],
+    post: C,
+  },
+  {
+    url: '/crud/:id',
+    get: [filter, R],
+    patch: U,
+    del: D
+  },
+  {
+    url: '/crud/count',
+    get: count
   }
-
 ]
 
 let options = {

@@ -3,8 +3,6 @@ const assert = require('assert')
 const sever = require('./test-server')
 let url = 'http://localhost:9090'
 let check = ''
-let child = ''
-
 
 
 //Basic Test 
