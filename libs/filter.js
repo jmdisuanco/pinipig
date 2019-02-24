@@ -11,10 +11,17 @@ let filter = (data, list) => {
       })
     })
   } catch (e) {
-    //if list is not an array
-    data.map(obj => {
-      obj[list] = undefined
-    })
+    try {
+      //if list is not an array
+      data.map(obj => {
+        obj[list] = undefined
+      })
+    } catch (e) {
+      //if data is not an array
+      list.map(l => {
+        data[l] = undefined
+      })
+    }
   }
 
   return data
