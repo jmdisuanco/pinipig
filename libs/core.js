@@ -11,6 +11,7 @@ const {
     formdataHandler
 } = require('./uploadhandler')
 let allowedHTTPMethods = ['get', 'post', 'options', 'put', 'patch', 'del', 'head']
+
 let noMatch = (res, req) => {
     res.writeStatus('404')
     res.writeHeader('Content-Type', 'text/json');
@@ -66,7 +67,7 @@ let cors = (res) => {
 }
 /**
  * Preflight response
- * This is ussually attached on OPTIONS method for browser's pre-flight checking response
+ * This is usually attached on OPTIONS method for browser's pre-flight checking response
  * @param {Object} res 
  */
 let preFlight = (res) => {
@@ -245,7 +246,6 @@ let MethodLoader = App => (route, routeObj, Flow) => {
 }
 
 
-
 let POSTHandler = callback => (context) => {
     let formUrlencoded = formUrlencodedHandler(callback)
     let formdata = formdataHandler(callback)
@@ -302,7 +302,6 @@ let composedFn = (Obj, hooks) => {
         if (beforeHooks == '' && typeof cb == 'function' && afterHooks == '') {
             return cb
         } else {
-
             let merged = flatten([beforeHooks, cb, afterHooks])
             return flow(merged)
         }
