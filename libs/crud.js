@@ -6,37 +6,37 @@ try {
 }
 
 let read = model => (ctx) => {
-  console.log('reading...')
+  let filtered
+  let prettify = null
+  if (ctx.query != undefined) {
+    ctx.query.pretty == 'true' ? prettify = 2 : null
+  }
+  //console.log('reading...')
   let id
   try {
     //will work if adapter is MongoDB
     ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) : id = parseInt(ctx.parameters.id)
   } catch (e) {
-    console.log(e.message)
     id = parseInt(ctx.parameters.id)
-    console.log(id)
   }
   model.findOne({
     where: {
       id: id
     }
   }, (err, data) => {
-    console.log(data)
-    ctx.res.end(JSON.stringify(data))
+    if (ctx.options != undefined) {
+      if (ctx.options.filter != undefined) {
+        filtered = filter(data, ctx.options.filter)
+      }
+    }
+    ctx.res.end(JSON.stringify({
+      data: filtered || data
+    }, null, prettify))
     if (err) {
       console.log(err)
       ctx.res.end('{"result":"error"}')
     }
-    //   try {
-    //     if (ctx.options != undefined) {
-    //       if (ctx.options.filter != undefined) {
-    //         filtered = filter(data, ctx.options.filter)
-    //         ctx.res.end(JSON.stringify(filter))
-    //       }
-    //     }
-    //   } catch (e) {
-    //     ctx.res.end(JSON.stringify(data))
-    //   }
+
   })
 }
 
