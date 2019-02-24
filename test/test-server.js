@@ -8,6 +8,7 @@ const crud = pinipig.crud
 const path = require('path')
 const fs = require('fs')
 const orm = pinipig.orm
+const filter = crud.filter
 
 let {
   cors,
@@ -30,7 +31,7 @@ let ORM = orm.Schema
 let schema = new ORM(dbconf.driver, dbconf)
 
 //Create Model
-let Model = schema.define('Test', {
+let Test = schema.define('Test', {
   title: {
     type: schema.String
   },
@@ -42,21 +43,33 @@ let Model = schema.define('Test', {
   }
 })
 
-let filter = (ctx) => {
-  ctx.options = {
-    filter: ['hidden']
-  }
-  return ctx
 
-}
+let User = schema.define('User', {
+  username: {
+    type: schema.String
+  },
+  password: {
+    type: schema.String
+  }
+})
+
+let uC = crud.create(User)
+let uR = crud.read(User)
+let uL = crud.readList(User) //List
+let uU = crud.update(User)
+let uD = crud.destroy(User) //destroy coz 'delete' is a reserved word
+let ucount = crud.count(User)
+
+
+
 //initialize CRUD
 
-let C = crud.create(Model)
-let R = crud.read(Model)
-let L = crud.readList(Model) //List
-let U = crud.update(Model)
-let D = crud.destroy(Model) //destroy coz 'delete' is a reserved word
-let count = crud.count(Model)
+let C = crud.create(Test)
+let R = crud.read(Test)
+let L = crud.readList(Test) //List
+let U = crud.update(Test)
+let D = crud.destroy(Test) //destroy coz 'delete' is a reserved word
+let count = crud.count(Test)
 
 //Methods
 let getMethod = (ctx) => {
@@ -262,18 +275,24 @@ let routes = [
   //CRUD TEST
   {
     url: '/crud',
-    get: [filter, L],
+    get: [filter(['hidden']), L],
     post: C,
   },
   {
     url: '/crud/:id',
-    get: [filter, R],
+    get: [filter(['hidden']), R],
     patch: U,
     del: D
   },
   {
     url: '/crud/count',
     get: count
+  },
+  //Authentication Test
+  {
+    url: '/user',
+    get: [filter(['password']), uL]
+
   }
 ]
 

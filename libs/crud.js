@@ -145,11 +145,19 @@ let count = model => (ctx) => {
   })
 }
 
+let Filter = filter => (ctx) => {
+  ctx.options = {
+    filter: filter
+  }
+  return ctx
+}
+
 module.exports = {
   create,
   read,
   readList,
   update,
   destroy, // delete
-  count
+  count,
+  filter: Filter
 }
