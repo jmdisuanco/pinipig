@@ -6,36 +6,40 @@ try {
 }
 
 let read = model => (ctx) => {
-  // console.log('reading...')
-
+  console.log('reading...')
   let id
   try {
     //will work if adapter is MongoDB
     ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) : id = parseInt(ctx.parameters.id)
   } catch (e) {
+    console.log(e.message)
     id = parseInt(ctx.parameters.id)
+    console.log(id)
   }
-  model.find({
+  model.findOne({
     where: {
       id: id
     }
   }, (err, data) => {
+    console.log(data)
+    ctx.res.end(JSON.stringify(data))
     if (err) {
       console.log(err)
       ctx.res.end('{"result":"error"}')
     }
-    try {
-      if (ctx.options != undefined) {
-        if (ctx.options.filter != undefined) {
-          filtered = filter(data, ctx.options.filter)
-          ctx.res.end(JSON.stringify(filter))
-        }
-      }
-    } catch (e) {
-      ctx.res.end(JSON.stringify(data))
-    }
+    //   try {
+    //     if (ctx.options != undefined) {
+    //       if (ctx.options.filter != undefined) {
+    //         filtered = filter(data, ctx.options.filter)
+    //         ctx.res.end(JSON.stringify(filter))
+    //       }
+    //     }
+    //   } catch (e) {
+    //     ctx.res.end(JSON.stringify(data))
+    //   }
   })
 }
+
 
 let readList = model => async (ctx) => {
   // console.log('listing...')
@@ -50,6 +54,7 @@ let readList = model => async (ctx) => {
   }
   // console.log(query)
   model.all(query, (err, data) => {
+    let filtered
     if (err) {
       console.log(err)
       return
@@ -60,22 +65,18 @@ let readList = model => async (ctx) => {
       if (ctx.query != undefined) {
         ctx.query.pretty == 'true' ? prettify = 2 : null
       }
-      try {
-        if (ctx.options != undefined) {
-          if (ctx.options.filter != undefined) {
-            filtered = filter(data, ctx.options.filter)
-          }
+
+      if (ctx.options != undefined) {
+        if (ctx.options.filter != undefined) {
+          filtered = filter(data, ctx.options.filter)
         }
-        ctx.res.end(JSON.stringify({
-          count: count,
-          limit: query.limit,
-          skip: query.skip,
-          data: filtered || data
-        }, null, prettify))
-      } catch (e) {
-        console.log(e.message)
-        return false
       }
+      ctx.res.end(JSON.stringify({
+        count: count,
+        limit: query.limit,
+        skip: query.skip,
+        data: filtered || data
+      }, null, prettify))
     })
   })
 }
