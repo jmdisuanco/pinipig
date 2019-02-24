@@ -4,27 +4,28 @@
  * @param {Array} list 
  */
 let filter = (data, list) => {
-  try {
-    list.map(l => {
-      data.map(obj => {
-        obj[l] = undefined
-      })
-    })
-  } catch (e) {
+  if (data) {
     try {
-      //if list is not an array
-      data.map(obj => {
-        obj[list] = undefined
+      list.map(l => {
+        data.map(obj => {
+          obj[l] = undefined
+        })
       })
     } catch (e) {
-      //if data is not an array
-      list.map(l => {
-        data[l] = undefined
-      })
+      try {
+        //if list is not an array
+        data.map(obj => {
+          obj[list] = undefined
+        })
+      } catch (e) {
+        //if data is not an array
+        list.map(l => {
+          data[l] = undefined
+        })
+      }
     }
+    return data
   }
-
-  return data
 }
 
 module.exports = filter
