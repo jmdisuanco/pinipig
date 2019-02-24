@@ -1,3 +1,4 @@
+const filter = require('./filter')
 try {
   ObjectID = require('mongodb').ObjectID
 } catch (e) {
@@ -23,7 +24,16 @@ let read = model => (ctx) => {
       console.log(err)
       ctx.res.end('{"result":"error"}')
     }
-    ctx.res.end(JSON.stringify(data))
+    try {
+      if (ctx.options != undefined) {
+        if (ctx.options.filter != undefined) {
+          filtered = filter(data, ctx.options.filter)
+          ctx.res.end(JSON.stringify(filter))
+        }
+      }
+    } catch (e) {
+      ctx.res.end(JSON.stringify(data))
+    }
   })
 }
 
@@ -51,11 +61,16 @@ let readList = model => async (ctx) => {
         ctx.query.pretty == 'true' ? prettify = 2 : null
       }
       try {
+        if (ctx.options != undefined) {
+          if (ctx.options.filter != undefined) {
+            filtered = filter(data, ctx.options.filter)
+          }
+        }
         ctx.res.end(JSON.stringify({
           count: count,
           limit: query.limit,
           skip: query.skip,
-          data: data
+          data: filtered || data
         }, null, prettify))
       } catch (e) {
         console.log(e.message)
