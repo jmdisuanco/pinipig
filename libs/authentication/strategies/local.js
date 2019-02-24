@@ -17,34 +17,48 @@ const issueToken = require('../issuetoken')
  */
 
 let LocalStrategy = options => (ctx) => {
-  let res = ctx.res
-  let username = ctx.data.fields.username
-  let password = ctx.data.fields.password
-  options.Model.findOne({
-    where: {
-      username: username
-    }
-  }, (err, user) => {
-    if (err) {
-      console.log(err)
-      res.end(JSON.stringify(err))
-    }
-    if (!user) {
-      res.end(JSON.stringify(err))
-    }
-    bcrypt.compare(password, user.password, function (err, isValid) {
-      if (isValid) {
-        res.end(JSON.stringify({
-          jwt: issueToken(user, options.jwt)
-        }))
-      } else {
-        res.end(JSON.stringify({
-          result: 'Unauthorized'
-        }))
+  try {
+    let {
+      res,
+      data
+    } = ctx
+    let {
+      Model
+    } = options
+    let username = data.fields.username
+    let password = data.fields.password
+    Model.findOne({
+      where: {
+        username: username
+      }
+    }, (err, user) => {
+      if (err) {
+        // return
+        console.log(err.message)
+
+        res.end(JSON.stringify(err))
+      }
+      if (!user) {
+        res.end(JSON.stringify(err))
       }
 
+      bcrypt.compare(password, user.password, function (err, isValid) {
+        if (isValid) {
+          res.end(JSON.stringify({
+            jwt: issueToken(user, options.config)
+          }))
+        } else {
+          res.end(JSON.stringify({
+            result: 'Unauthorized'
+          }))
+        }
+
+      })
     })
-  })
+  } catch (e) {
+    console.log(e)
+  }
+
 }
 
 module.exports = LocalStrategy

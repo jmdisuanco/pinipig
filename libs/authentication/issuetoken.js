@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
  * @param {Object} options | options for JWT Token refer to https://github.com/auth0/node-jsonwebtoken
  */
 
-let issueToken = config => (user) => {
+let issueToken = (user, config) => {
   let payload = {
     user: {
       id: user.id,
@@ -14,9 +14,9 @@ let issueToken = config => (user) => {
     }
   }
 
-  options = config.jwt.option
+  options = config.option
 
-  let token = jwt.sign(payload, config.jwt.secret, options);
+  let token = jwt.sign(payload, config.secret, options);
   return token
 }
 

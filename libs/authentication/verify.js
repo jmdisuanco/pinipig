@@ -8,14 +8,15 @@ const jwt = require('jsonwebtoken')
  * let verifier = verify(config)
  * verifier(ctx) 
  */
-let verify = config => async (ctx) => {
+let verify = async (ctx, config) => {
   let block = () => {
     ctx.res.end('{"result":"Unauthorized}"')
+    return
   }
   if (ctx.headers == undefined) {
     let token = ctx.req.headers['pinipig-jwt']
     try {
-      let isValid = await jwt.verify(token, config.jwt.secret)
+      let isValid = await jwt.verify(token, config.secret)
       if (isValid) {
         return ctx
       } else {

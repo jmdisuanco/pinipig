@@ -82,6 +82,8 @@ let HelloWorld = function (ctx) {
     ctx.res.end(); // end the response
 }
 
+
+
 let Query = (ctx) => {
     cors(ctx.res)
     ctx.res.setHeader('Content-Type', 'text/html');
