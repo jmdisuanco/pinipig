@@ -1,4 +1,6 @@
-const filter = require('./filter')
+const {
+  filterProcess
+} = require('./filter')
 try {
   ObjectID = require('mongodb').ObjectID
 } catch (e) {
@@ -26,7 +28,7 @@ let read = model => (ctx) => {
   }, (err, data) => {
     if (ctx.options != undefined) {
       if (ctx.options.filter != undefined) {
-        filtered = filter(data, ctx.options.filter)
+        filtered = filterProcess(data, ctx.options.filter)
       }
     }
     ctx.res.end(JSON.stringify({
@@ -68,7 +70,7 @@ let readList = model => async (ctx) => {
 
       if (ctx.options != undefined) {
         if (ctx.options.filter != undefined) {
-          filtered = filter(data, ctx.options.filter)
+          filtered = filterProcess(data, ctx.options.filter)
         }
       }
       ctx.res.end(JSON.stringify({
@@ -145,12 +147,7 @@ let count = model => (ctx) => {
   })
 }
 
-let Filter = filter => (ctx) => {
-  ctx.options = {
-    filter: filter
-  }
-  return ctx
-}
+
 
 module.exports = {
   create,
@@ -158,6 +155,5 @@ module.exports = {
   readList,
   update,
   destroy, // delete
-  count,
-  filter: Filter
+  count
 }

@@ -65,4 +65,8 @@ uploads
 #Work in progress directory
 wip
 
+#test directory Working files
+test/data/Test
+test/data/User
+
 .DS_Store

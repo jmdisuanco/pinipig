@@ -2,13 +2,17 @@
  * Test Server
  * 
  */
-
+const config = require('./default.json')
 const pinipig = require("../pinipig.js")
 const crud = pinipig.crud
 const path = require('path')
 const fs = require('fs')
 const orm = pinipig.orm
-const filter = crud.filter
+const auth = pinipig.auth
+
+const {
+  filter
+} = require('../libs/filter')
 
 let {
   cors,
@@ -53,6 +57,12 @@ let User = schema.define('User', {
   }
 })
 
+let stratOption = {
+  Model: User,
+  config: config.jwt
+}
+
+const localStrategy = auth.strategy.local(stratOption)
 let uC = crud.create(User)
 let uR = crud.read(User)
 let uL = crud.readList(User) //List
@@ -63,7 +73,6 @@ let ucount = crud.count(User)
 
 
 //initialize CRUD
-
 let C = crud.create(Test)
 let R = crud.read(Test)
 let L = crud.readList(Test) //List
@@ -72,6 +81,18 @@ let D = crud.destroy(Test) //destroy coz 'delete' is a reserved word
 let count = crud.count(Test)
 
 //Methods
+
+let init_getHead = (ctx) => {
+  try {
+    ctx.headers = []
+    console.log(ctx.req.getHeader('pinipig-jwt'))
+    ctx.headers.push(['pinipig-jwt', ctx.req.getHeader('pinipig-jwt')])
+    return ctx
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 let getMethod = (ctx) => {
   const {
     res,
@@ -102,20 +123,6 @@ let HelloWorld = function (ctx) {
   }
 }
 
-let HelloWorldPOST = function (ctx) {
-  try {
-    ctx.res.writeHead(200, {
-      accept: "*",
-      "content-type": "text/json"
-    });
-
-    ctx.res.end("Hello World POST");
-  } catch (e) {
-    ctx.res.end();
-  }
-}
-
-
 let Param = ctx => {
   try {
     ctx.res.writeHead(200, {
@@ -132,7 +139,6 @@ let Param = ctx => {
 
 let getQuery = ctx => {
   ctx.res.end(JSON.stringify(ctx.query))
-
 }
 
 let Combi = ctx => {
@@ -291,8 +297,12 @@ let routes = [
   //Authentication Test
   {
     url: '/user',
-    get: [filter(['password']), uL]
-
+    get: [filter(['password']), uL],
+    post: [auth.encryptPass, uC]
+  },
+  {
+    url: '/auth',
+    post: localStrategy
   }
 ]
 

@@ -6,20 +6,25 @@
 
 A super `simple` `REST` webservice framework
 
-Version 1 released!
-
-## What's in version 1.2.0
+## What's in version 1.3.0
 
 - Routes
 - Async Hooks
   - before
   - after
-- Inbuilt file upload
+- Inbuilt File upload
 - CORS
 - preflight handling
 - Async Functional Flow
 - WebSockets
+- ORM
+- CRUD
+- Authentication Module
 - a lot faster than previous version
+
+## What's next
+
+- Pub/Sub
 
 ## What are Hooks
 
@@ -29,7 +34,7 @@ hooks inside before
 
 ```javascript
 hooks: {
-  before: [hook1, hook2, hook3];
+  before: [hook1, hook2, hook3]
 } // arrays
 ```
 
@@ -39,7 +44,7 @@ hooks inside afer
 
 ```javascript
 hooks: {
-  before: [hook4, hook5, hook6];
+  before: [hook4, hook5, hook6]
 } // arrays
 ```
 
@@ -148,6 +153,20 @@ ws: {
         }
 ```
 
+### Context options for ORM result handling
+
+| property | description                                | type  | Sample                                             | Helper Function                                | Application inside route            |
+| -------- | ------------------------------------------ | ----- | -------------------------------------------------- | ---------------------------------------------- | ----------------------------------- |
+| filter   | filter out private fields from ORM results | Array | `ctx.options={filter:['password','secret_field']}` | `const { filter } = require('pinipig/filter')` | `get: [filter(['password']), List]` |
+
+### ORM
+
+### CRUD
+
+### Authentication
+
+``
+
 # Examples
 
 ## Pinipig in action! , Let's do the Pinipig crunch!
@@ -161,43 +180,43 @@ ws: {
  *
  */
 
-const pinipig = require("pinipig");
+const pinipig = require('pinipig')
 
 let HelloWorld = function(ctx) {
-  ctx.res.setHeader("Content-Type", "text/html");
+  ctx.res.setHeader('Content-Type', 'text/html')
   ctx.res.writeHead(200, {
-    "Content-Type": "text/html"
-  });
-  ctx.res.write("Working"); //write a response to the client
-  ctx.res.end(); //end the response
-};
+    'Content-Type': 'text/html',
+  })
+  ctx.res.write('Working') //write a response to the client
+  ctx.res.end() //end the response
+}
 
 let Query = ctx => {
-  ctx.res.setHeader("Content-Type", "text/html");
+  ctx.res.setHeader('Content-Type', 'text/html')
   ctx.res.writeHead(200, {
-    "Content-Type": "text/html"
-  });
-  ctx.res.write("<H1>Hello " + ctx.data.name + "</H1>"); //write a response to the client
-  ctx.res.end(); //end the response
-};
+    'Content-Type': 'text/html',
+  })
+  ctx.res.write('<H1>Hello ' + ctx.data.name + '</H1>') //write a response to the client
+  ctx.res.end() //end the response
+}
 
 let routes = [
   {
-    url: "/",
-    GET: HelloWorld
+    url: '/',
+    GET: HelloWorld,
   },
   {
-    url: "/user/:name", // http://localhost:9090/user/[NAME]
-    GET: Query
-  }
-];
+    url: '/user/:name', // http://localhost:9090/user/[NAME]
+    GET: Query,
+  },
+]
 
 let options = {
   port: 9090,
-  routes: routes
-};
+  routes: routes,
+}
 
-pinipig.createServer(options);
+pinipig.createServer(options)
 ```
 
 ---
@@ -211,56 +230,56 @@ pinipig.createServer(options);
  *
  */
 
-const pinipig = require("pinipig");
+const pinipig = require('pinipig')
 
 let HelloWorld = function(ctx) {
-  ctx.res.setHeader("Content-Type", "text/html");
+  ctx.res.setHeader('Content-Type', 'text/html')
   ctx.res.writeHead(200, {
-    "Content-Type": "text/html"
-  });
-  ctx.res.write("Working"); //write a response to the client
-  ctx.res.end(); //end the response
-};
+    'Content-Type': 'text/html',
+  })
+  ctx.res.write('Working') //write a response to the client
+  ctx.res.end() //end the response
+}
 
 let Query = ctx => {
-  ctx.res.setHeader("Content-Type", "text/html");
+  ctx.res.setHeader('Content-Type', 'text/html')
   ctx.res.writeHead(200, {
-    "Content-Type": "text/html"
-  });
-  ctx.res.write(`<H1> ${ctx.data.num} + 1 =  ${ctx.data.total}</H1>`); //iuput the processed data
-  ctx.res.end(); //end the response
-  return ctx;
-};
+    'Content-Type': 'text/html',
+  })
+  ctx.res.write(`<H1> ${ctx.data.num} + 1 =  ${ctx.data.total}</H1>`) //iuput the processed data
+  ctx.res.end() //end the response
+  return ctx
+}
 
 let addOne = ctx => {
-  ctx.data.total = parseInt(ctx.data.num) + 1;
-  return ctx;
-};
+  ctx.data.total = parseInt(ctx.data.num) + 1
+  return ctx
+}
 
 let sytemOut = ctx => {
-  console.log(ctx.data); //console log to the system
-};
+  console.log(ctx.data) //console log to the system
+}
 let routes = [
   {
-    url: "/",
-    GET: HelloWorld
+    url: '/',
+    GET: HelloWorld,
   },
   {
-    url: "/add/:num", // http://localhost:9090/add/[Number]
+    url: '/add/:num', // http://localhost:9090/add/[Number]
     GET: Query,
     hooks: {
       before: addOne,
-      after: sytemOut //console log to the system
-    }
-  }
-];
+      after: sytemOut, //console log to the system
+    },
+  },
+]
 
 let options = {
   port: 9090,
-  routes: routes
-};
+  routes: routes,
+}
 
-pinipig.createServer(options);
+pinipig.createServer(options)
 ```
 
 ---
@@ -274,51 +293,51 @@ pinipig.createServer(options);
  *  -- > Make sure you created uploads folder in your App root. < --
  */
 
-const pinipig = require("pinipig");
+const pinipig = require('pinipig')
 
 let UploadForm = context => {
   context.res.writeHead(200, {
-    "content-type": "text/html"
-  });
+    'content-type': 'text/html',
+  })
   context.res.write(
     '<form action="/upload" enctype="multipart/form-data" method="post">' +
       '<input type="text" name="title"/><br>' +
       '<input type="file" name="upload" multiple="multiple"><br>' +
       '<input type="submit" value="Upload">' +
-      "</form>"
-  );
-  context.res.end();
-  return context.res.end();
-};
+      '</form>'
+  )
+  context.res.end()
+  return context.res.end()
+}
 
 let UploadFormProcess = context => {
-  let data = context.data;
-  let tmpPath = data.files.upload.path;
-  let newPath = "./examples/uploads/" + data.files.upload.name; //Make sure you created uploads folder in your App root.
+  let data = context.data
+  let tmpPath = data.files.upload.path
+  let newPath = './examples/uploads/' + data.files.upload.name //Make sure you created uploads folder in your App root.
   fs.rename(tmpPath, newPath, function(err) {
-    if (err) throw err;
-    context.res.write("File uploaded with title " + data.fields.title + "!");
-    context.res.end();
-  });
-};
+    if (err) throw err
+    context.res.write('File uploaded with title ' + data.fields.title + '!')
+    context.res.end()
+  })
+}
 
 let routes = [
   {
-    url: "/",
-    GET: UploadForm
+    url: '/',
+    GET: UploadForm,
   },
   {
-    url: "/upload",
-    POST: UploadFormProcess
-  }
-];
+    url: '/upload',
+    POST: UploadFormProcess,
+  },
+]
 
 let options = {
   port: 9090,
-  routes: routes
-};
+  routes: routes,
+}
 
-pinipig.createServer(options);
+pinipig.createServer(options)
 ```
 
 ---
@@ -326,46 +345,46 @@ pinipig.createServer(options);
 - ## CORS example
 
 ```javascript
-const pinipig = require("pinipig");
+const pinipig = require('pinipig')
 
-let { cors, preFlight } = pinipig.utils;
+let { cors, preFlight } = pinipig.utils
 let HelloWorld = function(ctx) {
-  ctx.res.setHeader("Content-Type", "text/html");
+  ctx.res.setHeader('Content-Type', 'text/html')
   ctx.res.writeHead(200, {
-    "Content-Type": "text/html"
-  });
-  ctx.res.write("Working"); //write a response to the client
-  ctx.res.end(); //end the response
-};
+    'Content-Type': 'text/html',
+  })
+  ctx.res.write('Working') //write a response to the client
+  ctx.res.end() //end the response
+}
 
 let Query = ctx => {
-  cors(ctx.res);
-  ctx.res.setHeader("Content-Type", "text/html");
+  cors(ctx.res)
+  ctx.res.setHeader('Content-Type', 'text/html')
   ctx.res.writeHead(200, {
-    "Content-Type": "text/html"
-  });
-  ctx.res.write("<H1>Hello " + ctx.data.name + "</H1>"); //write a response to the client
-  ctx.res.end(); //end the response
-};
+    'Content-Type': 'text/html',
+  })
+  ctx.res.write('<H1>Hello ' + ctx.data.name + '</H1>') //write a response to the client
+  ctx.res.end() //end the response
+}
 
 let routes = [
   {
-    url: "/",
-    GET: HelloWorld
+    url: '/',
+    GET: HelloWorld,
   },
   {
-    url: "/user/:name", // http://localhost:9090/user/[NAME]
+    url: '/user/:name', // http://localhost:9090/user/[NAME]
     GET: Query,
-    OPTIONS: preFlight // Preflight check by browser
-  }
-];
+    OPTIONS: preFlight, // Preflight check by browser
+  },
+]
 
 let options = {
   port: 9090,
-  routes: routes
-};
+  routes: routes,
+}
 
-pinipig.createServer(options);
+pinipig.createServer(options)
 ```
 
 ---
@@ -381,8 +400,8 @@ this is how it looks like
 context = {
   res: res,
   req: req,
-  data: dataObjectHere
-};
+  data: dataObjectHere,
+}
 ```
 
 If you are coming from lower version this is how you update your routes methods
@@ -390,43 +409,43 @@ If you are coming from lower version this is how you update your routes methods
 ```javascript
 //from this
 let HelloWorld = (req, res) => {
-  console.log("helloWorld");
-  res.setHeader("Content-Type", "text/html");
-  res.writeHead(200, { "Content-Type": "text/html" });
-  res.write("Working"); //write a response to the client
-  res.end(); //end the response
-};
+  console.log('helloWorld')
+  res.setHeader('Content-Type', 'text/html')
+  res.writeHead(200, { 'Content-Type': 'text/html' })
+  res.write('Working') //write a response to the client
+  res.end() //end the response
+}
 
 //to this
 let HelloWorld = context => {
-  let res = context.res; // <--- assign this
-  console.log("helloWorld");
-  context.res.setHeader("Content-Type", "text/html"); //<-- you can have it like this
-  res.writeHead(200, { "Content-Type": "text/html" });
-  res.write("Working"); //write a response to the client
-  res.end(); //end the response
-};
+  let res = context.res // <--- assign this
+  console.log('helloWorld')
+  context.res.setHeader('Content-Type', 'text/html') //<-- you can have it like this
+  res.writeHead(200, { 'Content-Type': 'text/html' })
+  res.write('Working') //write a response to the client
+  res.end() //end the response
+}
 
 //another example
 //from this below version 1
 var Query = (req, res, query) => {
-  console.log("Query");
-  res.setHeader("Content-Type", "text/html");
-  res.writeHead(200, { "Content-Type": "text/html" });
-  res.write("<H1>Hello " + query.name + "</H1>"); //write a response to the client
-  res.end(); //end the response
-};
+  console.log('Query')
+  res.setHeader('Content-Type', 'text/html')
+  res.writeHead(200, { 'Content-Type': 'text/html' })
+  res.write('<H1>Hello ' + query.name + '</H1>') //write a response to the client
+  res.end() //end the response
+}
 
 //to this
 var Query = context => {
-  let res = context.res;
-  let query = context.data;
-  console.log("Query");
-  res.setHeader("Content-Type", "text/html");
-  res.writeHead(200, { "Content-Type": "text/html" });
-  res.write("<H1>Hello " + query.name + "</H1>"); //write a response to the client
-  res.end(); //end the response
-};
+  let res = context.res
+  let query = context.data
+  console.log('Query')
+  res.setHeader('Content-Type', 'text/html')
+  res.writeHead(200, { 'Content-Type': 'text/html' })
+  res.write('<H1>Hello ' + query.name + '</H1>') //write a response to the client
+  res.end() //end the response
+}
 ```
 
 ```

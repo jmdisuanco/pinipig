@@ -3,7 +3,7 @@
  * @param {Object} data 
  * @param {Array} list 
  */
-let filter = (data, list) => {
+let filterProcess = (data, list) => {
   if (data) {
     try {
       list.map(l => {
@@ -28,4 +28,16 @@ let filter = (data, list) => {
   }
 }
 
-module.exports = filter
+
+let filterSetter = filter => (ctx) => {
+  ctx.options = {
+    filter: filter
+  }
+  return ctx
+}
+
+module.exports = {
+  filterProcess,
+  filter: filterSetter
+
+}

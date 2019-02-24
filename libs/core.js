@@ -116,8 +116,9 @@ let flow = (fns) => param => {
         fns.reduce(async (payload, nxt) => nxt(await payload), param)
     } catch (e) {
         const err = new Error(`Parameter should be array of methods:
-  Example usage-> flow([func1,func2,func3])`)
+  Example usage-> flow( [ func1, func2, func3 ] )`)
         console.error(err.message)
+        // console.log(`Expected Array but instead received ${typeof fns}`)
     }
 }
 
@@ -246,7 +247,11 @@ let MethodLoader = App => (route, routeObj, Flow) => {
 }
 
 
-let POSTHandler = callback => (context) => {
+let POSTHandler = (callback, init) => (context) => {
+    if (init) {
+        context = init(context)
+    }
+
     let formUrlencoded = formUrlencodedHandler(callback)
     let formdata = formdataHandler(callback)
     //context.cb = callback
@@ -286,18 +291,49 @@ let composedFn = (Obj, hooks) => {
     let beforeHooks = []
     let afterHooks = []
     let cb = []
+    let init
     if (hooks) {
         hooks.before ? beforeHooks = hooks.before : null
         hooks.after ? afterHooks = hooks.after : null
     }
     let postMethods = ['post', 'patch']
+
     if (allowedHTTPMethods.includes(prop)) {
         // if (!postMethods.includes(prop)) {
         //     cb = Obj[1]
         // } else {
         //     cb = POSTHandler(Obj[1]) //Bug Starts here 
         // }
-        !postMethods.includes(prop) ? cb = Obj[1] : cb = POSTHandler(Obj[1])
+        //check if theres and init func
+        typeof Obj[1] == 'object' && Obj[1][0].name.includes('init_') ? init = Obj[1][0] : null
+        if (init) {
+            delete(Obj[1][0])
+            console.log(init)
+        }
+
+        let initFN = (cb, init) => context => {
+            try {
+                if (init) {
+                    ctx = init(context)
+                } else {
+                    ctx = context
+                }
+                return cb(ctx)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        let flw
+        if (typeof Obj[1] == 'object') {
+            flw = flow(Obj[1])
+        } else {
+            flw = Obj[1]
+        }
+
+
+
+        !postMethods.includes(prop) ? cb = initFN(Obj[1], init) : cb = POSTHandler(flw, init)
 
         if (beforeHooks == '' && typeof cb == 'function' && afterHooks == '') {
             return cb

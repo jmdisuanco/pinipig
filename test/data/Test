@@ -1,9 +1,0 @@
-{"k":"0000000078","o":"0000000093","v":"001"}
-{"_id":2,"_uid":2,"_dt":1550987212103,"_s":"789d3f3fc43cc2096fbedfc9237a3a3c"}
-{"title":"Apple","content":"Seeds","hidden":"Hide from User...","_id":{"$wrap":"$oid","v":2}}
-{"k":"0000000078","o":"0000000099","v":"001"}
-{"_id":3,"_uid":3,"_dt":1550990382221,"_s":"7b5b5e78a5bfaaa24cfce0b1694d2399"}
-{"title":"Banana","content":"Sweet Yellowish Fruit","hidden":"Secret","_id":{"$wrap":"$oid","v":3}}
-{"k":"0000000078","o":"0000000099","v":"001"}
-{"_id":4,"_uid":4,"_dt":1550991728589,"_s":"6db7360fe99a8f14340eacb397d02aae"}
-{"title":"Banana","content":"Sweet Yellowish Fruit","hidden":"Secret","_id":{"$wrap":"$oid","v":4}}

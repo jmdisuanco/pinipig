@@ -1,0 +1,15 @@
+{
+  "port": 8000,
+  "jwt": {
+    "secret": "wmx@Wo2pzS$3Je_S&cXbV@ZEj_fm0wkpS10tEg5mUT2rhcWD8-Bl&&G_763NUW#!rL9SecB_Ozz4dtq0K_2M3z$ZQxQVujkB-U-ICU3oNwezX7rCKeQ&UyZuqHA7fQIw",
+    "option": {
+      "issuer": "pinipig",
+      "subject": "userAuth",
+      "expiresIn": "1w"
+    }
+  },
+  "tingoDB": {
+    "driver": "tingodb",
+    "host": "localhost"
+  }
+}
