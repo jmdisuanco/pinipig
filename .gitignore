@@ -60,7 +60,6 @@ typings/
 #uploads directory for testing
 uploads
 *doctor
-*.html
 
 #Work in progress directory
 wip
