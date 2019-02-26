@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+
 const c = require("8colors");
 const uWS = require("uWebSockets.js");
 const core = require("./libs/core");
