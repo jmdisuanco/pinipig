@@ -27,12 +27,18 @@ let sf = streamFile('./test/public')
 //Initialize ORM
 let dbconf = {
   driver: 'tingodb',
-  database: './test/data'
+  database: './test/data/db'
+}
+
+let mongoconf = {
+  driver: 'mongodb',
+  database: 'test'
 }
 
 
 let ORM = orm.Schema
 let schema = new ORM(dbconf.driver, dbconf)
+let mongoSchema = new ORM(mongoconf.driver, mongoconf)
 
 //Create Model
 let Test = schema.define('Test', {
@@ -43,7 +49,21 @@ let Test = schema.define('Test', {
     type: schema.String
   },
   hidden: {
-    type: String
+    type: schema.String
+  }
+})
+
+//Create Model
+
+let Mongo = mongoSchema.define('MongoTest', {
+  title: {
+    type: mongoSchema.String
+  },
+  content: {
+    type: mongoSchema.String
+  },
+  hidden: {
+    type: mongoSchema.String
   }
 })
 
@@ -79,6 +99,15 @@ let L = crud.readList(Test) //List
 let U = crud.update(Test)
 let D = crud.destroy(Test) //destroy coz 'delete' is a reserved word
 let count = crud.count(Test)
+
+
+//initialize CRUD for Mongo
+let mC = crud.create(Mongo)
+let mR = crud.read(Mongo)
+let mL = crud.readList(Mongo) //List
+let mU = crud.update(Mongo)
+let mD = crud.destroy(Mongo) //destroy coz 'delete' is a reserved word
+let mcount = crud.count(Mongo)
 
 //Methods
 
@@ -288,11 +317,31 @@ let routes = [
     url: '/crud/:id',
     get: [filter(['hidden']), R],
     patch: U,
+    put: U,
     del: D
   },
   {
     url: '/crud/count',
     get: count
+  },
+
+  //MongoCrud
+  //CRUD TEST
+  {
+    url: '/mongo',
+    get: [filter(['hidden']), mL],
+    post: mC,
+  },
+  {
+    url: '/mongo/:id',
+    get: [filter(['hidden']), mR],
+    patch: mU,
+    put: mU,
+    del: mD
+  },
+  {
+    url: '/mongo/count',
+    get: mcount
   },
   //Authentication Test
   {

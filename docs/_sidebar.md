@@ -1,0 +1,7 @@
+- Quick Start
+  - [Using CLI](cli_usage.md)
+  - [NON-CLI instruction](getting_started.md)
+- [API](api.md)
+- [Examples](examples.md)
+- [Upgrading](upgrading.md)
+- [License](license.md)

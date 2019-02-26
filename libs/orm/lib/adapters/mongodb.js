@@ -164,7 +164,7 @@ MongoDB.prototype.create = function (model, data, callback) {
 MongoDB.prototype.save = function (model, data, callback) {
     var id = data.id;
     id = getObjectId(id);
-    this.collection(model).update({
+    this.collection(model).updateOne({
         _id: id
     }, data, function (err) {
         callback(err);
@@ -189,7 +189,7 @@ MongoDB.prototype.update = function (model, filter, data, callback) {
         var id = getObjectId(filter.id);
         filter.id = id;
     }
-    this.collection(model).update(filter, {
+    this.collection(model).updateOne(filter, {
         '$set': data
     }, {
         w: 1,

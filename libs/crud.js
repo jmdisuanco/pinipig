@@ -17,7 +17,7 @@ let read = model => (ctx) => {
   let id
   try {
     //will work if adapter is MongoDB
-    ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) : id = parseInt(ctx.parameters.id)
+    ObjectID.isValid(ctx.parameters.id) ? id = ObjectID(ctx.parameters.id) : id = parseInt(ctx.parameters.id)
   } catch (e) {
     id = parseInt(ctx.parameters.id)
   }
@@ -105,20 +105,32 @@ let create = model => (ctx) => {
 let update = model => (ctx) => {
   try {
     //will work if adapter is MongoDB
-    ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) : id = parseInt(ctx.parameters.id)
+    ObjectID.isValid(ctx.parameters.id) ? id = ObjectID(ctx.parameters.id) : id = parseInt(ctx.parameters.id)
   } catch (e) {
+    console.log(e)
     id = parseInt(ctx.parameters.id)
   }
   model.exists(id, (err, exists) => {
-    if (exists) {
-      model.updateOrCreate({
-        id: id
-      }, ctx.data.fields, (err, result) => {
-        ctx.res.end(JSON.stringify({
-          result: 'updated',
-          id: id
-        }))
-      })
+    if (exists && typeof ctx.data.fields === 'object') {
+      model.update({
+
+          _id: id
+
+        },
+        ctx.data.fields,
+        (err, result) => {
+          if (err) {
+            console.log(err.message)
+          } else {
+            ctx.res.end(JSON.stringify({
+              result: 'updated',
+              id: id
+            }))
+          }
+
+        })
+    } else {
+      ctx.res.end('{"result": "No Document found"}')
     }
   })
 }
@@ -127,7 +139,7 @@ let destroy = model => (ctx) => {
   // console.log('detroying...')
   try {
     //will work if adapter is MongoDB
-    ObjectID.isValid(ctx.data.id) ? id = ObjectID(ctx.data.id) : id = parseInt(ctx.parameters.id)
+    ObjectID.isValid(ctx.parameters.id) ? id = ObjectID(ctx.parameters.id) : id = parseInt(ctx.parameters.id)
   } catch (e) {
     id = parseInt(ctx.parameters.id)
   }

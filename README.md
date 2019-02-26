@@ -1,5 +1,7 @@
 # Pinipig
 
+<img src="docs/_images/logo.png" alt="Pinipig" widht="80" height="80"/>
+
 ![](https://img.shields.io/github/issues/jmdisuanco/pinipig.svg)
 ![](https://img.shields.io/github/license/jmdisuanco/pinipig.svg) ![](https://img.shields.io/twitter/url/https/github.com/jmdisuanco/pinipig.svg?style=social)
 ![](https://img.shields.io/github/commit-activity/y/jmdisuanco/pinipig.svg)
@@ -53,7 +55,7 @@ will run in consecutive order after the main method is invoke
 here's how the flow will look like
 
 ```
-hook1 -> hook2 -> hook3 -> MainMethod -> hook4 ->hook5 -> hook6
+hook1 -> hook2 -> hook3 -> MainMethod -> hook4 -> hook5 -> hook6
 ```
 
 ## Getting Started
@@ -161,7 +163,77 @@ ws: {
 
 ### ORM
 
-### CRUD
+## Supported DB
+
+- MongoDB
+- TingoDB
+- reThinkDB
+- mySQL
+- Redis
+- Postgres
+- SQLite3
+- Arango (untested)
+- Cassandra (untested)
+- Couchbase (untested)
+- Firebird (untested)
+- Mongoose (untested)
+- Neo4j (untested)
+- Riak (untested)
+
+## Implementation
+
+```javascript
+  const pinipig = require('pinipig')
+  ...
+  const orm = pinipig.orm
+
+  //configuration
+  let dbconf = {
+    driver: 'mongo',
+    database: 'testDB',
+    user: 'username',
+    password: 'password'
+  }
+
+  //initialization
+  let schema = new ORM(dbconf.driver, dbconf)
+
+  //Create Model
+  let Post = schema.define('Post', {
+    title: {
+      type: schema.String
+    },
+    content: {
+      type: schema.String
+    },
+    date:{
+      {
+        type: schema.Date,
+        default: Date.now
+      }
+    },
+    hidden: {
+      type: schema.String
+    }
+  })
+
+  //create new document
+
+  Post.create({title:'Hello World', content:'CONTENT HERE',hidden:'false'}, (err,data)=>{
+    if (err){console.log(err)}
+
+    JSON.stringify({
+        result: 'created',
+        data: data
+      }
+
+  })
+
+
+
+```
+
+### CRUD Endpoints
 
 ### Authentication
 
