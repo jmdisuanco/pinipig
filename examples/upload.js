@@ -22,9 +22,8 @@ let FormProcess = ctx => {
             console.log('no files to process')
         }
 
-        let result = JSON.stringify(ctx.data)
-        ctx.res.write(result)
-        ctx.res.end()
+        ctx.res.json(ctx.data)
+
     } catch (e) {
         ctx.res.end()
         console.log(e);

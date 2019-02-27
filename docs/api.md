@@ -9,6 +9,7 @@
 | write                         | send message to cliend                                            | `res.send('Hello Client')`                                         |
 | writeHeader alias `setHeader` | send the header part                                              | `res.writeHeader('content-type','text/json')`                      |
 | writeHead                     | send the header part in sets and with status (node http polyfill) | `res.writeHead(200, { accept: "*", "content-type": "text/json" })` |
+| json                          | send json stringified response                                    | `res.json(JSON_OBJECT)`                                            |
 
 # req (Request)
 

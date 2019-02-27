@@ -65,8 +65,7 @@ let getMethod = (ctx) => {
         res,
     } = ctx
     try {
-        let method = JSON.stringify(ctx.method)
-        res.end(method)
+        ctx.res.json(ctx.method)
     } catch (e) {
         console.log('getmethod', e)
         //res.end('')

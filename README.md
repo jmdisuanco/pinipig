@@ -6,7 +6,7 @@
 ![](https://img.shields.io/github/license/jmdisuanco/pinipig.svg) ![](https://img.shields.io/twitter/url/https/github.com/jmdisuanco/pinipig.svg?style=social)
 ![](https://img.shields.io/github/commit-activity/y/jmdisuanco/pinipig.svg)
 
-A super `simple` `REST` webservice framework
+A performant web framework that's easy for developers!
 
 ## What's in version 1.3.0
 
@@ -23,6 +23,7 @@ A super `simple` `REST` webservice framework
 - CRUD
 - Authentication Module
 - a lot faster than previous version
+- JSON response
 
 ## What's next
 

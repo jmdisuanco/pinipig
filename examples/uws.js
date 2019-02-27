@@ -59,7 +59,7 @@ let Query = ctx => {
 };
 
 let getQuery = ctx => {
-    ctx.res.end(JSON.stringify(ctx.query))
+    ctx.res.json(ctx.query)
 
 }
 let tellURL = ctx => {
@@ -84,9 +84,8 @@ let FormProcess = ctx => {
             console.log('no files to process')
         }
 
-        let result = JSON.stringify(ctx.data)
-        ctx.res.write(result)
-        ctx.res.end()
+        ctx.res.json(ctx.data)
+
     } catch (e) {
         ctx.res.end()
         console.log(e);
