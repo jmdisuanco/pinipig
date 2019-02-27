@@ -11,7 +11,7 @@ let read = model => (ctx) => {
   let filtered
   let prettify = null
   if (ctx.query != undefined) {
-    ctx.query.pretty == 'true' ? prettify = 2 : null
+    ctx.query.pretty == 'true' ? prettify = true : prettify = false
   }
   //console.log('reading...')
   let id
@@ -31,12 +31,19 @@ let read = model => (ctx) => {
         filtered = filterProcess(data, ctx.options.filter)
       }
     }
-    ctx.res.end(JSON.stringify({
+    // ctx.res.end(JSON.stringify({
+    //   data: filtered || data
+    // }, null, prettify))
+    let result = {
       data: filtered || data
-    }, null, prettify))
+    }
+    ctx.res.json(result, prettify)
     if (err) {
       console.log(err)
-      ctx.res.end('{"result":"error"}')
+      //ctx.res.end('{"result":"error"}')
+      ctx.res.json({
+        result: "error"
+      })
     }
 
   })
@@ -73,12 +80,19 @@ let readList = model => async (ctx) => {
           filtered = filterProcess(data, ctx.options.filter)
         }
       }
-      ctx.res.end(JSON.stringify({
+      // ctx.res.end(JSON.stringify({
+      //   count: count,
+      //   limit: query.limit,
+      //   skip: query.skip,
+      //   data: filtered || data
+      // }, null, prettify))
+      let result = {
         count: count,
         limit: query.limit,
         skip: query.skip,
         data: filtered || data
-      }, null, prettify))
+      }
+      ctx.res.json(result, prettify)
     })
   })
 }
@@ -90,10 +104,15 @@ let create = model => (ctx) => {
       ctx.res.end(JSON.stringify(err))
     }
     try {
-      ctx.res.end(JSON.stringify({
+      // ctx.res.end(JSON.stringify({
+      //   result: 'created',
+      //   data: data
+      // }))
+      let response = {
         result: 'created',
         data: data
-      }))
+      }
+      ctx.res.json(response)
     } catch (e) {
       return false
     }
@@ -122,10 +141,15 @@ let update = model => (ctx) => {
           if (err) {
             console.log(err.message)
           } else {
-            ctx.res.end(JSON.stringify({
+            // ctx.res.end(JSON.stringify({
+            //   result: 'updated',
+            //   id: id
+            // }))
+            let response = {
               result: 'updated',
               id: id
-            }))
+            }
+            ctx.res.json(response)
           }
 
         })
@@ -144,10 +168,16 @@ let destroy = model => (ctx) => {
     id = parseInt(ctx.parameters.id)
   }
   model.destroyById(id, (err, result) => {
-    ctx.res.end(JSON.stringify({
+    // ctx.res.end(JSON.stringify({
+    //   result: 'deleted',
+    //   id: id
+    // }))
+
+    let response = {
       result: 'deleted',
       id: id
-    }))
+    }
+    ctx.res.json(response)
   })
 }
 

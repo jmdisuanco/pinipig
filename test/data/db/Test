@@ -1,9 +1,3 @@
 {"k":"0000000078","o":"0000000088","v":"001"}
-{"_id":2,"_uid":2,"_dt":1551159995468,"_s":"54cbcc2e569ff271ca11483366a8142f"}
-{"title":"Banana","content":"Sweet Fruit","hidden":"seeds","_id":{"$wrap":"$oid","v":2}}
-{"k":"0000000078","o":"0000000089","v":"001"}
-{"_id":2,"_uid":2,"_dt":1551160357578,"_s":"0d7b79cd9299738ade6cd33fabf12e44"}
-{"title":"Bananas","content":"Sweet Fruit","hidden":"seeds","_id":{"$wrap":"$oid","v":2}}
-{"k":"0000000078","o":"0000000088","v":"001"}
 {"_id":2,"_uid":2,"_dt":1551160432448,"_s":"8373157abac5c924a6b09117c827afb1"}
 {"title":"Orange","content":"Sweet Fruit","hidden":"seeds","_id":{"$wrap":"$oid","v":2}}

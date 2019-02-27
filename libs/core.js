@@ -32,6 +32,7 @@ const orderBy = require("lodash/orderBy")
 const c = require("8colors")
 const pkg = require("../package")
 const commonHeaders = require('./commonheaders')
+const stringify = require('fast-stringify').default
 const {
     formUrlencodedHandler,
     formdataHandler
@@ -117,6 +118,30 @@ let getURLQuery = (req) => {
     }
 }
 
+/**
+ * Helper function to stringify JSON Object FAST
+ * @param {Object} jsonObj 
+ * @param {boolean} [pretty=false] pretty 
+ */
+
+let json = (res) => (jsonObj, pretty = false) => {
+    if (!pretty) {
+        res.end(stringify(jsonObj))
+    } else {
+        //Work in progress
+        let str = stringify(jsonObj)
+        let pretty = str
+            .replace(/\[/g, '[\n')
+            .replace(/,/g, ',\n')
+            .replace(/:{/g, ': {\n')
+            .replace(/{"/gm, '{\n\t"')
+            //.replace(/{"/g, '{\n  "')
+            .replace(/:/g, ':\t')
+            .replace(/(^[\"])/gm, '\t\t"')
+            .replace(/}}/g, '\n\t\t}\n}')
+        res.end(pretty)
+    }
+}
 
 let getUriData = (url, req) => {
     let data = {}
@@ -175,6 +200,7 @@ let payload = (res, req, urlTemplate) => {
     //context.req.headers = getHeaders(req) /*BOTTLENECK */ : null
     context.req.getHeaders = getHeaders
     context.getURLQuery = getURLQuery
+    context.res.json = json(res)
     //context.method = req.getMethod()
     //context.data = getUriData
     urlTemplate.search(':') ? context.parameters = getUriData(urlTemplate, req) /*BOTTLENECK */ : null
