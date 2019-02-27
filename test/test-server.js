@@ -132,7 +132,7 @@ let getMethod = (ctx) => {
       res.end()
     }
     let method = JSON.stringify(req.getMethod())
-    res.end(method)
+
   } catch (e) {
     console.log(req.getMethod(), e.message)
     res.end()
@@ -167,7 +167,7 @@ let Param = ctx => {
 }
 
 let getQuery = ctx => {
-  ctx.res.end(JSON.stringify(ctx.query))
+  ctx.res.json(ctx.query)
 }
 
 let Combi = ctx => {
@@ -180,7 +180,7 @@ let Combi = ctx => {
     query,
     parameters
   }
-  res.end(JSON.stringify(result))
+  res.json(result)
 
 }
 
@@ -206,9 +206,8 @@ let FormProcess = ctx => {
       console.log('no files to process')
     }
 
-    let result = JSON.stringify(ctx.data)
-    ctx.res.write(result)
-    ctx.res.end()
+    ctx.res.json(ctx.data)
+
   } catch (e) {
     ctx.res.end()
     console.log(e);
