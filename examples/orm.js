@@ -99,8 +99,7 @@ let FormProcess = (ctx) => {
     ctx.res.writeHead(200, {
         'Content-Type': 'text/html'
     })
-    ctx.res.write(JSON.stringify(ctx.data))
-    ctx.res.end()
+    ctx.res.json(ctx.data)
 }
 
 let routes = [{

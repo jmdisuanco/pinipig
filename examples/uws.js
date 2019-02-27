@@ -11,6 +11,7 @@ let {
     cors,
     preFlight
 } = pinipig.utils;
+
 let {
     streamFile
 } = pinipig

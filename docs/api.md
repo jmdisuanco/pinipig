@@ -33,6 +33,17 @@
 | subscribe         |             |
 | publish           |             |
 
+# Authentication
+
+`const {auth} = require(pinipig)`
+
+| Method         | Description                                                        |
+| -------------- | ------------------------------------------------------------------ |
+| encryptPass    | Encrypt the password. most proabbly used before CRUD               |
+| issueToken     | issue a token after login form submitted and veriffeid succesfully |
+| verify         |                                                                    |
+| strategy.local | default login strategy (email, password)                           |
+
 # streamFile
 
 Stream a static file inside a folder
