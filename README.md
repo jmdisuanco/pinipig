@@ -30,6 +30,19 @@ Benchmarker tool used can be found here [node-framework-benchmarker](https://git
 
 Detailed Benchmark report [here](_media/report.json)
 
+results obtained using below configuration
+
+```
+{
+  "port": 5000,
+  "url": "http://localhost",
+  "connections": 100,
+  "pipelining": 10,
+  "duration": 5
+
+}
+```
+
 ## What's in version 1.3.0
 
 - Routes
