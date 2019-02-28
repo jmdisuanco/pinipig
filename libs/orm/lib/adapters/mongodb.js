@@ -251,14 +251,14 @@ MongoDB.prototype.updateOrCreate = function updateOrCreate(model, data, callback
 
 MongoDB.prototype.destroy = function destroy(model, id, callback) {
     id = getObjectId(id);
-    this.collection(model).remove({
+    this.collection(model).deleteOne({
         _id: id
     }, callback);
 };
 
 MongoDB.prototype.remove = function remove(model, filter, callback) {
     var cond = buildWhere(filter.where);
-    this.collection(model).remove(cond, callback);
+    this.collection(model).deleteOne(cond, callback);
 };
 
 MongoDB.prototype.all = MongoDB.prototype.find = function all(model, filter, callback) {
