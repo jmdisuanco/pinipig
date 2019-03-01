@@ -28,9 +28,9 @@
   "author": "John Martin R. Disuanco",
   "license": "MIT",
   "bugs": {
-    "url": "https://pinipig/js/org"
+    "url": "https://github.com/jmdisuanco/pinipig/issues"
   },
-  "homepage": "https://github.com/jmdisuanco/pinipig#readme",
+  "homepage": "https://pinipig.js.org",
   "dependencies": {
     "8colors": "^1.0.1",
     "bcrypt": "^3.0.3",
