@@ -46,6 +46,7 @@
 | verify         |                                                                    |
 | strategy.local | default login strategy (email, password)                           |
 
+
 ## streamFile
 
 Stream a static file inside a folder
