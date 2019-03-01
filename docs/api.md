@@ -33,9 +33,11 @@
 | subscribe         |             |
 | publish           |             |
 
-# Authentication
+# Built-in Middleware
 
-`const {auth} = require(pinipig)`
+## Authentication
+
+`const {auth} = require('pinipig')`
 
 | Method         | Description                                                        |
 | -------------- | ------------------------------------------------------------------ |
@@ -44,7 +46,7 @@
 | verify         |                                                                    |
 | strategy.local | default login strategy (email, password)                           |
 
-# streamFile
+## streamFile
 
 Stream a static file inside a folder
 

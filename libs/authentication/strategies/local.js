@@ -36,21 +36,21 @@ let LocalStrategy = options => (ctx) => {
         // return
         console.log(err.message)
 
-        res.end(JSON.stringify(err))
+        res.json(err)
       }
       if (!user) {
-        res.end(JSON.stringify(err))
+        res.json(err)
       }
 
       bcrypt.compare(password, user.password, function (err, isValid) {
         if (isValid) {
-          res.end(JSON.stringify({
+          res.json({
             jwt: issueToken(user, options.config)
-          }))
+          })
         } else {
-          res.end(JSON.stringify({
+          res.json({
             result: 'Unauthorized'
-          }))
+          })
         }
 
       })
