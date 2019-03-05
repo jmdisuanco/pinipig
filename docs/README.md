@@ -16,7 +16,7 @@ Environment
 
 | Model                                     | Cores | Ram        |
 | ----------------------------------------- | ----- | ---------- |
-| Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz | 8     | 4294967296 |
+| Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz | 8     | 4gb |
 
 Results
 

@@ -35,7 +35,8 @@ const commonHeaders = require('./commonheaders')
 const stringify = require('fast-stringify').default
 const {
     formUrlencodedHandler,
-    formdataHandler
+    formdataHandler,
+    jsonHandler
 } = require('./uploadhandler')
 let allowedHTTPMethods = ['get', 'post', 'options', 'put', 'patch', 'del', 'head']
 
@@ -126,7 +127,14 @@ let getURLQuery = (req) => {
 
 let json = (res) => (jsonObj, pretty = false) => {
     if (!pretty) {
-        res.end(stringify(jsonObj))
+        try{
+            res.end(stringify(jsonObj))
+        }
+        catch(e){
+            console.log(e)
+            return false
+        }
+        
     } else {
         //Work in progress
         let str = stringify(jsonObj)
@@ -306,6 +314,7 @@ let POSTHandler = (callback, init) => (context) => {
 
     let formUrlencoded = formUrlencodedHandler(callback)
     let formdata = formdataHandler(callback)
+    let jsondata = jsonHandler(callback)
     //context.cb = callback
     let type = context.req.getHeader('content-type')
     type = type.split(";")[0]
@@ -329,7 +338,9 @@ let POSTHandler = (callback, init) => (context) => {
             if (type == "application/x-www-form-urlencoded") {
                 //formUrlencodedHandler(context)
                 formUrlencoded(context)
-            } else {
+            } else if(type == "application/json"){
+                jsondata(context)
+            }else {
                 formdata(context)
                 //formdataHandler(context)
             }

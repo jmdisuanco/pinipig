@@ -14,7 +14,7 @@ let getValueinsideQoute = (str) => {
 }
 
 let formdataHandler = callback => async context => {
-  console.log('form-data handler initiated')
+  //console.log('form-data handler initiated')
   try {
     let set = context.rawdata.split(/------[a-zA-Z0-9--]*/);
     let fields = {};
@@ -81,7 +81,21 @@ let formUrlencodedHandler = callback => async context => {
 
 }
 
+let jsonHandler = callback => async context => {
+  try {
+    let result = JSON.parse(context.rawdata)
+    context.data = {
+      fields: result
+    }
+    callback(context);
+  } catch (e) {
+    console.log(e)
+  }
+
+}
+
 module.exports = {
   formUrlencodedHandler,
-  formdataHandler
+  formdataHandler,
+  jsonHandler
 }

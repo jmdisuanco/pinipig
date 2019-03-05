@@ -4,12 +4,11 @@
  */
 const config = require('./default.json')
 const pinipig = require("../pinipig.js")
-const crud = pinipig.crud
+
 const path = require('path')
 const fs = require('fs')
-const orm = pinipig.orm
-const auth = pinipig.auth
-
+const {auth,orm, crud} = pinipig
+let verify = auth.verify(config.jwt)
 const {
   filter
 } = require('../libs/filter')
@@ -351,6 +350,10 @@ let routes = [
   {
     url: '/auth',
     post: localStrategy
+  },
+  {
+    url: '/protected',
+    get: [verify,tellURL ]
   }
 ]
 

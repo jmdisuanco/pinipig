@@ -35,25 +35,31 @@ let LocalStrategy = options => (ctx) => {
       if (err) {
         // return
         console.log(err.message)
-
-        res.json(err)
+        res.json({result:"missing username or password"})
       }
       if (!user) {
-        res.json(err)
+        res.json({result:"missing username or password"})
       }
-
-      bcrypt.compare(password, user.password, function (err, isValid) {
-        if (isValid) {
-          res.json({
-            jwt: issueToken(user, options.config)
-          })
-        } else {
-          res.json({
-            result: 'Unauthorized'
-          })
-        }
-
-      })
+      try{
+        bcrypt.compare(password, user.password, function (err, isValid) {
+          if (isValid) {
+            res.json({
+              jwt: issueToken(user, options.config)
+            })
+          } else {
+            res.json({
+              result: 'Unauthorized'
+            })
+          }
+  
+        })
+      }
+      catch(e){
+        console.log(e.message)
+        res.json({result:"incorrect username or password"})
+        return
+      }
+     
     })
   } catch (e) {
     console.log(e)
