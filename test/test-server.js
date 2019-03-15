@@ -195,7 +195,7 @@ let FormProcess = ctx => {
   try {
     try {
       ctx.data.files.map(f => {
-        let target = path.join('./examples/uploads/', f.filename)
+        let target = path.join('./test/examples/uploads/', f.filename)
         fs.rename(f.tmpFilename, target, function (err) {
           if (err) return
           console.log(`written ${target}`)
@@ -302,7 +302,7 @@ let routes = [
     patch: getMethod
   },
   {
-    url: '/public/*',
+    url: '/*',
     get: sf
   },
   //CRUD TEST
