@@ -302,7 +302,7 @@ let routes = [
     patch: getMethod
   },
   {
-    url: '/*',
+    url: '/public/*',
     get: sf
   },
   //CRUD TEST
