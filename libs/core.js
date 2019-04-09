@@ -98,8 +98,8 @@ let cors = (res) => {
  * This is usually attached on OPTIONS method for browser's pre-flight checking response
  * @param {Object} res 
  */
-let preFlight = (res) => {
-    cors(res)
+let preFlight = (ctx) => {
+    cors(ctx.res)
     res.end()
 }
 
@@ -127,14 +127,13 @@ let getURLQuery = (req) => {
 
 let json = (res) => (jsonObj, pretty = false) => {
     if (!pretty) {
-        try{
+        try {
             res.end(stringify(jsonObj))
-        }
-        catch(e){
+        } catch (e) {
             console.log(e)
             return false
         }
-        
+
     } else {
         //Work in progress
         let str = stringify(jsonObj)
@@ -338,9 +337,9 @@ let POSTHandler = (callback, init) => (context) => {
             if (type == "application/x-www-form-urlencoded") {
                 //formUrlencodedHandler(context)
                 formUrlencoded(context)
-            } else if(type == "application/json"){
+            } else if (type == "application/json") {
                 jsondata(context)
-            }else {
+            } else {
                 formdata(context)
                 //formdataHandler(context)
             }
