@@ -100,7 +100,7 @@ let cors = (res) => {
  */
 let preFlight = (ctx) => {
     cors(ctx.res)
-    res.end()
+    ctx.res.end()
 }
 
 let getURLQuery = (req) => {
