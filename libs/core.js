@@ -82,9 +82,10 @@ let memoize = (fn) => {
 
 /**
  * CORS
- * @param {Obectt} Response ctx.res
+ * @param {Object} ctx context 
  */
-let cors = (res) => {
+let cors = (ctx) => {
+    let {res} = ctx
     res.writeHead(200, {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true',
@@ -99,7 +100,7 @@ let cors = (res) => {
  * @param {Object} res 
  */
 let preFlight = (ctx) => {
-    cors(ctx.res)
+    cors(ctx)
     ctx.res.end()
 }
 

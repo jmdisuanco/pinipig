@@ -45,11 +45,17 @@ let formdataHandler = callback => async context => {
         });
       } else {
         let key = getValueinsideQoute(field[0]);
-        let value = field[1].replace("\r\n", "");
-        Object.assign(fields, {
-          [key]: value
-        });
+        try{
+          let value = field[1].replace("\r\n", "");
+           Object.assign(fields, {
+            [key]: value
+            });
         return;
+
+        }catch(e){
+
+        }
+        
       }
     });
 
