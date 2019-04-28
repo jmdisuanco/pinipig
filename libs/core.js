@@ -92,7 +92,7 @@ let cors = (ctx) => {
         'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': '*'
     });
-
+    return ctx
 }
 /**
  * Preflight response
