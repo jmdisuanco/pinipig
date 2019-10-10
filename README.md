@@ -23,8 +23,8 @@ Results
 | pinipig   | 41,315.2  |
 | bare      | 25,473.6  |
 | fastify   | 22,743.2  |
-| express   | 10,233.21 |
 | hapi      | 10,389.21 |
+| express   | 10,233.21 |
 
 Benchmarker tool used can be found here [node-framework-benchmarker](https://github.com/jmdisuanco/node-framework-benchmarker)
 
