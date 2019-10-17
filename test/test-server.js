@@ -15,7 +15,8 @@ const {
 
 let {
   cors,
-  preFlight
+  preFlight,
+  getURLQuery
 } = pinipig.utils;
 
 let {

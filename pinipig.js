@@ -36,7 +36,7 @@ const {
   flatten,
   preFlight,
   flow,
-  generateApp
+  generateApp,
 } = core;
 
 // let options

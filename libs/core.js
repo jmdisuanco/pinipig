@@ -107,8 +107,8 @@ let preFlight = (ctx) => {
 let getURLQuery = (req) => {
     let url = req.getQuery().split('?')
     let kvp = {}
-    if (url[1]) {
-        let queries = url[1].split('&')
+    if (url[0]) {
+        let queries = url[0].split('&')
         queries.map(data => {
             let d = data.split('=')
             let key = decodeURI(d[0])
