@@ -38,7 +38,7 @@ const {
     formdataHandler,
     jsonHandler
 } = require('./uploadhandler')
-let allowedHTTPMethods = ['get', 'post', 'options', 'put', 'patch', 'del', 'head']
+let allowedHTTPMethods = ['get', 'post', 'options', 'put', 'patch', 'del', 'head','ws']
 
 let noMatch = (res, req) => {
     res.writeStatus('404')
@@ -351,6 +351,7 @@ let POSTHandler = (callback, init) => (context) => {
 
 let composedFn = (Obj, hooks) => {
     let prop = Obj[0].toLowerCase()
+    //if(prop === 'ws') prop ='' //discard ws
     let beforeHooks = []
     let afterHooks = []
     let cb = []
@@ -361,14 +362,17 @@ let composedFn = (Obj, hooks) => {
     }
     let postMethods = ['post', 'patch', 'put']
 
-    if (allowedHTTPMethods.includes(prop)) {
+    if (allowedHTTPMethods.includes(prop) ) {
         // if (!postMethods.includes(prop)) {
         //     cb = Obj[1]
         // } else {
         //     cb = POSTHandler(Obj[1]) //Bug Starts here 
         // }
         //check if theres and init func
-        typeof Obj[1] == 'object' && Obj[1][0].name.includes('init_') ? init = Obj[1][0] : null
+     
+        if(prop != 'ws') typeof Obj[1] == 'object' && Obj[1][0].name.includes('init_') ? init = Obj[1][0] : null
+
+      
         if (init) {
             delete(Obj[1][0])
             console.log(init)

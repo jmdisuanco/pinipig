@@ -164,7 +164,7 @@ let routes = [{
             options: {
                 compression: 0,
                 maxPayloadLength: 16 * 1024 * 1024,
-                idleTimeout: 3000
+                idleTimeout: 10
             },
             open: WSPost,
             message: WSMessage,
