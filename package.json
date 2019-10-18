@@ -1,6 +1,6 @@
 {
   "name": "pinipig",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "A super `simple` webservice functional-like framework",
   "main": "pinipig.js",
   "scripts": {
