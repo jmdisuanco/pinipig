@@ -27,7 +27,6 @@ SOFTWARE.
 /**********************************************************************************************/
 /************************************* CORE  MODULES  *****************************************/
 /**********************************************************************************************/
-
 const orderBy = require("lodash/orderBy")
 const c = require("8colors")
 const pkg = require("../package")
@@ -136,17 +135,7 @@ let json = (res) => (jsonObj, pretty = false) => {
         }
 
     } else {
-        //Work in progress
-        let str = stringify(jsonObj)
-        let pretty = str
-            .replace(/\[/g, '[\n')
-            .replace(/,/g, ',\n')
-            .replace(/:{/g, ': {\n')
-            .replace(/{"/gm, '{\n\t"')
-            //.replace(/{"/g, '{\n  "')
-            .replace(/:/g, ':\t')
-            .replace(/(^[\"])/gm, '\t\t"')
-            .replace(/}}/g, '\n\t\t}\n}')
+        let pretty = JSON.stringify(jsonObj,null,4)
         res.end(pretty)
     }
 }
@@ -251,19 +240,22 @@ let MethodLoader = App => (route, routeObj, Flow) => {
     if (method === 'ws') {
         let wsFunc = route[1]
         let options = route[1].options
+        let WS
         App.ws(url, {
+            
             /* Options */
             compression: options.compression,
             maxPayloadLength: options.maxPayloadLength,
             idleTimeout: options.idleTimeout,
             /* Handlers */
-
+        
             open: (ws, req) => {
                 let context = {
                     ws,
                     req
                 }
                 try {
+                    WS = ws
                     wsFunc.open(context)
                 } catch (e) {
                     msg = `Pinipig WS connected via URL: ${url}`
@@ -272,11 +264,12 @@ let MethodLoader = App => (route, routeObj, Flow) => {
                 }
 
             },
-            message: (ws, message, isBinary) => {
+            message: (WS, message, isBinary) => {
+                
                 let context = {
                     isBinary,
                     message,
-                    ws
+                    ws: WS
                 }
                 try {
                     wsFunc.message(context)
@@ -287,9 +280,9 @@ let MethodLoader = App => (route, routeObj, Flow) => {
                 /* Ok is false if backpressure was built up, wait for drain */
                 //let ok = ws.send(message, isBinary);
             },
-            drain: (ws) => {
+            drain: (WS) => {
                 let context = {
-                    ws
+                    ws:WS
                 }
                 try {
                     wsFunc.message(context)
@@ -351,7 +344,6 @@ let POSTHandler = (callback, init) => (context) => {
 
 let composedFn = (Obj, hooks) => {
     let prop = Obj[0].toLowerCase()
-    //if(prop === 'ws') prop ='' //discard ws
     let beforeHooks = []
     let afterHooks = []
     let cb = []
@@ -375,7 +367,7 @@ let composedFn = (Obj, hooks) => {
       
         if (init) {
             delete(Obj[1][0])
-            console.log(init)
+            // console.log(init)
         }
 
         let initFN = (cb, init) => context => {

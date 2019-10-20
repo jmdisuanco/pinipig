@@ -13,6 +13,8 @@ let Handshake = (ctx) => {
 }
 let WSMessage = (ctx) => {
     try{
+      console.log(ctx.ws.getRemoteAddress())
+
         let  data = Buffer.from(ctx.message).toString("binary")
         console.log(data.toUpperCase())
          let ok = ctx.ws.send(data.toUpperCase(), ctx.isBinary)

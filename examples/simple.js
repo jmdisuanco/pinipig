@@ -1,5 +1,5 @@
 /**
- * This is a barebone example using the HTTP module of Nodejs
+ * This is a barebone example using the uWebsocket
  * and taking advantage of pinipig's REST handler
  *  
  * 
@@ -12,7 +12,7 @@ let HelloWorld = function (ctx) {
     ctx.res.writeHead(200, {
         'Content-Type': 'text/html'
     });
-    ctx.res.write('Hello World'); //write a response to the client
+    ctx.res.write('Hello World '); //write a response to the client
     ctx.res.end(); //end the response
 }
 
