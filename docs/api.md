@@ -10,6 +10,7 @@
 | writeHeader alias `setHeader` | send the header part                                              | `res.writeHeader('content-type','text/json')`                      |
 | writeHead                     | send the header part in sets and with status (node http polyfill) | `res.writeHead(200, { accept: "*", "content-type": "text/json" })` |
 | json                          | send json stringified response                                    | `res.json(JSON_OBJECT)`                                            |
+| getRemoteAddress              | get client's IP (IPv4 IPv6)                                       | `Buffer.from(res.getRemoteAddress()).toString()`                   |
 
 # req (Request)
 
@@ -32,6 +33,7 @@
 | getBufferedAmount |             |
 | subscribe         |             |
 | publish           |             |
+| getRemoteAddress  | get client IPv6/v4 | 
 
 # Built-in Middleware
 

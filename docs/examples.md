@@ -165,3 +165,108 @@ let options = {
 
 pinipig.createServer(options)
 ```
+
+- ## Websocket Example
+
+```javascript
+const pinipig = require("../pinipig.js")
+
+
+
+let Handshake = (ctx) => {
+    ctx.ws.send(`Connected via url${ctx.req.getUrl()}`)
+}
+let WSMessage = (ctx) => {
+    try{
+      console.log(ctx.ws.getRemoteAddress())
+
+        let  data = Buffer.from(ctx.message).toString("binary")
+        console.log(data.toUpperCase())
+         let ok = ctx.ws.send(data.toUpperCase(), ctx.isBinary)
+    }
+  catch(e){
+    console.log(e)
+  }
+}
+
+
+let routes = [
+    {
+        url: "/ws", // ws://localhost:9090/ws
+        ws: {
+            options: {
+                compression: 0,
+                maxPayloadLength: 16 * 1024 * 1024,
+                idleTimeout: 10
+            },
+            open: Handshake,
+            message: WSMessage,
+            drain: null,
+            close: null
+        }
+    }
+
+];
+
+let options = {
+    port: 9090,
+    routes: routes,
+    banner: `UWS test 9090`
+};
+
+pinipig.createServer(options);
+
+
+```
+
+
+---
+
+- ## Pub Sub example
+
+```javascript
+const pinipig = require('../pinipig')
+
+
+const Subscribe = (ctx) => {
+    ctx.ws.subscribe('chat/#');
+}
+
+const Publish = (ctx) => {
+    try{
+        ctx.ws.publish('chat/room01', ctx.message);
+    }
+  catch(e){
+    console.log(e)
+  }
+}
+
+
+
+const routes = [
+    {
+        url: "/pubsub",   // ws://localhost:9090/pubsub
+        ws: {
+            options: {
+                compression: 0,
+                maxPayloadLength: 16 * 1024 * 1024,
+                idleTimeout: 0
+            },
+            open: Subscribe,
+            message: Publish,
+            drain: null,
+            close: null
+        }
+    }
+
+]
+
+const options = {
+    port: 9090,
+    routes: routes
+}
+
+pinipig.createServer(options)
+
+```
+

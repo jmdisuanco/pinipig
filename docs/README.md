@@ -45,6 +45,14 @@ results obtained using below configuration
 }
 ```
 
+## What's new in 1.4.0
+
+- Pub/Sub
+- Websocket Update
+- getRemoteAddress
+
+
+
 ## What's in version 1.3.0
 
 - Routes
@@ -61,6 +69,3 @@ results obtained using below configuration
 - Authentication Module
 - a lot faster than previous version
 
-## What's next
-
-- Pub/Sub
