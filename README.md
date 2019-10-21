@@ -31,7 +31,7 @@ Results
 
 Benchmarker tool used can be found here [node-framework-benchmarker](https://github.com/jmdisuanco/node-framework-benchmarker)
 
-Detailed Benchmark report [here](_media/report.json)
+Detailed Benchmark report [here](docs/_media/report.json)
 
 results obtained using below configuration
 
