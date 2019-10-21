@@ -1,6 +1,6 @@
 # Pinipig
 
-<img src="_images/logo.png" alt="Pinipig" widht="124" height="80"/>
+<img src="docs/_images/logo.png" alt="Pinipig" widht="124" height="80"/>
 
 ![](https://img.shields.io/github/issues/jmdisuanco/pinipig.svg)
 ![](https://img.shields.io/github/license/jmdisuanco/pinipig.svg) ![](https://img.shields.io/twitter/url/https/github.com/jmdisuanco/pinipig.svg?style=social)
