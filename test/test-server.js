@@ -1,40 +1,30 @@
 /**
  * Test Server
- * 
+ *
  */
 const config = require('./default.json')
-const pinipig = require("../pinipig.js")
-
+const pinipig = require('../pinipig.js')
 const path = require('path')
 const fs = require('fs')
-const {auth,orm, crud} = pinipig
+const { auth, orm, crud } = pinipig
 let verify = auth.verify(config.jwt)
-const {
-  filter
-} = require('../libs/filter')
+const { filter } = require('../libs/filter')
 
-let {
-  cors,
-  preFlight,
-  getURLQuery
-} = pinipig.utils;
+let { cors, preFlight, getURLQuery } = pinipig.utils
 
-let {
-  streamFile
-} = pinipig
-let sf = streamFile('./test/public')
+let { streamFile, serveFile } = pinipig
+let sf = streamFile('test/public')
 
 //Initialize ORM
 let dbconf = {
   driver: 'tingodb',
-  database: './test/data/db'
+  database: './test/data/db',
 }
 
 let mongoconf = {
   driver: 'mongodb',
-  database: 'test'
+  database: 'test',
 }
-
 
 let ORM = orm.Schema
 let schema = new ORM(dbconf.driver, dbconf)
@@ -43,43 +33,42 @@ let mongoSchema = new ORM(mongoconf.driver, mongoconf)
 //Create Model
 let Test = schema.define('Test', {
   title: {
-    type: schema.String
+    type: schema.String,
   },
   content: {
-    type: schema.String
+    type: schema.String,
   },
   hidden: {
-    type: schema.String
-  }
+    type: schema.String,
+  },
 })
 
 //Create Model
 
 let Mongo = mongoSchema.define('MongoTest', {
   title: {
-    type: mongoSchema.String
+    type: mongoSchema.String,
   },
   content: {
-    type: mongoSchema.String
+    type: mongoSchema.String,
   },
   hidden: {
-    type: mongoSchema.String
-  }
+    type: mongoSchema.String,
+  },
 })
-
 
 let User = schema.define('User', {
   username: {
-    type: schema.String
+    type: schema.String,
   },
   password: {
-    type: schema.String
-  }
+    type: schema.String,
+  },
 })
 
 let stratOption = {
   Model: User,
-  config: config.jwt
+  config: config.jwt,
 }
 
 const localStrategy = auth.strategy.local(stratOption)
@@ -90,8 +79,6 @@ let uU = crud.update(User)
 let uD = crud.destroy(User) //destroy coz 'delete' is a reserved word
 let ucount = crud.count(User)
 
-
-
 //initialize CRUD
 let C = crud.create(Test)
 let R = crud.read(Test)
@@ -99,7 +86,6 @@ let L = crud.readList(Test) //List
 let U = crud.update(Test)
 let D = crud.destroy(Test) //destroy coz 'delete' is a reserved word
 let count = crud.count(Test)
-
 
 //initialize CRUD for Mongo
 let mC = crud.create(Mongo)
@@ -111,7 +97,7 @@ let mcount = crud.count(Mongo)
 
 //Methods
 
-let init_getHead = (ctx) => {
+let init_getHead = ctx => {
   try {
     ctx.headers = []
     console.log(ctx.req.getHeader('pinipig-jwt'))
@@ -122,17 +108,13 @@ let init_getHead = (ctx) => {
   }
 }
 
-let getMethod = (ctx) => {
-  const {
-    res,
-    req
-  } = ctx
+let getMethod = ctx => {
+  const { res, req } = ctx
   try {
     res.onAborted = () => {
       res.end()
     }
     let method = JSON.stringify(req.getMethod())
-
   } catch (e) {
     console.log(req.getMethod(), e.message)
     res.end()
@@ -140,30 +122,29 @@ let getMethod = (ctx) => {
   }
 }
 
-let HelloWorld = function (ctx) {
+let HelloWorld = function(ctx) {
   try {
     ctx.res.writeHead(200, {
-      "accept": "*",
-      "content-type": "text/html"
-    });
-    ctx.res.end("Hello World");
+      accept: '*',
+      'content-type': 'text/html',
+    })
+    ctx.res.end('Hello World')
   } catch (e) {
-    ctx.res.end();
+    ctx.res.end()
   }
 }
 
 let Param = ctx => {
   try {
     ctx.res.writeHead(200, {
-      accept: "*",
-      "content-type": "text/html"
-    });
-    ctx.res.write(ctx.parameters.name); //write a response to the client
-    ctx.res.end(); //end the response
+      accept: '*',
+      'content-type': 'text/html',
+    })
+    ctx.res.write(ctx.parameters.name) //write a response to the client
+    ctx.res.end() //end the response
   } catch (e) {
     console.log(e)
   }
-
 }
 
 let getQuery = ctx => {
@@ -171,33 +152,26 @@ let getQuery = ctx => {
 }
 
 let Combi = ctx => {
-  let {
-    query,
-    parameters,
-    res
-  } = ctx
+  let { query, parameters, res } = ctx
   let result = {
     query,
-    parameters
+    parameters,
   }
   res.json(result)
-
 }
 
 let tellURL = ctx => {
   try {
     let url = ctx.req.getUrl()
     ctx.res.end(url)
-  } catch (e) {
-
-  }
+  } catch (e) {}
 }
 let FormProcess = ctx => {
   try {
     try {
       ctx.data.files.map(f => {
         let target = path.join('./test/examples/uploads/', f.filename)
-        fs.rename(f.tmpFilename, target, function (err) {
+        fs.rename(f.tmpFilename, target, function(err) {
           if (err) return
           console.log(`written ${target}`)
         })
@@ -207,104 +181,112 @@ let FormProcess = ctx => {
     }
 
     ctx.res.json(ctx.data)
-
   } catch (e) {
     ctx.res.end()
-    console.log(e);
+    console.log(e)
   }
 }
 
 let UploadForm = context => {
   try {
-    context.res.writeHeader("content-type", "text/html");
+    context.res.writeHeader('content-type', 'text/html')
     context.res.write(
       '<form action="/upload" enctype="multipart/form-data" method="post">' +
-      '<input type="text" name="title"/><br>' +
-      '<input type="file" name="upload" multiple="multiple"><br>' +
-      '<input type="submit" value="Upload">' +
-      "</form>"
-    );
+        '<input type="text" name="title"/><br>' +
+        '<input type="file" name="upload" multiple="multiple"><br>' +
+        '<input type="submit" value="Upload">' +
+        '</form>'
+    )
     context.res.end()
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
-};
+}
 
-let WSPost = (ctx) => {
+let WSPost = ctx => {
   ctx.ws.send(`Connected via ${ctx.req.getUrl()}`)
 }
-let WSMessage = (ctx) => {
+let WSMessage = ctx => {
   let ok = ctx.ws.send(ctx.message, ctx.isBinary)
-
 }
 
+const catchError = ctx => {
+  console.log(ctx)
+  ctx.res.end()
+  // if (ctx.result) {
+  //   ctx.res.json(ctx.result)
+  // } else {
+  //   return
+  // }
+}
 
 let routes = [
   //Basic  Test
   {
-    url: "/",
-    get: HelloWorld
+    url: '/',
+    get: HelloWorld,
   },
   {
-    url: "/user/:name", // http://localhost:9090/user/[NAME]
+    url: '/user/:name', // http://localhost:9090/user/[NAME]
     get: Param,
   },
   // URL Query TEST
   {
-    url: "/query",
-    get: getQuery
+    url: '/query',
+    get: getQuery,
   },
   {
-    url: "/combi/:name",
-    get: Combi
-  },
-
-  {
-    url: "/a/:b",
-    get: tellURL,
-  },
-  {
-    url: "/a/b/c",
-    get: tellURL,
+    url: '/combi/:name',
+    get: Combi,
   },
 
   {
-    url: "/a/b",
+    url: '/a/:b',
     get: tellURL,
   },
   {
-    url: "/a",
+    url: '/a/b/c',
+    get: tellURL,
+  },
+
+  {
+    url: '/a/b',
     get: tellURL,
   },
   {
-    url: "/post",
+    url: '/a',
+    get: tellURL,
+  },
+  {
+    url: '/post',
     post: FormProcess,
     ws: {
       options: {
         compression: 0,
         maxPayloadLength: 16 * 1024 * 1024,
-        idleTimeout: 3000
+        idleTimeout: 3000,
       },
       open: WSPost,
       message: WSMessage,
       drain: null,
-      close: null
-    }
+      close: null,
+    },
   },
   {
-    url: "/upload",
+    url: '/upload',
     get: UploadForm,
-    post: FormProcess
+    post: FormProcess,
   },
   {
     url: '/method',
     get: getMethod,
     post: getMethod,
-    patch: getMethod
+    patch: getMethod,
   },
   {
     url: '/public/*',
-    get: sf
+    get: sf,
+    catchError,
   },
   //CRUD TEST
   {
@@ -317,11 +299,11 @@ let routes = [
     get: [filter(['hidden']), R],
     patch: U,
     put: U,
-    del: D
+    del: D,
   },
   {
     url: '/crud/count',
-    get: count
+    get: count,
   },
 
   //MongoCrud
@@ -336,32 +318,32 @@ let routes = [
     get: [filter(['hidden']), mR],
     patch: mU,
     put: mU,
-    del: mD
+    del: mD,
   },
   {
     url: '/mongo/count',
-    get: mcount
+    get: mcount,
   },
   //Authentication Test
   {
     url: '/user',
     get: [filter(['password']), uL],
-    post: [auth.encryptPass, uC]
+    post: [auth.encryptPass, uC],
   },
   {
     url: '/auth',
-    post: localStrategy
+    post: localStrategy,
   },
   {
     url: '/protected',
-    get: [verify,tellURL ]
-  }
+    get: [verify, tellURL],
+  },
 ]
 
 let options = {
   port: 9090,
   routes: routes,
-  banner: `Pinipig Test Server 9090`
+  banner: `Pinipig Test Server 9090`,
 }
 
 pinipig.createServer(options)

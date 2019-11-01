@@ -30,7 +30,6 @@ const core = require('./libs/core')
 const orm = require('./libs/orm')
 const crud = require('./libs/crud')
 const getMime = require('./libs/getmime')
-const crud = require('./libs/crud')
 const auth = require('./libs/authentication')
 const streamFile = require('./libs/streamfile')
 const { cors, flatten, preFlight, flow, generateApp } = core
