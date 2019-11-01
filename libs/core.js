@@ -259,7 +259,7 @@ let MethodLoader = App => (route, routeObj, Flow) => {
                     wsFunc.open(context)
                 } catch (e) {
                     msg = `Pinipig WS connected via URL: ${url}`
-                    ws.send(msg)
+                    ws.send(msg,'  ERROR : ' + e.message)
                     //console.log(`Pinipig WS connected via URL: ${url}!`)
                 }
 

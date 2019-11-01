@@ -10,13 +10,12 @@ A performant web framework that's easy for developers!
 
 Happy Developers... Happy servers...
 
-
 ## Benchmark
 
 Environment
 
-| Model                                     | Cores | Ram        |
-| ----------------------------------------- | ----- | ---------- |
+| Model                                     | Cores | Ram |
+| ----------------------------------------- | ----- | --- |
 | Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz | 8     | 4gb |
 
 Results
@@ -45,16 +44,22 @@ results obtained using below configuration
 
 }
 ```
-## Documentation 
+
+## Documentation
+
 can be found [here](https://pinipig.js.org/)
 
-## What's new in 1.4.0
+### 1.4.4
+
+- getMime utility
+
+## What's new
+
+### 1.4.0
 
 - Pub/Sub
 - Websocket Update
 - getRemoteAddress
-
-
 
 ## What's in version 1.3.0
 
@@ -90,8 +95,6 @@ can be found [here](https://pinipig.js.org/)
 - Mongoose (untested)
 - Neo4j (untested)
 - Riak (untested)
-
-
 
 ```
   _____    _           _           _

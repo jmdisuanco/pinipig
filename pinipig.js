@@ -24,20 +24,16 @@ SOFTWARE.
 
 */
 
-const c = require("8colors");
-const uWS = require("uWebSockets.js");
-const core = require("./libs/core");
-const orm = require("./libs/orm")
-const crud = require("./libs/crud")
+const c = require('8colors')
+const uWS = require('uWebSockets.js')
+const core = require('./libs/core')
+const orm = require('./libs/orm')
+const crud = require('./libs/crud')
+const getMime = require('./libs/getmime')
+const crud = require('./libs/crud')
 const auth = require('./libs/authentication')
 const streamFile = require('./libs/streamfile')
-const {
-  cors,
-  flatten,
-  preFlight,
-  flow,
-  generateApp,
-} = core;
+const { cors, flatten, preFlight, flow, generateApp } = core
 
 // let options
 
@@ -60,6 +56,7 @@ module.exports = {
     color: c,
     flow,
     flatten,
-    preFlight
-  }
-};
+    getMime,
+    preFlight,
+  },
+}

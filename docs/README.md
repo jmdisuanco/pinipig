@@ -14,8 +14,8 @@ Happy Developers... Happy servers...
 
 Environment
 
-| Model                                     | Cores | Ram        |
-| ----------------------------------------- | ----- | ---------- |
+| Model                                     | Cores | Ram |
+| ----------------------------------------- | ----- | --- |
 | Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz | 8     | 4gb |
 
 Results
@@ -45,13 +45,17 @@ results obtained using below configuration
 }
 ```
 
-## What's new in 1.4.0
+## What's new
+
+### 1.4.4
+
+- getMime utility
+
+### 1.4.0
 
 - Pub/Sub
 - Websocket Update
 - getRemoteAddress
-
-
 
 ## What's in version 1.3.0
 
@@ -68,4 +72,3 @@ results obtained using below configuration
 - CRUD
 - Authentication Module
 - a lot faster than previous version
-
