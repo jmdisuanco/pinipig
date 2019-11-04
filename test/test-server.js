@@ -12,7 +12,7 @@ const { filter } = require('../libs/filter')
 
 let { cors, preFlight, getURLQuery } = pinipig.utils
 
-let { streamFile, serveFile } = pinipig
+let { streamFile } = pinipig
 let sf = streamFile('test/public')
 
 //Initialize ORM
