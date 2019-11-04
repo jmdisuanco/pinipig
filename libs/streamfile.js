@@ -103,11 +103,11 @@ let streamFile = directory => async ctx => {
   let url = req.getUrl().split('/')
   let filename = url[Object.keys(url).length - 1]
   filename == '' ? (filename = 'index.html') : null
-  res.writeHeader('content-type', getMime(filename.split('.')[1]))
   let filepath = `${process.cwd()}/${directory}/${filename}`
   try {
     totalSize = fs.statSync(filepath).size
     const readStream = fs.createReadStream(filepath)
+    res.writeHeader('content-type', getMime(filename.split('.')[1]))
     pipeStreamOverResponse(res, readStream, totalSize)
   } catch (e) {
     noMatch(res)
