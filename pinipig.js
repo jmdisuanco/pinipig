@@ -32,6 +32,7 @@ const crud = require('./libs/crud')
 const getMime = require('./libs/getmime')
 const auth = require('./libs/authentication')
 const streamFile = require('./libs/streamfile')
+const filter = require('./libs/filter')
 const { cors, flatten, preFlight, flow, generateApp } = core
 
 // let options
@@ -53,6 +54,7 @@ module.exports = {
   utils: {
     cors,
     color: c,
+    filter,
     flow,
     flatten,
     getMime,
