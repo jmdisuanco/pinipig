@@ -49,11 +49,16 @@ results obtained using below configuration
 
 can be found [here](https://pinipig.js.org/)
 
+## What's new
+
+### 1.4.8
+
+- exposed memoize function from core to pinipig.utils
+- uWebSockets.js#v16.2.0 (fixed pubsub issue)
+
 ### 1.4.4
 
 - getMime utility
-
-## What's new
 
 ### 1.4.0
 
