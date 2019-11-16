@@ -33,11 +33,11 @@ const getMime = require('./libs/getmime')
 const auth = require('./libs/authentication')
 const streamFile = require('./libs/streamfile')
 const filter = require('./libs/filter')
-const { cors, flatten, preFlight, flow, generateApp } = core
+const { cors, flatten, preFlight, flow, generateApp, memoize } = core
 
 // let options
 
-let createServer = options => {
+let createServer = (options) => {
   //initiate the options
   //options = opt;
 
@@ -59,5 +59,6 @@ module.exports = {
     flatten,
     getMime,
     preFlight,
+    memoize,
   },
 }
