@@ -58,7 +58,7 @@ let noMatch = (res, req) => {
  * Flatten Nested Arrays
  * @param {Array} arrays | [['a'],['b],['c','d']]
  */
-let flatten = arrays => {
+let flatten = (arrays) => {
   return arrays.reduce((a, b) => a.concat(b), [])
 }
 
@@ -71,14 +71,14 @@ let flatten = arrays => {
  * Memoize Functions (Pure)
  * @param {Function} fn
  */
-let memoize = fn => {
+let memoize = (fn) => {
   let cache = {}
   return (...args) => {
-    let n = args[0]
+    let n = args
     if (n in cache) {
       return cache[n]
     } else {
-      let result = fn(n)
+      let result = fn(...args)
       cache[n] = result
       return result
     }
@@ -89,7 +89,7 @@ let memoize = fn => {
  * CORS
  * @param {Object} ctx context
  */
-let cors = ctx => {
+let cors = (ctx) => {
   let { res } = ctx
   res.writeHead(200, {
     'Access-Control-Allow-Origin': '*',
@@ -104,17 +104,17 @@ let cors = ctx => {
  * This is usually attached on OPTIONS method for browser's pre-flight checking response
  * @param {Object} res
  */
-let preFlight = ctx => {
+let preFlight = (ctx) => {
   cors(ctx)
   ctx.res.end()
 }
 
-let getURLQuery = req => {
+let getURLQuery = (req) => {
   let url = req.getQuery().split('?')
   let kvp = {}
   if (url[0]) {
     let queries = url[0].split('&')
-    queries.map(data => {
+    queries.map((data) => {
       let d = data.split('=')
       let key = decodeURI(d[0])
       Object.assign(kvp, {
@@ -131,7 +131,7 @@ let getURLQuery = req => {
  * @param {boolean} [pretty=false] pretty
  */
 
-let json = res => (jsonObj, pretty = false) => {
+let json = (res) => (jsonObj, pretty = false) => {
   if (!pretty) {
     try {
       res.end(stringify(jsonObj))
@@ -163,7 +163,7 @@ let getUriData = (url, req) => {
   }
 }
 
-let flow = fns => param => {
+let flow = (fns) => (param) => {
   try {
     fns.reduce(async (payload, nxt) => nxt(await payload), param)
   } catch (e) {
@@ -174,10 +174,10 @@ let flow = fns => param => {
   }
 }
 
-let getHeaders = req => {
+let getHeaders = (req) => {
   try {
     let Headers = {}
-    commonHeaders.map(header => {
+    commonHeaders.map((header) => {
       let value = req.getHeader(header)
       if (value != '') {
         Object.assign(Headers, {
@@ -213,7 +213,7 @@ let payload = (res, req, urlTemplate) => {
     try {
       res.writeStatus(status.toString())
       let headerset = Object.entries(headers)
-      headerset.map(header => {
+      headerset.map((header) => {
         res.writeHeader(header[0], header[1])
       })
     } catch (e) {
@@ -224,7 +224,7 @@ let payload = (res, req, urlTemplate) => {
   return context
 }
 
-let MethodLoader = App => (route, routeObj, Flow) => {
+let MethodLoader = (App) => (route, routeObj, Flow) => {
   let method = route[0].toLowerCase()
   let url = routeObj.url
   if (allowedHTTPMethods.includes(method)) {
@@ -284,7 +284,7 @@ let MethodLoader = App => (route, routeObj, Flow) => {
         /* Ok is false if backpressure was built up, wait for drain */
         //let ok = ws.send(message, isBinary);
       },
-      drain: WS => {
+      drain: (WS) => {
         let context = {
           ws: WS,
         }
@@ -302,7 +302,7 @@ let MethodLoader = App => (route, routeObj, Flow) => {
   }
 }
 
-let POSTHandler = (callback, init) => context => {
+let POSTHandler = (callback, init) => (context) => {
   if (init) {
     context = init(context)
   }
@@ -373,7 +373,7 @@ let composedFn = (Obj, hooks) => {
       // console.log(init)
     }
 
-    let initFN = (cb, init) => context => {
+    let initFN = (cb, init) => (context) => {
       try {
         if (init) {
           ctx = init(context)
@@ -410,17 +410,17 @@ let composedFn = (Obj, hooks) => {
   }
 }
 
-let generateApp = App => options => {
+let generateApp = (App) => (options) => {
   let routes = orderBy(
     options.routes,
-    o => {
+    (o) => {
       return o.url.length
     },
     'desc'
   )
   let Loader = MethodLoader(App)
-  routes.map(routes => {
-    Object.entries(routes).map(route => {
+  routes.map((routes) => {
+    Object.entries(routes).map((route) => {
       let Flow = composedFn(route, routes.hooks)
       if (Flow) {
         Loader(route, routes, Flow)
@@ -432,7 +432,7 @@ let generateApp = App => options => {
     noMatch(res, req)
   })
 
-  App.listen(options.port, token => {
+  App.listen(options.port, (token) => {
     if (token) {
       tkn = token
       let msg = c
