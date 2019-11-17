@@ -51,6 +51,10 @@ can be found [here](https://pinipig.js.org/)
 
 ## What's new
 
+### 1.4.11
+
+- added staticFileServer (supports nested directory)
+
 ### 1.4.8
 
 - exposed memoize function from core to pinipig.utils

@@ -47,6 +47,15 @@ results obtained using below configuration
 
 ## What's new
 
+### 1.4.11
+
+- added staticFileServer (supports nested directory)
+
+### 1.4.8
+
+- exposed memoize function from core to pinipig.utils
+- uWebSockets.js#v16.2.0 (fixed pubsub issue)
+
 ### 1.4.4
 
 - getMime utility
@@ -57,7 +66,7 @@ results obtained using below configuration
 - Websocket Update
 - getRemoteAddress
 
-## What's in version 1.3.0
+## 1.3.0
 
 - Routes
 - Async Hooks

@@ -25,15 +25,15 @@
 
 # ws (Websocket)
 
-| Method            | Description |
-| ----------------- | ----------- |
-| send              |             |
-| end               |             |
-| close             |             |
-| getBufferedAmount |             |
-| subscribe         |             |
-| publish           |             |
-| getRemoteAddress  | get client IPv6/v4 | 
+| Method            | Description        |
+| ----------------- | ------------------ |
+| send              |                    |
+| end               |                    |
+| close             |                    |
+| getBufferedAmount |                    |
+| subscribe         |                    |
+| publish           |                    |
+| getRemoteAddress  | get client IPv6/v4 |
 
 # Built-in Middleware
 
@@ -47,7 +47,6 @@
 | issueToken     | issue a token after login form submitted and veriffeid succesfully |
 | verify         |                                                                    |
 | strategy.local | default login strategy (email, password)                           |
-
 
 ## streamFile
 
@@ -72,6 +71,31 @@ let routes = [{
   {
         url: "/stream/*",
         get: sf,
+    },
+}]
+```
+
+## staticFileServer
+
+Stream a static file inside a folder
+
+| function                    | Description              | Example                                          |
+| --------------------------- | ------------------------ | ------------------------------------------------ |
+| staticFileServer(directory) | value should be a String | `const staticServer= staticFileServer('public')` |
+
+** directory is the same level as the src folder**
+
+```javascript
+...
+const { staticFileServer } = pinipig
+const staticServer= staticFileServer('public')
+
+...
+let routes = [{
+...
+  {
+        url: "/*",
+        get: staticServer,
     },
 }]
 ```
