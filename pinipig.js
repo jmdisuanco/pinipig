@@ -32,6 +32,7 @@ const crud = require('./libs/crud')
 const getMime = require('./libs/getmime')
 const auth = require('./libs/authentication')
 const streamFile = require('./libs/streamfile')
+const staticFileServer = require('./libs/staticfileserver')
 const filter = require('./libs/filter')
 const { cors, flatten, preFlight, flow, generateApp, memoize } = core
 
@@ -51,6 +52,7 @@ module.exports = {
   crud,
   orm,
   streamFile,
+  staticFileServer,
   utils: {
     cors,
     color: c,

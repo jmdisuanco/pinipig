@@ -12,9 +12,10 @@ const { filter } = require('../libs/filter')
 
 let { cors, preFlight, getURLQuery } = pinipig.utils
 
-let { streamFile } = pinipig
+let { streamFile, staticFileServer } = pinipig
 let sf = streamFile('test/public')
 
+let serveStatic = staticFileServer('test/public')
 //Initialize ORM
 let dbconf = {
   driver: 'tingodb',
@@ -97,7 +98,7 @@ let mcount = crud.count(Mongo)
 
 //Methods
 
-let init_getHead = ctx => {
+let init_getHead = (ctx) => {
   try {
     ctx.headers = []
     console.log(ctx.req.getHeader('pinipig-jwt'))
@@ -108,7 +109,7 @@ let init_getHead = ctx => {
   }
 }
 
-let getMethod = ctx => {
+let getMethod = (ctx) => {
   const { res, req } = ctx
   try {
     res.onAborted = () => {
@@ -134,7 +135,7 @@ let HelloWorld = function(ctx) {
   }
 }
 
-let Param = ctx => {
+let Param = (ctx) => {
   try {
     ctx.res.writeHead(200, {
       accept: '*',
@@ -147,11 +148,11 @@ let Param = ctx => {
   }
 }
 
-let getQuery = ctx => {
+let getQuery = (ctx) => {
   ctx.res.json(ctx.query)
 }
 
-let Combi = ctx => {
+let Combi = (ctx) => {
   let { query, parameters, res } = ctx
   let result = {
     query,
@@ -160,16 +161,16 @@ let Combi = ctx => {
   res.json(result)
 }
 
-let tellURL = ctx => {
+let tellURL = (ctx) => {
   try {
     let url = ctx.req.getUrl()
     ctx.res.end(url)
   } catch (e) {}
 }
-let FormProcess = ctx => {
+let FormProcess = (ctx) => {
   try {
     try {
-      ctx.data.files.map(f => {
+      ctx.data.files.map((f) => {
         let target = path.join('./test/examples/uploads/', f.filename)
         fs.rename(f.tmpFilename, target, function(err) {
           if (err) return
@@ -187,7 +188,7 @@ let FormProcess = ctx => {
   }
 }
 
-let UploadForm = context => {
+let UploadForm = (context) => {
   try {
     context.res.writeHeader('content-type', 'text/html')
     context.res.write(
@@ -203,14 +204,14 @@ let UploadForm = context => {
   }
 }
 
-let WSPost = ctx => {
+let WSPost = (ctx) => {
   ctx.ws.send(`Connected via ${ctx.req.getUrl()}`)
 }
-let WSMessage = ctx => {
+let WSMessage = (ctx) => {
   let ok = ctx.ws.send(ctx.message, ctx.isBinary)
 }
 
-const catchError = ctx => {
+const catchError = (ctx) => {
   console.log(ctx)
   ctx.res.end()
   // if (ctx.result) {
@@ -222,10 +223,7 @@ const catchError = ctx => {
 
 let routes = [
   //Basic  Test
-  {
-    url: '/',
-    get: HelloWorld,
-  },
+
   {
     url: '/user/:name', // http://localhost:9090/user/[NAME]
     get: Param,
@@ -287,6 +285,10 @@ let routes = [
     url: '/public/*',
     get: sf,
     catchError,
+  },
+  {
+    url: '/*',
+    get: serveStatic,
   },
   //CRUD TEST
   {

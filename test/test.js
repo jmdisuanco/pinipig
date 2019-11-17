@@ -4,8 +4,7 @@ const sever = require('./test-server')
 let url = 'http://localhost:9090'
 let check = ''
 
-
-//Basic Test 
+//Basic Test
 describe('/', () => {
   it('should return 200', (done) => {
     http.get(url, (res) => {
@@ -15,6 +14,25 @@ describe('/', () => {
   })
 })
 
+//Test staticFileServer
+describe('/index.html', () => {
+  it('should return 200', (done) => {
+    http.get(`${url}/index.html`, (res) => {
+      console.log(`${url}/index.html`)
+      assert.equal(200, res.statusCode)
+      done()
+    })
+  })
+})
+describe('/subdir/index.html', () => {
+  it('should return 200', (done) => {
+    http.get(`${url}/subdir/index.html`, (res) => {
+      console.log(`${url}/subdir/index.html`)
+      assert.equal(200, res.statusCode)
+      done()
+    })
+  })
+})
 //Test header
 describe('/', () => {
   it('should return text/html', (done) => {
@@ -24,20 +42,20 @@ describe('/', () => {
     })
   })
 })
-describe('/', () => {
-  it('should return Hello World', (done) => {
-    http.get(url, (res) => {
-      let data = ''
-      res.on('data', (chunk) => {
-        data += chunk
-      })
-      res.on('end', () => {
-        assert.equal("Hello World", data)
-        done()
-      })
-    })
-  })
-})
+// describe('/', () => {
+//   it('should return Hello World', (done) => {
+//     http.get(url, (res) => {
+//       let data = ''
+//       res.on('data', (chunk) => {
+//         data += chunk
+//       })
+//       res.on('end', () => {
+//         assert.equal('Hello World', data)
+//         done()
+//       })
+//     })
+//   })
+// })
 
 //URL Query Test
 describe('/query?name=john&gender=male', () => {
@@ -80,7 +98,10 @@ describe('/combi/:name?age=20', () => {
         data += chunk
       })
       res.on('end', () => {
-        assert.equal(`{"query":{"age":"20"},"parameters":{"name":"John"}}`, data)
+        assert.equal(
+          `{"query":{"age":"20"},"parameters":{"name":"John"}}`,
+          data
+        )
         done()
       })
     })
@@ -152,7 +173,6 @@ describe(check, () => {
   })
 })
 
-
 describe('/blahblah', () => {
   it('it should 404', (done) => {
     try {
@@ -164,7 +184,6 @@ describe('/blahblah', () => {
       done()
     }
   })
-
 })
 
 //StreamFile Check
