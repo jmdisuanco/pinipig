@@ -44,7 +44,7 @@
 | Method         | Description                                                        |
 | -------------- | ------------------------------------------------------------------ |
 | encryptPass    | Encrypt the password. most proabbly used before CRUD               |
-| issueToken     | issue a token after login form submitted and veriffeid succesfully |
+| issueToken     | issue a token after login form submitted and verified succesfully  |
 | verify         |                                                                    |
 | strategy.local | default login strategy (email, password)                           |
 
