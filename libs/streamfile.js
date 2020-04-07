@@ -6,7 +6,7 @@ const fs = require('fs')
 const getMime = require('./getmime')
 // const path = require('path')
 
-let noMatch = res => {
+let noMatch = (res) => {
   res.writeStatus('404')
   res.writeHeader('Content-Type', 'text/json')
   res.end('{"result":"no resource found"}')
@@ -41,7 +41,7 @@ function pipeStreamOverResponse(res, readStream, totalSize) {
   /* Careful! If Node.js would emit error before the first res.tryEnd, res will hang and never time out */
   /* For this demo, I skipped checking for Node.js errors, you are free to PR fixes to this example */
   readStream
-    .on('data', chunk => {
+    .on('data', (chunk) => {
       /* We only take standard V8 units of data */
       const ab = toArrayBuffer(chunk)
 
@@ -63,7 +63,7 @@ function pipeStreamOverResponse(res, readStream, totalSize) {
         res.abOffset = lastOffset
 
         /* Register async handlers for drainage */
-        res.onWritable(offset => {
+        res.onWritable((offset) => {
           /* Here the timeout is off, we can spend as much time before calling tryEnd we want to */
 
           /* On failure the timeout will start */
@@ -97,7 +97,7 @@ function pipeStreamOverResponse(res, readStream, totalSize) {
   })
 }
 
-let streamFile = directory => async ctx => {
+let streamFile = (directory) => async (ctx) => {
   const { res, req } = ctx
   let totalSize = 0
   let url = req.getUrl().split('/')
@@ -107,7 +107,8 @@ let streamFile = directory => async ctx => {
   try {
     totalSize = fs.statSync(filepath).size
     const readStream = fs.createReadStream(filepath)
-    res.writeHeader('content-type', getMime(filename.split('.')[1]))
+    let ext = filename.split('.')
+    res.writeHeader('content-type', getMime(ext[ext.length - 1]))
     pipeStreamOverResponse(res, readStream, totalSize)
   } catch (e) {
     noMatch(res)
