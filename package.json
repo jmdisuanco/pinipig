@@ -40,7 +40,7 @@
     "fast-stringify": "^1.1.1",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.15",
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v16.2.0"
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v17.6.0"
   },
   "devDependencies": {
     "mocha": "^7.1.1",
