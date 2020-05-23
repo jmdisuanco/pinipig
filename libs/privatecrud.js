@@ -5,7 +5,11 @@ try {
   null
 }
 
-let read = (model) => async (ctx) => {
+let privateRead = (model) => (ctx) => {
+  ctx.res.onAborted(() => {
+    console.log('read request Aborted')
+    return false
+  })
   let filtered
   let prettify = null
   if (ctx.query != undefined) {
@@ -21,13 +25,14 @@ let read = (model) => async (ctx) => {
   } catch (e) {
     id = parseInt(ctx.parameters.id)
   }
-  let result = await model.findOne(
+  model.findOne(
     {
       where: {
         id: id,
+        ownerid: ctx.UserPayload.user.id,
       },
     },
-    (err, data) => {
+    async (err, data) => {
       if (ctx.options != undefined) {
         if (ctx.options.filter != undefined) {
           filtered = filterProcess(data, ctx.options.filter)
@@ -39,28 +44,31 @@ let read = (model) => async (ctx) => {
       let result = {
         data: filtered || data,
       }
+      ctx.res.json(result, prettify)
+
+      Object.assign(ctx, { crud: result })
+
+      return ctx
 
       if (err) {
-        // console.log(err)
+        console.log(err)
         //ctx.res.end('{"result":"error"}')
         ctx.res.json({
           result: 'error',
         })
-        return result
-      } else {
-        ctx.res.json(result, prettify)
-        return result
       }
     }
   )
-  Object.assign(ctx, { crud: { result } })
-  return ctx
 }
 
-let readList = (model) => async (ctx) => {
+let privateReadList = (model) => async (ctx) => {
+  ctx.res.onAborted(() => {
+    console.log('readlist request Aborted')
+    return false
+  })
   // console.log('listing...')
   let urlQuery = ctx.query
-  let query = {}
+  let query = { where: { ownerid: ctx.UserPayload.user.id } }
   let count = 0
 
   if (urlQuery) {
@@ -76,10 +84,10 @@ let readList = (model) => async (ctx) => {
   model.all(query, (err, data) => {
     let filtered
     if (err) {
-      console.log(err)
+      console.log('privateCRUD: ', err.message)
       return
     }
-    model.count({}, (err, c) => {
+    model.count({ where: { ownerid: ctx.UserPayload.user.id } }, (err, c) => {
       let count = c
       let prettify = null
       if (ctx.query != undefined) {
@@ -91,7 +99,12 @@ let readList = (model) => async (ctx) => {
           filtered = filterProcess(data, ctx.options.filter)
         }
       }
-
+      // ctx.res.end(JSON.stringify({
+      //   count: count,
+      //   limit: query.limit,
+      //   skip: query.skip,
+      //   data: filtered || data
+      // }, null, prettify))
       let result = {
         count: count,
         limit: query.limit,
@@ -99,13 +112,16 @@ let readList = (model) => async (ctx) => {
         data: filtered || data,
       }
       ctx.res.json(result, prettify)
+      return ctx
     })
   })
-  Object.assign(ctx, { crud: { result: 'success' } })
-  return ctx
 }
 
-let create = (model) => async (ctx) => {
+let privateCreate = (model) => async (ctx) => {
+  ctx.res.onAborted(() => {
+    console.log('create request Aborted')
+    return false
+  })
   // console.log('creating...')
   let result = await model.create(ctx.data.fields, (err, data) => {
     if (err) {
@@ -120,57 +136,84 @@ let create = (model) => async (ctx) => {
         result: 'created',
         data: data,
       }
+
       ctx.res.json(response)
     } catch (e) {
       return false
     }
   })
 
-  Object.assign(ctx, { crud: { result } })
+  ctx.result = result
   return ctx
 }
 
-let update = (model) => (ctx) => {
+let privateUpdate = (model) => async (ctx) => {
   try {
-    //will work if adapter is MongoDB
-    ObjectID.isValid(ctx.parameters.id)
-      ? (id = ObjectID(ctx.parameters.id))
-      : (id = parseInt(ctx.parameters.id))
-  } catch (e) {
-    // console.log(e)
-    id = parseInt(ctx.parameters.id)
-  }
-  model.exists(id, (err, exists) => {
-    if (exists && typeof ctx.data.fields === 'object') {
-      model.update(
-        {
-          _id: id,
-        },
-        ctx.data.fields,
-        (err, result) => {
-          if (err) {
-            console.log(err.message)
-          } else {
-            // ctx.res.end(JSON.stringify({
-            //   result: 'updated',
-            //   id: id
-            // }))
-            let response = {
-              result: 'updated',
-              id: id,
-            }
-            ctx.res.json(response)
-          }
-        }
-      )
-    } else {
-      ctx.res.end('{"result": "No Document found"}')
+    const { res } = ctx
+    ctx.res.onAborted(() => {
+      res.json({ error: 'request aborted' })
+      console.log('update request Aborted')
+      return false
+    })
+    try {
+      //will work if adapter is MongoDB
+      ObjectID.isValid(ctx.parameters.id)
+        ? (id = ObjectID(ctx.parameters.id))
+        : (id = parseInt(ctx.parameters.id))
+    } catch (e) {
+      console.log(e)
+      id = parseInt(ctx.parameters.id)
     }
-  })
-  return ctx
+    model.exists(id, (err, exists) => {
+      if (exists && typeof ctx.data.fields === 'object') {
+        try {
+          model.update(
+            {
+              _id: id,
+              ownerid: ctx.UserPayload.user.id,
+            },
+            ctx.data.fields,
+
+            (err, result) => {
+              if (err) {
+                console.log(err.message)
+              } else {
+                let response = {
+                  result: 'updated',
+                  id: id,
+                }
+
+                res.json(response)
+              }
+            }
+          )
+        } catch (e) {
+          console.log('privatecrud:update', e.message)
+        }
+      } else {
+        ctx.res.end('{"result": "No Document found"}')
+      }
+    })
+    //retrieve updated data
+    try {
+      let result = await model.findOne({ where: { id: id } })
+      //ctx.result = result
+      Object.assign(ctx, { crud: result })
+      return ctx
+    } catch (e) {
+      console.log('privatecrud:update:findone', e.message)
+    }
+  } catch (e) {
+    console.log(e.message)
+    return false
+  }
 }
 
-let destroy = (model) => (ctx) => {
+let privateDestroy = (model) => (ctx) => {
+  ctx.res.onAborted(() => {
+    console.log('destroy request Aborted')
+    return false
+  })
   // console.log('detroying...')
   try {
     //will work if adapter is MongoDB
@@ -191,26 +234,26 @@ let destroy = (model) => (ctx) => {
       id: id,
     }
     ctx.res.json(response)
+    return ctx
   })
-  return ctx
 }
 
-let count = (model) => (ctx) => {
-  model.count({}, (err, c) => {
+let privateCount = (model) => (ctx) => {
+  model.count({ where: { ownerid: ctx.UserPayload.user.id } }, (err, c) => {
+    count(c)
     ctx.res.end(
       JSON.stringify({
         count: c,
       })
     )
   })
-  return ctx
 }
 
 module.exports = {
-  create,
-  read,
-  readList,
-  update,
-  destroy, // delete
-  count,
+  privateCreate,
+  privateRead,
+  privateReadList,
+  privateUpdate,
+  privateDestroy, // delete
+  privateCount,
 }

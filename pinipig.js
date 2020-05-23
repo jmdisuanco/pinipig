@@ -29,11 +29,13 @@ const uWS = require('uWebSockets.js')
 const core = require('./libs/core')
 const orm = require('./libs/orm')
 const crud = require('./libs/crud')
+const privatecrud = require('./libs/privatecrud')
 const getMime = require('./libs/getmime')
 const auth = require('./libs/authentication')
 const streamFile = require('./libs/streamfile')
 const staticFileServer = require('./libs/staticfileserver')
 const filter = require('./libs/filter')
+const token = require('./libs/token')
 const { cors, flatten, preFlight, flow, generateApp, memoize } = core
 
 // let options
@@ -50,6 +52,7 @@ module.exports = {
   auth,
   createServer,
   crud,
+  privatecrud,
   orm,
   streamFile,
   staticFileServer,
@@ -62,5 +65,6 @@ module.exports = {
     getMime,
     preFlight,
     memoize,
+    token,
   },
 }
