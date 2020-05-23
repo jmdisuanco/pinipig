@@ -51,6 +51,12 @@ can be found [here](https://pinipig.js.org/)
 
 ## What's new
 
+### 1.5.0
+
+- using uWS ~17
+- Private/Protected CRUD implemented
+- token Utilities -- `init_getJWT`, `verify`, `decode`
+
 ### 1.4.11
 
 - added staticFileServer (supports nested directory)
