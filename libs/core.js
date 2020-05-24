@@ -248,57 +248,63 @@ let MethodLoader = (App) => (route, routeObj, Flow) => {
     let wsFunc = route[1]
     let options = route[1].options
     let WS
-    App.ws(url, {
-      /* Options */
-      compression: options.compression,
-      maxPayloadLength: options.maxPayloadLength,
-      idleTimeout: options.idleTimeout,
-      /* Handlers */
 
-      open: (ws, req) => {
-        let context = {
-          ws,
-          req,
-        }
-        try {
-          WS = ws
-          wsFunc.open(context)
-        } catch (e) {
-          msg = `Pinipig WS connected via URL: ${url}`
-          ws.send(msg, '  ERROR : ' + e.message)
-          //console.log(`Pinipig WS connected via URL: ${url}!`)
-        }
-      },
-      message: (WS, message, isBinary) => {
-        let context = {
-          isBinary,
-          message,
-          ws: WS,
-        }
-        try {
-          wsFunc.message(context)
-        } catch (e) {
-          console.log('WS message handler not define in routes')
-          ws.close()
-        }
-        /* Ok is false if backpressure was built up, wait for drain */
-        //let ok = ws.send(message, isBinary);
-      },
-      drain: (WS) => {
-        let context = {
-          ws: WS,
-        }
-        try {
-          wsFunc.message(context)
-        } catch (e) {
-          console.log('WS drain handler not define in routes')
-          ws.close()
-        }
-      },
-      close: (ws, code, message) => {
-        console.log('WebSocket closed')
-      },
-    })
+    /**
+     *
+     *
+     */
+
+    // App.ws(url, {
+    //   /* Options */
+    //   compression: options.compression,
+    //   maxPayloadLength: options.maxPayloadLength,
+    //   idleTimeout: options.idleTimeout,
+    //   /* Handlers */
+
+    //   open: (ws, req) => {
+    //     let context = {
+    //       ws,
+    //       req,
+    //     }
+    //     try {
+    //       WS = ws
+    //       wsFunc.open(context)
+    //     } catch (e) {
+    //       msg = `Pinipig WS connected via URL: ${url}`
+    //       ws.send(msg, '  ERROR : ' + e.message)
+    //       //console.log(`Pinipig WS connected via URL: ${url}!`)
+    //     }
+    //   },
+    //   message: (WS, message, isBinary) => {
+    //     let context = {
+    //       isBinary,
+    //       message,
+    //       ws: WS,
+    //     }
+    //     try {
+    //       wsFunc.message(context)
+    //     } catch (e) {
+    //       console.log('WS message handler not define in routes')
+    //       ws.close()
+    //     }
+    //     /* Ok is false if backpressure was built up, wait for drain */
+    //     //let ok = ws.send(message, isBinary);
+    //   },
+    //   drain: (WS) => {
+    //     let context = {
+    //       ws: WS,
+    //     }
+    //     try {
+    //       wsFunc.message(context)
+    //     } catch (e) {
+    //       console.log('WS drain handler not define in routes')
+    //       ws.close()
+    //     }
+    //   },
+    //   close: (ws, code, message) => {
+    //     console.log('WebSocket closed')
+    //   },
+    // })
   }
 }
 
@@ -419,11 +425,76 @@ let generateApp = (App) => (options) => {
     'desc'
   )
   let Loader = MethodLoader(App)
-  routes.map((routes) => {
-    Object.entries(routes).map((route) => {
+  // routes.map((routes) => {
+  //   Object.entries(routes).map((route) => {
+  //     let Flow = composedFn(route, routes.hooks)
+  //     if (Flow) {
+  //       Loader(route, routes, Flow)
+  //     }
+  //   })
+  // })
+
+  routes.forEach((routes) => {
+    Object.entries(routes).forEach((route) => {
       let Flow = composedFn(route, routes.hooks)
-      if (Flow) {
-        Loader(route, routes, Flow)
+      if (route[0].toLowerCase() === 'ws') {
+        let url = routes.url
+        let wsFunc = route[1]
+        let options = route[1].options
+        App.ws(url, {
+          /* Options */
+          compression: options.compression,
+          maxPayloadLength: options.maxPayloadLength,
+          idleTimeout: options.idleTimeout,
+          /* Handlers */
+          open: (ws, req) => {
+            let context = {
+              ws,
+              req,
+            }
+            try {
+              WS = ws
+              wsFunc.open(context)
+            } catch (e) {
+              msg = `Pinipig WS connected via URL: ${url}`
+              ws.send(msg, '  ERROR : ' + e.message)
+              //console.log(`Pinipig WS connected via URL: ${url}!`)
+            }
+          },
+          message: (WS, message, isBinary) => {
+            let context = {
+              isBinary,
+              message,
+              ws: WS,
+            }
+            try {
+              wsFunc.message(context)
+            } catch (e) {
+              console.log('WS message handler not define in routes')
+              ws.close()
+            }
+            /* Ok is false if backpressure was built up, wait for drain */
+            //let ok = ws.send(message, isBinary);
+          },
+          drain: (WS) => {
+            let context = {
+              ws: WS,
+            }
+            try {
+              wsFunc.message(context)
+            } catch (e) {
+              console.log('WS drain handler not define in routes')
+              ws.close()
+            }
+          },
+          close: (ws, code, message) => {
+            console.log('WebSocket closed')
+          },
+        })
+      } else {
+        if (Flow) {
+          Loader(route, routes, Flow)
+        }
       }
     })
   })
