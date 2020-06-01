@@ -9,7 +9,10 @@ const fs = require('fs')
 const { auth, orm, crud } = pinipig
 let verify = auth.verify(config.jwt)
 const { filter } = require('../libs/filter')
-
+const debug = (ctx) => {
+  const { fields } = ctx.data
+  ctx.res.json(fields)
+}
 let { cors, preFlight, getURLQuery } = pinipig.utils
 
 let { streamFile, staticFileServer } = pinipig
@@ -123,7 +126,7 @@ let getMethod = (ctx) => {
   }
 }
 
-let HelloWorld = function(ctx) {
+let HelloWorld = function (ctx) {
   try {
     ctx.res.writeHead(200, {
       accept: '*',
@@ -172,7 +175,7 @@ let FormProcess = (ctx) => {
     try {
       ctx.data.files.map((f) => {
         let target = path.join('./test/examples/uploads/', f.filename)
-        fs.rename(f.tmpFilename, target, function(err) {
+        fs.rename(f.tmpFilename, target, function (err) {
           if (err) return
           console.log(`written ${target}`)
         })
@@ -340,6 +343,7 @@ let routes = [
     url: '/protected',
     get: [verify, tellURL],
   },
+  { url: '/utf', post: debug },
 ]
 
 let options = {

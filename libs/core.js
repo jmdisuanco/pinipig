@@ -185,6 +185,7 @@ let getHeaders = (req) => {
         })
       }
     })
+
     return Headers
   } catch (e) {
     console.log('unable to get Headers')
@@ -197,7 +198,7 @@ let payload = (res, req, urlTemplate) => {
     req,
   }
   res.setHeader = res.writeHeader
-  //context.req.headers = getHeaders(req) /*BOTTLENECK */ : null
+  context.req.headers = getHeaders(req) || null /*BOTTLENECK */
   context.req.getHeaders = getHeaders
   context.getURLQuery = getURLQuery
   context.res.json = json(res)
