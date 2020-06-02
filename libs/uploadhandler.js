@@ -68,8 +68,12 @@ let formdataHandler = (callback) => async (context) => {
 }
 
 const isUTF8 = (value) => {
-  let charset = value.split(';')[1].split('=')[1]
-  return charset.toLowerCase() == 'utf-8'
+  try {
+    let charset = value.split(';')[1].split('=')[1]
+    return charset.toLowerCase() == 'utf-8'
+  } catch (e) {
+    return false
+  }
 }
 
 let formUrlencodedHandler = (callback) => async (context) => {
