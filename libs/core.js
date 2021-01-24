@@ -485,7 +485,6 @@ let generateApp = (App) => (options) => {
               wsFunc.message(context)
             } catch (e) {
               console.log('WS drain handler not define in routes')
-              ws.close()
             }
           },
           close: (ws, code, message) => {
