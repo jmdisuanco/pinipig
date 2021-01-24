@@ -240,7 +240,6 @@ let privateDestroy = (model) => (ctx) => {
 
 let privateCount = (model) => (ctx) => {
   model.count({ where: { ownerid: ctx.UserPayload.user.id } }, (err, c) => {
-    count(c)
     ctx.res.end(
       JSON.stringify({
         count: c,
