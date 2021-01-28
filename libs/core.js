@@ -487,8 +487,15 @@ let generateApp = (App) => (options) => {
               console.log('WS drain handler not define in routes')
             }
           },
-          close: (ws, code, message) => {
-            console.log('WebSocket closed')
+          close: (WS) => {
+            let context = {
+              ws: WS,
+            }
+            try {
+              wsFunc.close(context)
+            } catch (e) {
+              console.log('WebsocketcClosed ')
+            }
           },
         })
       } else {

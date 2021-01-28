@@ -207,7 +207,15 @@ let UploadForm = (context) => {
   }
 }
 
+let WSClose = (ctx)=>{
+  console.log('do something when websocket closed')
+}
+
 let WSPost = (ctx) => {
+  let ip = ctx.ws.getRemoteAddressAsText()
+  let buff = Buffer.from(ip)
+  let iphex = buff.toString('utf8') 
+  console.log(iphex)
   ctx.ws.send(`Connected via ${ctx.req.getUrl()}`)
 }
 let WSMessage = (ctx) => {
@@ -270,7 +278,7 @@ let routes = [
       open: WSPost,
       message: WSMessage,
       drain: null,
-      close: null,
+      close: WSClose,
     },
   },
   {
