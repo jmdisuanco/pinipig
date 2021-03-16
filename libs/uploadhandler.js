@@ -15,7 +15,16 @@ let getValueinsideQoute = (str) => {
   }
 }
 
-let formdataHandler = (callback) => async (context) => {
+
+const generateRandomString = (stringLength)=> {
+  let secret = ''
+  const set ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  for (let i = 0; i < stringLength; i++)
+    secret += set.charAt(Math.floor(Math.random() * set.length))
+  return secret
+}
+
+const formdataHandler = (callback) => async (context) => {
   //console.log('form-data handler initiated')
   try {
     let set = context.rawdata.split(/------[a-zA-Z0-9--]*/)
@@ -30,10 +39,7 @@ let formdataHandler = (callback) => async (context) => {
         let filename = getValueinsideQoute(field[0].split(';')[1])
         let file = field[1]
         let ext = filename.split('.')[1]
-        let tmpFilename = path.join(os.tmpdir(), `${Date.now()}.${ext}`)
-        // fs.writeFile(tmpFilename, file, "binary", err => {
-        //   if (err) console.log(err);
-        // });
+        let tmpFilename = path.join(os.tmpdir(), `${generateRandomString(8)}.${ext}`)
         fs.writeFileSync(tmpFilename, file, 'binary')
         files.push({
           mime,
