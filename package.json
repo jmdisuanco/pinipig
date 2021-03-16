@@ -1,6 +1,6 @@
 {
   "name": "pinipig",
-  "version": "1.6.3",
+  "version": "1.7.1",
   "description": "A super `simple` webservice functional-like framework",
   "main": "pinipig.js",
   "scripts": {
@@ -40,7 +40,7 @@
     "fast-stringify": "^1.1.1",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.15",
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v17.6.0",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v18.14.0",
     "utf8": "^3.0.0"
   },
   "devDependencies": {

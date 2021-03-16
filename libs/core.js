@@ -472,7 +472,6 @@ let generateApp = (App) => (options) => {
               wsFunc.message(context)
             } catch (e) {
               console.log('WS message handler not define in routes')
-              ws.close()
             }
             /* Ok is false if backpressure was built up, wait for drain */
             //let ok = ws.send(message, isBinary);
@@ -488,7 +487,17 @@ let generateApp = (App) => (options) => {
             }
           },
           close: (ws, code, message) => {
-            console.log('WebSocket closed')
+            
+            let context = {
+              ws,
+              code,
+              message
+            }
+            try {
+              wsFunc.close(context)
+            } catch (e) {
+              console.log('WebsocketcClosed ')
+            }
           },
         })
       } else {
