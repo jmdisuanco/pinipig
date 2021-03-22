@@ -39,8 +39,10 @@ const formdataHandler = (callback) => async (context) => {
           const fileset = filename.split('.')
           const ext = fileset[fileset.length -1]
           const tmpFilename = path.join(os.tmpdir(), `${generateRandomString(8)}.${ext}`)
-  
-           fs.writeFileSync(tmpFilename, file, 'binary')
+        
+          const newfile  =file.split('\n')
+          const payload = newfile.splice(0,newfile.length -1).splice(2).join('\n').trim()
+           fs.writeFileSync(tmpFilename, payload, 'binary')
 
         files.push({
           mime,
