@@ -6,6 +6,7 @@ try {
 }
 
 let privateRead = (model) => (ctx) => {
+  if(!ctx) return
   ctx.res.onAborted(() => {
     console.log('read request Aborted')
     return false
@@ -62,6 +63,7 @@ let privateRead = (model) => (ctx) => {
 }
 
 let privateReadList = (model) => async (ctx) => {
+  if(!ctx) return
   ctx.res.onAborted(() => {
     console.log('readlist request Aborted')
     return false
@@ -118,6 +120,7 @@ let privateReadList = (model) => async (ctx) => {
 }
 
 let privateCreate = (model) => async (ctx) => {
+  if(!ctx) return
   ctx.res.onAborted(() => {
     console.log('create request Aborted')
     return false
@@ -148,6 +151,7 @@ let privateCreate = (model) => async (ctx) => {
 }
 
 let privateUpdate = (model) => async (ctx) => {
+  if(!ctx) return
   try {
     const { res } = ctx
     ctx.res.onAborted(() => {
@@ -210,6 +214,7 @@ let privateUpdate = (model) => async (ctx) => {
 }
 
 let privateDestroy = (model) => (ctx) => {
+  if(!ctx) return
   ctx.res.onAborted(() => {
     console.log('destroy request Aborted')
     return false
@@ -239,6 +244,7 @@ let privateDestroy = (model) => (ctx) => {
 }
 
 let privateCount = (model) => (ctx) => {
+  if(!ctx) return
   model.count({ where: { ownerid: ctx.UserPayload.user.id } }, (err, c) => {
     ctx.res.end(
       JSON.stringify({

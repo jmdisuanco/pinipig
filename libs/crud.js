@@ -6,6 +6,7 @@ try {
 }
 
 let read = (model) => async (ctx) => {
+  if(!ctx) return
   let filtered
   let prettify = null
   if (ctx.query != undefined) {
@@ -58,6 +59,7 @@ let read = (model) => async (ctx) => {
 }
 
 let readList = (model) => async (ctx) => {
+  if(!ctx) return
   // console.log('listing...')
   let urlQuery = ctx.query
   let query = {}
@@ -106,6 +108,7 @@ let readList = (model) => async (ctx) => {
 }
 
 let create = (model) => async (ctx) => {
+  if(!ctx) return
   // console.log('creating...')
   let result = await model.create(ctx.data.fields, (err, data) => {
     if (err) {
@@ -131,6 +134,7 @@ let create = (model) => async (ctx) => {
 }
 
 let update = (model) => (ctx) => {
+  if(!ctx) return
   try {
     //will work if adapter is MongoDB
     ObjectID.isValid(ctx.parameters.id)
@@ -171,6 +175,7 @@ let update = (model) => (ctx) => {
 }
 
 let destroy = (model) => (ctx) => {
+  if(!ctx) return
   // console.log('detroying...')
   try {
     //will work if adapter is MongoDB
