@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken')
  */
 let verify = config => async ctx => {
   let block = () => {
-    ctx.res.end('{"result":"Unauthorized}"')
+    ctx.res.end('{"result":"Unauthorized"}')
     return
   }
   if (ctx.headers == undefined) {
