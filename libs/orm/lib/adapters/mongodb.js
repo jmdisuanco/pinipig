@@ -155,7 +155,7 @@ MongoDB.prototype.create = function (model, data, callback) {
     }
     this.collection(model).insertOne(data, {}, function (err, m) {
         var inserted;
-        inserted = m[0] && m[0]._id ? m[0]._id : null;
+        inserted = m?.[0]?._id ? m[0]._id : m.insertedid ? m.insertedid : null;
         inserted = m.ops && m.ops[0] && m.ops[0]._id ? m.ops[0]._id : inserted;
         callback(err, err ? null : inserted);
     });
